@@ -53,4 +53,4 @@ This project is developed as part of a university course and is licensed under M
 ## ✍️ Author
 
 👨‍💻 Developed by David Pospisil
-📚 HFU Semester 6 – Softwarequalität & React Web-Entwicklung
+📚 HFU Semester 6 – Softwarequalität & React Web-Programming
