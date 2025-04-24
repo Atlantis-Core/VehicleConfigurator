@@ -32,15 +32,6 @@ A full-stack vehicle configurator built with **React**, **Node.js**, and **Postg
 
 ---
 
-## 📁 Project Structure
-vehicle-configurator/
-├── frontend/          # React app
-├── backend/           # Node.js backend with Clean Architecture
-├── .github/           # CI/CD workflows
-└── README.md
-
----
-
 ## 🧪 Testing
 
 ---
