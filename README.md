@@ -9,9 +9,9 @@ A full-stack vehicle configurator built with **React**, **Node.js**, and **Postg
 ### Frontend
 
 - ⚛️ React + TypeScript
-- 🧪 Jest / Vitest for component testing
-- 🌐 React Router, TailwindCSS (or Shadcn UI)
-- 🔁 React Query / SWR for API calls
+- 🧪 Jest for component testing
+- 🌐 React Router
+- 🔁 React Query for API calls
 
 ### Backend
 
