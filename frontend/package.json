@@ -8,7 +8,6 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.126",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "react": "^19.1.0",
@@ -41,6 +40,7 @@
     ]
   },
   "devDependencies": {
+    "@types/node": "^20.17.30",
     "@vitejs/plugin-react": "^4.4.1",
     "vite": "^6.3.3"
   }
