@@ -22,6 +22,7 @@ model Model {
   id             Int             @id @default(autoincrement())
   name           String
   basePrice      Int
+  imagePath      String
   model3dPath    String
   configurations Configuration[]
 }
