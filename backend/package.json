@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "prisma:generate": "prisma generate",
+    "start": "npm run prisma:generate && node dist/server.js"
   },
   "keywords": [],
   "author": "",
