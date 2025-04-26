@@ -16,7 +16,7 @@ const StartPage = () => {
   }, []);
 
   const handleConfigureClick = () => {
-    navigate('/configure');
+    navigate('/configurator');
   };
 
   return (
