@@ -28,7 +28,7 @@ model Model {
 
 model Engine {
   id              Int             @id @default(autoincrement())
-  type            String
+  name            String
   description     String
   additionalPrice Int
   configurations  Configuration[]
@@ -36,7 +36,7 @@ model Engine {
 
 model Transmission {
   id             Int             @id @default(autoincrement())
-  type           String
+  name           String
   configurations Configuration[]
 }
 
@@ -45,6 +45,8 @@ model Color {
   name            String
   type            String
   additionalPrice Int
+  hexCode         String?
+  materialName    String?
   configurations  Configuration[]
 }
 
@@ -59,6 +61,7 @@ model Interior {
 
 model Rim {
   id              Int             @id @default(autoincrement())
+  name            String
   size            Int
   type            String
   additionalPrice Int
@@ -67,16 +70,16 @@ model Rim {
 }
 
 model Feature {
-  id              Int                    @id @default(autoincrement())
-  name            String
-  category        String
-  additionalPrice Int
-  imagePath       String
-  configurations  ConfigurationFeature[]
+  id                    Int                    @id @default(autoincrement())
+  name                  String
+  category              String
+  additionalPrice       Int
+  imagePath             String
+  configurationFeatures ConfigurationFeature[]
 }
 
 model Configuration {
-  id             Int                    @id @default(autoincrement())
+  id             Int @id @default(autoincrement())
   customerId     Int
   modelId        Int
   engineId       Int
@@ -85,34 +88,37 @@ model Configuration {
   interiorId     Int
   rimId          Int
   totalPrice     Int
-  color          Color                  @relation(fields: [colorId], references: [id])
-  customer       Customer               @relation(fields: [customerId], references: [id])
-  engine         Engine                 @relation(fields: [engineId], references: [id])
-  interior       Interior               @relation(fields: [interiorId], references: [id])
-  model          Model                  @relation(fields: [modelId], references: [id])
-  rim            Rim                    @relation(fields: [rimId], references: [id])
-  transmission   Transmission           @relation(fields: [transmissionId], references: [id])
-  features       ConfigurationFeature[]
-  orders         Order[]
+
+  customer     Customer               @relation(fields: [customerId], references: [id])
+  model        Model                  @relation(fields: [modelId], references: [id])
+  engine       Engine                 @relation(fields: [engineId], references: [id])
+  transmission Transmission           @relation(fields: [transmissionId], references: [id])
+  color        Color                  @relation(fields: [colorId], references: [id])
+  interior     Interior               @relation(fields: [interiorId], references: [id])
+  rim          Rim                    @relation(fields: [rimId], references: [id])
+  features     ConfigurationFeature[]
+  orders       Order[]
 }
 
 model ConfigurationFeature {
   configurationId Int
   featureId       Int
-  configuration   Configuration @relation(fields: [configurationId], references: [id])
-  feature         Feature       @relation(fields: [featureId], references: [id])
+
+  configuration Configuration @relation(fields: [configurationId], references: [id])
+  feature       Feature       @relation(fields: [featureId], references: [id])
 
   @@id([configurationId, featureId])
 }
 
 model Order {
-  id              Int           @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   customerId      Int
   configurationId Int
   paymentOption   String
   monthlyRate     Int?
   downpayment     Int?
-  orderDate       DateTime      @default(now())
-  configuration   Configuration @relation(fields: [configurationId], references: [id])
-  customer        Customer      @relation(fields: [customerId], references: [id])
+  orderDate       DateTime @default(now())
+
+  customer      Customer      @relation(fields: [customerId], references: [id])
+  configuration Configuration @relation(fields: [configurationId], references: [id])
 }
