@@ -1,32 +1,21 @@
-import logo from './logo.svg';
-import { useEffect, useState } from 'react';
-import { getModels, getRims } from './api/api';
-import { Rim } from './types/types';
-import { getImageUrl } from './lib/getImageUrl';
+// App.tsx
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import StartPage from '@pages/startPage';
 
 function App() {
-
-  const [rims, setRims] = useState<Rim[]>([]);
-
-  useEffect(() => {
-    const fetchRims = async () => {
-      const rims = await getRims();
-      setRims(rims);
-    };
-
-    fetchRims();
-  }, [])
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <h2>Vehicle Configurator</h2>
-        {rims.map((rim) => (
-          <img key={rim.id} src={getImageUrl(rim.imagePath)} alt={rim.name} />
-        ))
+    <Router>
+      <Routes>
+        <Route path="/" element={<StartPage />} />
+        {
+          /*
+          <Route path="/configurator" element={<ConfiguratorPage />} />
+          <Route path="/summary" element={<SummaryPage />} />
+          <Route path="/success" element={<SuccessPage />} />
+          */
         }
-      </header>
-    </div>
+      </Routes>
+    </Router>
   );
 }
 
