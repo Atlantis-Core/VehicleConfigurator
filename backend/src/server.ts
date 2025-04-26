@@ -8,6 +8,9 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+// Serve static images from /public
+app.use('/public', express.static('public'))
+
 app.get('/api/health', (_req, res) => {
   res.send({ status: 'OK 🚗 Vehicle Configurator backend running' })
 })
