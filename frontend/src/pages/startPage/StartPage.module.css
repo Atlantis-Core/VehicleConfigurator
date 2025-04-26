@@ -2,7 +2,7 @@
   position: relative;
   display: flex;
   height: 100vh;
-  align-items: baseline;
+  align-items: center;
   justify-content: center;
   
   overflow: hidden;
@@ -10,9 +10,9 @@
   font-family: 'Corporate', 'Avenir Next', 'Helvetica Neue', sans-serif;
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url("../../assets/backgrounds/startPage_Background-2.jpg");
   
-  background-position-x: center;
+  background-position: center;
   background-size: cover;
-  background-position-y: 500px;
+  background-attachment: fixed;
 }
 
 .contentWrapper {
@@ -21,8 +21,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  margin-top: 15vh;
-  max-width: 1200px;
+  max-width: 90%;
   width: 100%;
   z-index: 2;
   animation: fadeIn 1.5s ease-out forwards;
@@ -33,6 +32,7 @@
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+  width: 100%;
 }
 
 .textGroup.visible {
@@ -41,28 +41,30 @@
 }
 
 .title {
-  font-size: 5rem;
+  font-size: clamp(2.5rem, 8vw, 5rem);
   font-weight: 300;
   margin: 0;
   letter-spacing: 2px;
   text-transform: uppercase;
-  text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.6);
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
 }
 
 .subTitle {
-  font-size: 2rem;
+  font-size: clamp(1.2rem, 4vw, 2rem);
   font-weight: 300;
-  margin: 2rem 0 1rem 2rem;
+  margin: clamp(1rem, 3vw, 2rem) 0 clamp(0.5rem, 2vw, 1rem) 0;
   opacity: 0.9;
   letter-spacing: 1px;
   text-transform: uppercase;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+  text-align: center;
 }
 
 .designLine {
   height: 2px;
-  width: 60%;
+  width: clamp(40%, 60%, 80%);
   background: linear-gradient(to right, transparent, #00adef 20%, #00adef 80%, transparent);
-  margin: 1.5rem auto 3rem;
+  margin: clamp(1rem, 3vw, 1.5rem) auto clamp(2rem, 5vw, 3rem);
   box-shadow: 0 0 8px rgba(0, 173, 239, 0.6);
 }
 
@@ -73,8 +75,8 @@
   background: rgba(0, 0, 0, 0.5);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.8);
-  padding: 1rem 3.5rem;
-  font-size: 1.1rem;
+  padding: clamp(0.8rem, 2vw, 1rem) clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
   font-weight: 400;
   cursor: pointer;
   border-radius: 2px;
@@ -88,6 +90,8 @@
   position: relative;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  max-width: 90%;
+  width: fit-content;
 }
 
 .configureButton.visible {
@@ -138,11 +142,11 @@
 }
 
 .buttonText {
-  margin-right: 12px;
+  margin-right: clamp(6px, 2vw, 12px);
 }
 
 .buttonIcon {
-  font-size: 1rem;
+  font-size: clamp(0.8rem, 2vw, 1rem);
   transition: transform 0.4s ease;
 }
 
@@ -171,30 +175,124 @@
 }
 
 @media (max-width: 768px) {
+  .container {
+    background-position: center;
+  }
+  
+  .contentWrapper {
+    padding: 1.5rem;
+  }
+  
   .title {
-    font-size: 3.2rem;
+    line-height: 1.1;
   }
   
   .subTitle {
-    font-size: 1.4rem;
+    margin-top: 1rem;
   }
   
   .designLine {
-    width: 50px;
+    margin: 1rem auto 2rem;
   }
 }
 
 @media (max-width: 480px) {
-  .title {
-    font-size: 2.5rem;
-  }
-  
-  .subTitle {
-    font-size: 1.1rem;
+  .contentWrapper {
+    padding: 1rem;
   }
   
   .configureButton {
-    padding: 0.8rem 2rem;
-    font-size: 0.9rem;
+    margin-top: 1rem;
+    min-height: 44px;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .container {
+    align-items: flex-start;
+  }
+  
+  .contentWrapper {
+    margin-top: 2vh;
+    padding: 1rem;
+  }
+  
+  .title {
+    font-size: clamp(1.8rem, 6vw, 3rem);
+  }
+  
+  .subTitle {
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    margin: 0.5rem 0;
+  }
+  
+  .designLine {
+    margin: 0.8rem auto 1.2rem;
+  }
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  z-index: 3;
+}
+
+.copyright, .createdBy {
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.copyright:hover, .createdBy:hover {
+  opacity: 1;
+}
+
+.brandIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mercedesIcon {
+  width: 24px;
+  height: 24px;
+  opacity: 0.8;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.mercedesIcon:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.8rem 1.5rem;
+  }
+  
+  .copyright {
+    order: 1;
+  }
+  
+  .createdBy {
+    order: 2;
+    font-size: 0.7rem;
+  }
+  
+  .brandIcon {
+    order: 0;
+    margin-bottom: 0.5rem;
   }
 }

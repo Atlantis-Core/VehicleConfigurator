@@ -1,13 +1,18 @@
 import styles from "./StartPage.module.css"
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import MercedesLogo from "../../assets/icons/mercedes_star.svg";
 
 const StartPage = () => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    setIsVisible(true);
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 300);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   const handleConfigureClick = () => {
@@ -32,6 +37,18 @@ const StartPage = () => {
           <span className={styles.buttonIcon}>→</span>
         </button>
       </div>
+      
+      <footer className={styles.footer}>
+        <div className={styles.copyright}>
+          © {new Date().getFullYear()} Softwarequalität & React
+        </div>
+        <div className={styles.createdBy}>
+          Created by David Pospisil (AIN 6 SE)
+        </div>
+        <div className={styles.brandIcon}>
+          <img src={MercedesLogo} alt="mercedes star" className={styles.mercedesIcon}/>
+        </div>
+      </footer>
     </div>
   );
 };
