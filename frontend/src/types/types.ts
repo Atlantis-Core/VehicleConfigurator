@@ -4,6 +4,7 @@ export interface Model {
   id: number;
   name: string;
   basePrice: number;
+  imagePath: string;
   model3dPath: string;
 }
 
