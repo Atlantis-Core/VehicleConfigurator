@@ -1,20 +1,15 @@
-// App.tsx
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import StartPage from '@pages/startPage';
-import ConfiguratorPage from '@pages/configuratorPage';
+import ModelPicker from '@pages/modelPicker';
+import Configurator from '@pages/configurator';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<StartPage />} />
-        <Route path="/configurator" element={<ConfiguratorPage />} />
-        {
-          /*
-          <Route path="/summary" element={<SummaryPage />} />
-          <Route path="/success" element={<SuccessPage />} />
-          */
-        }
+        <Route path="/configurator" element={<ModelPicker />} />
+        <Route path="/configurator/:modelId" element={<Configurator />} />
       </Routes>
     </Router>
   );
