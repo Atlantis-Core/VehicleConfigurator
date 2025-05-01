@@ -1,49 +1,30 @@
-import { Mesh } from "three";
+import { Mesh, MeshStandardMaterial } from "three";
 
 // Helper function to apply color to a mesh
-export const applyColorToMesh = (mesh: Mesh, colorHex: string, isMatte = false) => {
+export const applyColorToMesh = (mesh: Mesh, color: string, isMatte: boolean = false) => {
   if (!mesh.material) return;
+  
+  console.log(`Applying color ${color} to mesh ${mesh.name}`);
   
   if (Array.isArray(mesh.material)) {
     mesh.material.forEach(mat => {
-      if (mat.isMaterial) {
-        // Apply to any material with a color property
-        if ('color' in mat) {
-          (mat as any).color.set(colorHex);
-          
-          // Apply matte properties if requested
-          if (isMatte && 'roughness' in mat) {
-            (mat as any).roughness = 0.9;  // High roughness for matte look
-          }
-          if (isMatte && 'metalness' in mat) {
-            (mat as any).metalness = 0.1;  // Low metalness for matte look
-          }
-          if (isMatte && 'clearcoat' in mat) {
-            (mat as any).clearcoat = 0.0;  // No clearcoat for matte
-          }
-          
-          // Force material update
-          (mat as any).needsUpdate = true;
-        }
+      if (mat instanceof MeshStandardMaterial) {
+        mat.color.set(color);
+        
+        // Adjust material properties based on finish
+        if ('metalness' in mat) mat.metalness = isMatte ? 0.1 : 0.7;
+        if ('roughness' in mat) mat.roughness = isMatte ? 0.8 : 0.2;
+        
+        console.log(`Set color on array material: ${color}`);
       }
     });
-  } else if (mesh.material.isMaterial) {
-    // Apply to any material with a color property
-    if ('color' in mesh.material) {
-      (mesh.material as any).color.set(colorHex);
-      
-      // Apply matte properties if requested
-      if (isMatte && 'roughness' in mesh.material) {
-        (mesh.material as any).roughness = 0.9;  // High roughness for matte look
-      }
-      if (isMatte && 'metalness' in mesh.material) {
-        (mesh.material as any).metalness = 0.1;  // Low metalness for matte look
-      }
-      if (isMatte && 'clearcoat' in mesh.material) {
-        (mesh.material as any).clearcoat = 0.0;  // No clearcoat for matte
-      }
-      
-      mesh.material.needsUpdate = true;
-    }
+  } else if (mesh.material instanceof MeshStandardMaterial) {
+    mesh.material.color.set(color);
+    
+    // Adjust material properties based on finish
+    if ('metalness' in mesh.material) mesh.material.metalness = isMatte ? 0.1 : 0.7;
+    if ('roughness' in mesh.material) mesh.material.roughness = isMatte ? 0.8 : 0.2;
+    
+    console.log(`Set color on material: ${color}`);
   }
 };
