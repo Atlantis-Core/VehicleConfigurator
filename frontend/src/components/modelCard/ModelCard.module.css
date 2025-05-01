@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+.card {
+  position: relative;
+  background: linear-gradient(145deg, #FFFFFF 0%, #F8F8F8 100%);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.09);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  cursor: pointer;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Roboto', 'Corporate A', Arial, sans-serif;
+  position: relative;
+  z-index: 1;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #00ADEF, #66C3EF);
+  transform: scaleX(0);
+  transform-origin: 0 0;
+  transition: transform 0.4s ease;
+  z-index: 2;
+}
+
+.card:hover::before, 
+.card.hovered::before {
+  transform: scaleX(1);
+}
+
+.card:hover, 
+.card.hovered {
+  transform: translateY(-10px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+}
+
+.card.selected {
+  border: none;
+  box-shadow: 0 16px 40px rgba(0, 174, 239, 0.2);
+  background: linear-gradient(145deg, #FFFFFF 0%, #F0F7FA 100%);
+}
+
+.card.selected::before {
+  background: linear-gradient(90deg, #00ADEF, #00ADEF);
+  transform: scaleX(1);
+  height: 6px;
+}
+
+.badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #000000;
+  color: white;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  transform: skewX(-10deg);
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.content {
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.modelName {
+  margin: 0 0 8px 0;
+  font-size: 22px;
+  font-weight: 500;
+  color: #111111;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.modelName::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: #00ADEF;
+}
+
+.imageContainer {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  overflow: hidden;
+  background: linear-gradient(to bottom, rgba(240,240,240,0.4) 0%, rgba(255,255,255,0) 100%);
+  position: relative;
+}
+
+.imageContainer::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(to top, rgba(248,248,248,0.8) 0%, rgba(248,248,248,0) 100%);
+  pointer-events: none;
+}
+
+.modelImage {
+  width: 95%;
+  height: auto;
+  object-fit: contain;
+  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
+}
+
+.card:hover .modelImage {
+  transform: scale(1.05) translateY(-5px);
+  filter: drop-shadow(0 15px 20px rgba(0, 0, 0, 0.15));
+}
+
+.priceSection {
+  margin-bottom: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-top: 10px;
+}
+
+.priceSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 1px;
+  background: #DDDDDD;
+}
+
+.priceLabel {
+  font-size: 12px;
+  color: #777777;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.basePrice {
+  font-size: 28px;
+  font-weight: 500;
+  color: #111111;
+  letter-spacing: 0.5px;
+}
+
+.selectButton {
+  background: #000000;
+  color: white;
+  border: none;
+  border-radius: 0;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.selectButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: #00ADEF;
+  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: -1;
+}
+
+.selectButton:hover::before {
+  transform: translateX(100%);
+}
+
+.selectButton:hover {
+  background: #00ADEF;
+  box-shadow: 0 4px 12px rgba(0, 173, 239, 0.3);
+}
+
+.selected .selectButton {
+  background: #00ADEF;
+}
+
+.selected .selectButton::before {
+  background: #000000;
+}
+
+@media (max-width: 768px) {
+  .card {
+    height: 400px;
+  }
+  
+  .modelName {
+    font-size: 20px;
+  }
+  
+  .basePrice {
+    font-size: 24px;
+  }
+  
+  .selectButton {
+    padding: 12px;
+  }
+}

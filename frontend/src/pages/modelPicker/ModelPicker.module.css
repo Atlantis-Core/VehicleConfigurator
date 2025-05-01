@@ -1,0 +1,324 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  overflow: scroll;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background-color: #000;
+  min-height: 60px;
+  padding: 0.5rem 0;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.logoImage {
+  width: 2.5rem;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.logoImage:hover {
+  transform: scale(1.1);
+}
+
+.upperSection {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+  padding: 0 1rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.sectionLine {
+  height: 1px;
+  width: 60px;
+  background: linear-gradient(90deg, transparent, #000, transparent);
+  margin: 0 20px;
+}
+
+.upperSectionTitle {
+  font-size: 48px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0;
+  color: #111;
+}
+
+.upperSectionSubTitle {
+  font-size: 16px;
+  max-width: 50%;
+  line-height: 24px;
+  font-weight: 300;
+  color: #555;
+}
+
+.filterControls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+  padding: 0 1rem;
+}
+
+.filterButton {
+  background: transparent;
+  border: 1px solid #ddd;
+  color: #555;
+  font-size: 14px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+
+.filterButton:hover {
+  background: #f0f0f0;
+  color: #000;
+}
+
+.filterButton.active {
+  background: #000;
+  color: white;
+  border-color: #000;
+}
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  gap: 1.5rem;
+  color: #555;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #00ADEF;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cardWrapper {
+  animation: fadeIn 0.5s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modelCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 4rem;
+  max-width: 90%;
+  margin: 5rem auto;
+  position: relative;
+  padding: 2rem;
+  background: linear-gradient(180deg, rgba(248, 248, 248, 0) 0%, rgba(240, 240, 240, 0.5) 100%);
+}
+
+.modelCards::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #00ADEF, transparent);
+}
+
+.modelCards::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 100%;
+  background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.02) 25%, transparent 25%), 
+                    linear-gradient(-45deg, rgba(0, 0, 0, 0.02) 25%, transparent 25%),
+                    linear-gradient(45deg, transparent 75%, rgba(0, 0, 0, 0.02) 75%),
+                    linear-gradient(-45deg, transparent 75%, rgba(0, 0, 0, 0.02) 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  z-index: -1;
+}
+
+.selectionSummary {
+  background: linear-gradient(to right, #f8f8f8, #ffffff);
+  padding: 2rem;
+  margin: 3rem auto;
+  max-width: 800px;
+  border-radius: 4px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.selectionSummary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #00ADEF;
+}
+
+.summaryContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.summaryContent h3 {
+  font-size: 24px;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #333;
+  margin: 0;
+}
+
+.selectedModelName {
+  font-size: 32px;
+  font-weight: 500;
+  color: #000;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.continueButton {
+  background: #000;
+  color: white;
+  border: none;
+  padding: 14px 30px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.continueButton:hover {
+  background: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.buttonArrow {
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.continueButton:hover .buttonArrow {
+  transform: translateX(5px);
+}
+
+.clearButton {
+  background: transparent;
+  border: none;
+  color: #777;
+  font-size: 14px;
+  margin-top: 1rem;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.clearButton:hover {
+  color: #000;
+}
+
+@media (max-width: 1200px) {
+  .modelCards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+  }
+
+  .upperSectionTitle {
+    font-size: 42px;
+  }
+  
+  .upperSectionSubTitle {
+    max-width: 70%;
+  }
+}
+
+@media (max-width: 768px) {
+  .modelCards {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .sectionLine {
+    width: 40px;
+  }
+  
+  .upperSectionTitle {
+    font-size: 36px;
+  }
+  
+  .upperSectionSubTitle {
+    max-width: 90%;
+    font-size: 14px;
+  }
+  
+  .filterButton {
+    padding: 6px 15px;
+    font-size: 13px;
+  }
+  
+  .selectedModelName {
+    font-size: 26px;
+  }
+  
+  .continueButton {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}
