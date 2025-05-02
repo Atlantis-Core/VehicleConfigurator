@@ -1,7 +1,7 @@
 import styles from "./StartPage.module.css"
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import LogoIcon from "../../../public/logo.svg";
+import LogoIcon from "@assets/logo.svg";
 
 const StartPage = () => {
   const navigate = useNavigate();
