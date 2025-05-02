@@ -10,14 +10,11 @@ import transmissionsRoutes from './routes/transmissions.routes';
 import featuresRoutes from './routes/features.routes';
 import enginesRoutes from './routes/engines.routes';
 import colorsRoutes from './routes/colors.routes';
+import r2BucketRoutes from './routes/r2bucket.routes';
 
 const app = express()
 app.use(cors());
 app.use(express.json());
-
-// Static serving if needed
-const path = require('path');
-app.use('/public', express.static(path.join(__dirname, '..', 'public')));
 
 const prisma = new PrismaClient();
 
@@ -33,5 +30,6 @@ app.use('/api/transmissions', transmissionsRoutes);
 app.use('/api/features', featuresRoutes);
 app.use('/api/engines', enginesRoutes);
 app.use('/api/colors', colorsRoutes);
+app.use('/api/storage', r2BucketRoutes);
 
 export { app, prisma }

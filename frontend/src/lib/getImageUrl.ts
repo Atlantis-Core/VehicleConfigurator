@@ -1,5 +1,8 @@
-const BACKEND_URL = import.meta.env.VITE_API_URL?.replace("/api", "") || "http://localhost:5001";
+const STORAGE_URL = import.meta.env.VITE_API_URL;
 
 export function getImageUrl(imagePath: string): string {
-  return `${BACKEND_URL}${imagePath}`;
+  if (!STORAGE_URL) {
+    console.error('Could not find StorageURL; imageURL is wrong!');
+  }
+  return `${STORAGE_URL}/storage/${imagePath}`;
 }
