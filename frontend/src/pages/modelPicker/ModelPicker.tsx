@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./ModelPicker.module.css";
 import { Model } from "../../types/types";
 import { getModels } from "@api/api";
-import MercedesIcon from "../../assets/icons/mercedes_star.svg";
+import LogoIcon from "../../../public/logo.svg";
 import { useNavigate } from "react-router-dom";
 import ModelCard from "@components/modelCard";
 import { motion } from "framer-motion";
@@ -54,8 +54,8 @@ const ModelPicker = () => {
     <div className={styles.container}>
       <header className={styles.header}>
         <img 
-          src={MercedesIcon} 
-          alt="Mercedes star"
+          src={LogoIcon} 
+          alt="Logo Icon"
           onClick={() => navigate("/")}
           className={styles.logoImage}
         />

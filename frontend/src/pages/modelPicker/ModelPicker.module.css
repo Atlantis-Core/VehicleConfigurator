@@ -21,6 +21,7 @@
   height: auto;
   cursor: pointer;
   transition: transform 0.3s ease;
+  filter: invert(1);
 }
 
 .logoImage:hover {

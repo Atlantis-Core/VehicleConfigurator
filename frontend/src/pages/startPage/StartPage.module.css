@@ -236,21 +236,35 @@
   bottom: 0;
   left: 0;
   right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  padding: 1.5rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
   color: rgba(255, 255, 255, 0.7);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 300;
   letter-spacing: 0.5px;
   z-index: 3;
 }
 
+.footerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .copyright, .createdBy {
   opacity: 0.7;
   transition: opacity 0.3s ease;
+  flex: 1;
+}
+
+.copyright {
+  text-align: left;
+}
+
+.createdBy {
+  text-align: right;
 }
 
 .copyright:hover, .createdBy:hover {
@@ -261,38 +275,38 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 2rem;
 }
 
-.mercedesIcon {
-  width: 24px;
-  height: 24px;
+.logoIcon {
+  width: 40px;
+  height: 40px;
   opacity: 0.8;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: all 0.3s ease;
+  filter: invert(1);
 }
 
-.mercedesIcon:hover {
+.logoIcon:hover {
   opacity: 1;
   transform: scale(1.1);
 }
 
 @media (max-width: 768px) {
   .footer {
+    padding: 1rem;
+  }
+  
+  .footerContent {
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.8rem 1.5rem;
+    gap: 0.8rem;
   }
   
-  .copyright {
-    order: 1;
+  .copyright, .createdBy {
+    text-align: center;
   }
   
-  .createdBy {
-    order: 2;
-    font-size: 0.7rem;
-  }
-  
-  .brandIcon {
-    order: 0;
-    margin-bottom: 0.5rem;
+  .logoIcon {
+    width: 32px;
+    height: 32px;
   }
 }
