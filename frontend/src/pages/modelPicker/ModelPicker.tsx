@@ -6,21 +6,26 @@ import LogoIcon from "@assets/logo.svg";
 import { useNavigate } from "react-router-dom";
 import ModelCard from "@components/modelCard";
 import { motion } from "framer-motion";
+import { getModelTypes } from "@lib/getModelTypes";
 
 const ModelPicker = () => {
   const [models, setModels] = useState<Model[]>([]);
   const [selectedModel, setSelectedModel] = useState<Model | null>(null);
+  const [modelTypes, setModelTypes] = useState<String[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState('All');
+  const [activeFilter, setActiveFilter] = useState<String>('All');
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchModels = async () => {
+    const fetchData = async () => {
       setIsLoading(true);
       try {
-        const data = await getModels();
-        setModels(data);
+        const models = await getModels();
+        setModels(models);
+
+        const newModelTypes = await getModelTypes();
+        setModelTypes(['All', ...newModelTypes]);
       } catch (error) {
         console.error("Failed to fetch models:", error);
       } finally {
@@ -28,7 +33,7 @@ const ModelPicker = () => {
       }
     };
 
-    fetchModels();
+    fetchData();
   }, []);
 
   const handleSelectModel = (model: Model) => {
@@ -80,13 +85,13 @@ const ModelPicker = () => {
       </motion.div>
 
       <div className={styles.filterControls}>
-        {['All', 'Sedan', 'SUV', 'Electric', 'AMG'].map(filter => (
-          <button 
-            key={filter}
-            className={`${styles.filterButton} ${activeFilter === filter ? styles.active : ''}`}
-            onClick={() => setActiveFilter(filter)}
+        {modelTypes.map(type => (
+          <button
+            key={type.toString()}
+            className={`${styles.filterButton} ${activeFilter === type ? styles.active : ''}`}
+            onClick={() => setActiveFilter(type)}
           >
-            {filter}
+            {type}
           </button>
         ))}
       </div>
@@ -103,20 +108,23 @@ const ModelPicker = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          {models.map((model, index) => (
-            <motion.div
-              key={model.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={styles.cardWrapper}
-            >
-              <ModelCard 
-                model={model}
-                onSelect={handleSelectModel}
-                isSelected={selectedModel?.id === model.id}
-              />
-            </motion.div>
-          ))}
+          {models
+            .filter((model) => activeFilter === 'All' || model.type === activeFilter)
+            .map((model) => (
+              <motion.div
+                key={model.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={styles.cardWrapper}
+              >
+                <ModelCard 
+                  model={model}
+                  onSelect={handleSelectModel}
+                  isSelected={selectedModel?.id === model.id}
+                />
+              </motion.div>
+            ))
+          }
         </motion.div>
       )}
 
