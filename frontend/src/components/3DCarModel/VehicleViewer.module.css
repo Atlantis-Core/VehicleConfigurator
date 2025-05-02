@@ -1,0 +1,39 @@
+.rotateToggle {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 100;
+}
+
+.rotateToggle:hover {
+  background-color: white;
+  transform: scale(1.05);
+}
+
+.rotateIcon {
+  width: 20px;
+  height: 20px;
+  color: #333;
+}
+
+/* Optional animation for when rotation is active */
+@keyframes pulseRotate {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.rotateToggle[aria-label="Pause rotation"] .rotateIcon {
+  animation: pulseRotate 2s infinite ease-in-out;
+}

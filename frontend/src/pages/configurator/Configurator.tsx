@@ -6,15 +6,15 @@ import styles from './Configurator.module.css';
 import { IoArrowBack } from "react-icons/io5";
 import { BsBookmark } from "react-icons/bs";
 import { IoRefreshOutline } from "react-icons/io5";
+import { Rim } from '../../types/types';
 
 function Configurator() {
   const { modelId } = useParams();
   const navigate = useNavigate();
-  const [model, setModel] = useState(null);
-  const [rims, setRims] = useState([]);
+  const [model, setModel] = useState<any>(null);
+  const [rims, setRims] = useState<Rim[]>([]);
   const [selectedColor, setSelectedColor] = useState('red');
-  const [selectedRim, setSelectedRim] = useState(null);
-  const [selectedPackage, setSelectedPackage] = useState(null);
+  const [selectedRim, setSelectedRim] = useState<Number>(-1);
   const [activeCategory, setActiveCategory] = useState('Exterior');
 
   // Demo data
@@ -96,11 +96,11 @@ function Configurator() {
                   onClick={() => setSelectedRim(rim.id)}
                 >
                   <div className={styles.rimImage}>
-                    <img src={rim.thumbnail || '/placeholder-rim.png'} alt={rim.name} />
+                    <img src={rim.imagePath || '/placeholder-rim.png'} alt={rim.name} />
                   </div>
                   <div className={styles.rimInfo}>
                     <span className={styles.rimName}>{rim.name}</span>
-                    <span className={styles.rimPrice}>+${rim.price?.toLocaleString()}</span>
+                    <span className={styles.rimPrice}>+${rim?.toLocaleString()}</span>
                   </div>
                 </div>
               ))}
@@ -113,20 +113,7 @@ function Configurator() {
             <h3>Equipment Packages</h3>
             <div className={styles.packageOptions}>
               {packages.map((pkg) => (
-                <div 
-                  key={pkg.id}
-                  className={`${styles.packageOption} ${selectedPackage === pkg.id ? styles.selected : ''}`}
-                  onClick={() => setSelectedPackage(pkg.id)}
-                >
-                  <div className={styles.packageHeader}>
-                    <span className={styles.packageName}>{pkg.name} Package</span>
-                    <span className={styles.packagePrice}>{pkg.price}</span>
-                  </div>
-                  <ul className={styles.packageFeatures}>
-                    {pkg.features.map((feature, idx) => (
-                      <li key={idx}>{feature}</li>
-                    ))}
-                  </ul>
+                <div>
                 </div>
               ))}
             </div>
@@ -145,29 +132,41 @@ function Configurator() {
     <div className={styles.configuratorContainer}>
       {/* Top header with back button, model info and save button */}
       <div className={styles.topHeader}>
-        <button onClick={handleBack} className={styles.backButton}>
-          <IoArrowBack />
-          <span>Back to Models</span>
-        </button>
-        
-        <div className={styles.modelInfo}>
-          <span className={styles.modelName}>{model.name}</span>
-          <div className={styles.priceInfo}>
-            <div className={styles.priceRow}>
-              <span>Base price</span>
-              <span className={styles.price}>${model.price?.toLocaleString()} €</span>
-            </div>
-            <div className={styles.priceRow}>
-              <span>Monthly leasing</span>
-              <span className={styles.price}>300,36 € <span className={styles.leaseTerms}>(36 months)</span></span>
-            </div>
-          </div>
+        <div className={styles.headerLeft}>
+          <button onClick={handleBack} className={styles.backButton}>
+            <IoArrowBack />
+            <span>Back</span>
+          </button>
         </div>
         
-        <button className={styles.saveButton}>
-          <BsBookmark />
-          <span>Save Configuration</span>
-        </button>
+        <div className={styles.headerCenter}>
+          <h1 className={styles.modelName}>{model.name}</h1>
+          <div className={styles.modelSubtitle}>{model.subtitle || 'Premium Vehicle'}</div>
+        </div>
+        
+        <div className={styles.headerRight}>
+          <div className={styles.priceWrapper}>
+            <div className={styles.priceDetail}>
+              <div className={styles.priceLabel}>Base Price</div>
+              <div className={styles.priceValue}>{model.price?.toLocaleString()} €</div>
+            </div>
+            
+            <div className={styles.priceDivider}></div>
+            
+            <div className={styles.priceDetail}>
+              <div className={styles.priceLabel}>Monthly Leasing</div>
+              <div className={styles.priceValue}>
+                300,36 €
+                <span className={styles.leaseTerms}>/mo.</span>
+              </div>
+            </div>
+          </div>
+          
+          <button className={styles.saveButton}>
+            <BsBookmark />
+            <span>Save</span>
+          </button>
+        </div>
       </div>
 
       {/* Main content with sidebar and viewer */}
