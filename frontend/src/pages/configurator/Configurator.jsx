@@ -1,11 +1,15 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getModels, getRims } from '@api/api';
 import VehicleViewer from '@components/3DCarModel/VehicleViewer';
 import styles from './Configurator.module.css';
+import { IoArrowBack } from "react-icons/io5";
+import { BsBookmark } from "react-icons/bs";
+import { IoRefreshOutline } from "react-icons/io5";
 
 function Configurator() {
   const { modelId } = useParams();
+  const navigate = useNavigate();
   const [model, setModel] = useState(null);
   const [rims, setRims] = useState([]);
   const [selectedColor, setSelectedColor] = useState('red');
@@ -50,7 +54,16 @@ function Configurator() {
     loadData();
   }, [modelId]);
 
-  if (!model) return <div className={styles.container}>Loading model...</div>;
+  const handleBack = () => {
+    navigate('/configurator');
+  };
+
+  if (!model) return (
+    <div className={styles.loadingContainer}>
+      <div className={styles.loader}></div>
+      <p>Loading your configuration...</p>
+    </div>
+  );
 
   const renderActiveCategoryContent = () => {
     switch (activeCategory) {
@@ -130,24 +143,30 @@ function Configurator() {
 
   return (
     <div className={styles.configuratorContainer}>
-      {/* Top header with model info and save button */}
+      {/* Top header with back button, model info and save button */}
       <div className={styles.topHeader}>
+        <button onClick={handleBack} className={styles.backButton}>
+          <IoArrowBack />
+          <span>Back to Models</span>
+        </button>
+        
         <div className={styles.modelInfo}>
           <span className={styles.modelName}>{model.name}</span>
           <div className={styles.priceInfo}>
             <div className={styles.priceRow}>
-              <span>Vehicle price (incl. tax)</span>
+              <span>Base price</span>
               <span className={styles.price}>${model.price?.toLocaleString()} €</span>
             </div>
             <div className={styles.priceRow}>
-              <span>Monthly leasing rate (incl. tax)</span>
-              <span className={styles.price}>300,36 € (36 months)</span>
+              <span>Monthly leasing</span>
+              <span className={styles.price}>300,36 € <span className={styles.leaseTerms}>(36 months)</span></span>
             </div>
           </div>
         </div>
+        
         <button className={styles.saveButton}>
-          <span className={styles.saveIcon}>★</span>
-          Save
+          <BsBookmark />
+          <span>Save Configuration</span>
         </button>
       </div>
 
@@ -155,9 +174,6 @@ function Configurator() {
       <div className={styles.mainContent}>
         {/* Left sidebar navigation */}
         <div className={styles.sidebar}>
-          <div className={styles.searchContainer}>
-            <input type="text" placeholder="Search" className={styles.searchInput} />
-          </div>
           <nav className={styles.categoryNav}>
             {categories.map((category) => (
               <div 
@@ -176,7 +192,7 @@ function Configurator() {
           <div className={styles.viewer}>
             <VehicleViewer modelPath={model.model3dPath} color={selectedColor} />
             <div className={styles.rotateIndicator}>
-              <span className={styles.rotateIcon}>⟳</span>
+              <IoRefreshOutline />
               360°
             </div>
           </div>
