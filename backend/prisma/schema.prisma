@@ -21,6 +21,7 @@ model Customer {
 model Model {
   id             Int             @id @default(autoincrement())
   name           String
+  type           String
   basePrice      Int
   imagePath      String
   model3dPath    String
