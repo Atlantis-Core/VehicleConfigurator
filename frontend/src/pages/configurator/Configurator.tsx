@@ -1,19 +1,20 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getColors, getEngines, getModels, getRims } from '@api/api';
+import { getColors, getEngines, getModels, getRims, getTransmissions } from '@api/api';
 import VehicleViewer from '@components/3DCarModel/VehicleViewer';
 import styles from './Configurator.module.css';
 import { IoArrowBack, IoRefreshOutline, IoCheckmarkCircle } from "react-icons/io5";
 import { BsBookmark } from "react-icons/bs";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { FaRegCircle, FaCircle, FaCar, FaPaintBrush, FaCogs, FaStar, FaChair } from "react-icons/fa";
-import { Color, Engine, Model, Rim } from '../../types/types';
+import { Color, Engine, Model, Rim, Transmission } from '../../types/types';
 import { getCategories } from '@lib/getCategories';
 import { getNextSubcategory } from '@lib/getNextSubcategory';
 import Logo from "@assets/logo.svg";
 import ExteriorColor from '@components/categoryContent/exteriorColor';
 import Rims from '@components/categoryContent/rims';
 import { default as EngineCategory } from '@components/categoryContent/engines';
+import Transmissions from '@components/categoryContent/transmissions';
 
 function Configurator() {
   const { modelId } = useParams();
@@ -24,11 +25,13 @@ function Configurator() {
   const [rims, setRims] = useState<Rim[]>([]);
   const [colors, setColors] = useState<Color[]>([]);
   const [engines, setEngines] = useState<Engine[]>([]);
+  const [transmissions, setTransmissions] = useState<Transmission[]>([]);
   
   // Selected options
   const [selectedColor, setSelectedColor] = useState<Color>();
   const [selectedRim, setSelectedRim] = useState<Rim>();
   const [selectedEngine, setSelectedEngine] = useState<Engine>();
+  const [selectedTransmission, setSelectedTransmission] = useState<Transmission>();
 
   const [activeCategory, setActiveCategory] = useState<string>('motorization');
   const [activeSubcategory, setActiveSubcategory] = useState<string>('engine');
@@ -58,11 +61,12 @@ function Configurator() {
     async function loadData() {
       try {
         // Fetch data in parallel with proper typing
-        const [models, rims, colors, engines] = await Promise.all([
+        const [models, rims, colors, engines, transmissions] = await Promise.all([
           getModels(),
           getRims(),
           getColors(),
-          getEngines()
+          getEngines(),
+          getTransmissions()
         ]);
 
         // Set model state if found
@@ -73,6 +77,7 @@ function Configurator() {
         setRims(rims);
         setColors(colors);
         setEngines(engines);
+        setTransmissions(transmissions);
       } catch (err) {
         console.error('Error loading config data:', err);
       }
@@ -120,6 +125,11 @@ function Configurator() {
   const handleSelectEngine = (engine: Engine) => {
     setSelectedEngine(engine);
     setCompletedSteps(prev => ({ ...prev, 'engine': true }));
+  }
+
+  const handleSelectTransmission = (transmission: Transmission) => {
+    setSelectedTransmission(transmission);
+    setCompletedSteps(prev => ({ ...prev, 'transmission': true }));
   } 
 
   if (!model) return (
@@ -142,9 +152,11 @@ function Configurator() {
         );
       case 'transmission':
         return (
-          <div>
-
-          </div>
+          <Transmissions
+            transmissions={transmissions}
+            selectedTransmission={selectedTransmission}
+            handleSelectTransmission={handleSelectTransmission}
+          />
         );
       case 'exterior-color':
         return (
