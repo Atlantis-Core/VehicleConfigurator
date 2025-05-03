@@ -18,7 +18,6 @@ import Transmissions from '@components/categoryContent/transmissions';
 import Upholstery from '@components/categoryContent/upholstery';
 import Assistance from '@components/categoryContent/assistance';
 import Comfort from '@components/categoryContent/comfort';
-//import ConfigurationSummary from '@components/categoryContent/configurationSummary';
 //import Pricing from '@components/categoryContent/pricing';
 
 function Configurator() {
@@ -230,22 +229,6 @@ function Configurator() {
             selectedComfort={selectedComfort}
             handleSelectComfort={handleSelectComfort}
           />
-        );
-      case 'configuration':
-        return (
-          <div style={{ display: 'none' }}>
-            {/*
-              <ConfigurationSummary
-                selectedEngine={selectedEngine}
-                selectedTransmission={selectedTransmission}
-                selectedColor={selectedColor}
-                selectedRim={selectedRim}
-                selectedUpholstery={selectedUpholstery}
-                selectedAssistance={selectedAssistance}
-                selectedComfort={selectedComfort}
-              />
-            */}
-          </div>
         );
       case 'pricing':
         return (
