@@ -1,13 +1,13 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getColors, getEngines, getModels, getRims, getTransmissions } from '@api/api';
+import { getColors, getEngines, getModels, getRims, getTransmissions, getFeatures, getInteriors } from '@api/api';
 import VehicleViewer from '@components/3DCarModel/VehicleViewer';
 import styles from './Configurator.module.css';
 import { IoArrowBack, IoRefreshOutline, IoCheckmarkCircle } from "react-icons/io5";
 import { BsBookmark } from "react-icons/bs";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { FaRegCircle, FaCircle, FaCar, FaPaintBrush, FaCogs, FaStar, FaChair } from "react-icons/fa";
-import { Color, Engine, Model, Rim, Transmission } from '../../types/types';
+import { Color, Engine, Model, Rim, Transmission, Feature, Interior } from '../../types/types';
 import { getCategories } from '@lib/getCategories';
 import { getNextSubcategory } from '@lib/getNextSubcategory';
 import Logo from "@assets/logo.svg";
@@ -15,6 +15,11 @@ import ExteriorColor from '@components/categoryContent/exteriorColor';
 import Rims from '@components/categoryContent/rims';
 import { default as EngineCategory } from '@components/categoryContent/engines';
 import Transmissions from '@components/categoryContent/transmissions';
+import Upholstery from '@components/categoryContent/upholstery';
+import Assistance from '@components/categoryContent/assistance';
+import Comfort from '@components/categoryContent/comfort';
+//import ConfigurationSummary from '@components/categoryContent/configurationSummary';
+//import Pricing from '@components/categoryContent/pricing';
 
 function Configurator() {
   const { modelId } = useParams();
@@ -26,12 +31,18 @@ function Configurator() {
   const [colors, setColors] = useState<Color[]>([]);
   const [engines, setEngines] = useState<Engine[]>([]);
   const [transmissions, setTransmissions] = useState<Transmission[]>([]);
-  
+  const [upholsteries, setUpholsteries] = useState<Interior[]>([]);
+  const [assistances, setAssistances] = useState<Feature[]>([]);
+  const [comforts, setComforts] = useState<Feature[]>([]);
+
   // Selected options
   const [selectedColor, setSelectedColor] = useState<Color>();
   const [selectedRim, setSelectedRim] = useState<Rim>();
   const [selectedEngine, setSelectedEngine] = useState<Engine>();
   const [selectedTransmission, setSelectedTransmission] = useState<Transmission>();
+  const [selectedUpholstery, setSelectedUpholstery] = useState<Interior>();
+  const [selectedAssistance, setSelectedAssistance] = useState<Feature | null>();
+  const [selectedComfort, setSelectedComfort] = useState<Feature | null>();
 
   const [activeCategory, setActiveCategory] = useState<string>('motorization');
   const [activeSubcategory, setActiveSubcategory] = useState<string>('engine');
@@ -61,12 +72,14 @@ function Configurator() {
     async function loadData() {
       try {
         // Fetch data in parallel with proper typing
-        const [models, rims, colors, engines, transmissions] = await Promise.all([
+        const [models, rims, colors, engines, transmissions, interiors, features] = await Promise.all([
           getModels(),
           getRims(),
           getColors(),
           getEngines(),
-          getTransmissions()
+          getTransmissions(),
+          getInteriors(),
+          getFeatures()
         ]);
 
         // Set model state if found
@@ -78,6 +91,11 @@ function Configurator() {
         setColors(colors);
         setEngines(engines);
         setTransmissions(transmissions);
+        setUpholsteries(interiors);
+
+        // Filter features into assistances and comforts
+        setAssistances(features.filter((feature) => feature.category === 'assistance'));
+        setComforts(features.filter((feature) => feature.category === 'comfort'));
       } catch (err) {
         console.error('Error loading config data:', err);
       }
@@ -132,6 +150,21 @@ function Configurator() {
     setCompletedSteps(prev => ({ ...prev, 'transmission': true }));
   } 
 
+  const handleSelectUpholstery = (upholstery: Interior) => {
+    setSelectedUpholstery(upholstery);
+    setCompletedSteps(prev => ({ ...prev, 'upholstery': true }));
+  };
+
+  const handleSelectAssistance = (assistance: Feature | null) => {
+    setSelectedAssistance(assistance);
+    setCompletedSteps(prev => ({ ...prev, 'assistance': true }));
+  };
+
+  const handleSelectComfort = (comfort: Feature | null) => {
+    setSelectedComfort(comfort);
+    setCompletedSteps(prev => ({ ...prev, 'comfort': true }));
+  };
+
   if (!model) return (
     <div className={styles.loadingContainer}>
       <div className={styles.loader}></div>
@@ -166,7 +199,6 @@ function Configurator() {
             onSelectColor={handleColorSelect}
           />
         );
-
       case 'rims':
         return (
           <Rims
@@ -175,41 +207,64 @@ function Configurator() {
             handleRimSelect={handleRimSelect}
           />
         );
-        
       case 'upholstery':
         return (
-          <div>
-
-          </div>
+          <Upholstery
+            upholsteries={upholsteries}
+            selectedUpholstery={selectedUpholstery}
+            handleSelectUpholstery={handleSelectUpholstery}
+          />
         );
-
       case 'assistance':
         return (
-          <div>
-
-          </div>
+          <Assistance
+            assistances={assistances}
+            selectedAssistance={selectedAssistance}
+            handleSelectAssistance={handleSelectAssistance}
+          />
         );
-
       case 'comfort':
         return (
-          <div>
-
-          </div>
+          <Comfort
+            comforts={comforts}
+            selectedComfort={selectedComfort}
+            handleSelectComfort={handleSelectComfort}
+          />
         );
-
       case 'configuration':
         return (
-          <div>
-
+          <div style={{ display: 'none' }}>
+            {/*
+              <ConfigurationSummary
+                selectedEngine={selectedEngine}
+                selectedTransmission={selectedTransmission}
+                selectedColor={selectedColor}
+                selectedRim={selectedRim}
+                selectedUpholstery={selectedUpholstery}
+                selectedAssistance={selectedAssistance}
+                selectedComfort={selectedComfort}
+              />
+            */}
           </div>
         );
-
       case 'pricing':
         return (
-          <div>
-
+          <div style={{ display: 'none' }}>
+            {/*
+              <Pricing
+                selectedEngine={selectedEngine}
+                selectedTransmission={selectedTransmission}
+                selectedColor={selectedColor}
+                selectedRim={selectedRim}
+                selectedUpholstery={selectedUpholstery}
+                selectedAssistance={selectedAssistance}
+                selectedComfort={selectedComfort}
+              />
+            */}
           </div>
         );
+      default:
+        return null;
     }
   };
 
