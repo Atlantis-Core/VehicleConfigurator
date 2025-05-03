@@ -12,7 +12,7 @@ export interface Model {
 export interface Color {
   id: number;
   name: string;
-  type: string;
+  type: 'glossy' | 'matte' | 'metallic';
   additionalPrice: number;
   hexCode?: string;         // optional
   materialName?: string;    // optional

@@ -1,0 +1,143 @@
+.categoryContent {
+  margin: 0 auto;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.categoryContent {
+  margin: 0 auto;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.categoryContent h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.categoryContent h3::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 80px;
+  height: 3px;
+  background: var(#00a4dc);
+  border-radius: 2px;
+}
+
+.colorTypeSection {
+  margin-bottom: 2rem;
+}
+
+.colorTypeHeading {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+.colorOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.colorOption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.colorOption:hover {
+  transform: translateY(-4px);
+}
+
+.colorOption.selected {
+  position: relative;
+}
+
+.colorOption.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-color: #1a73e8;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+.colorSwatch {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  margin-bottom: 0.6rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.colorSwatch.metallic {
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 70%);
+  background-size: 200% 200%;
+}
+
+.colorSwatch.glossy {
+  background-image: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.2) 25%, rgba(255, 255, 255, 0) 50%);
+}
+
+.colorSwatch.matte {
+  box-shadow: none;
+  opacity: 0.95;
+  border: 2px solid #ccc;
+}
+
+.colorName {
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 0.3rem;
+}
+
+.colorDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.2rem;
+}
+
+.colorType {
+  font-size: 0.75rem;
+  color: #666;
+  text-transform: capitalize;
+}
+
+.colorPrice {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #1a73e8;
+  margin-top: 0.2rem;
+}
+
+.colorIncluded {
+  font-size: 0.8rem;
+  color: #28a745;
+  margin-top: 0.2rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

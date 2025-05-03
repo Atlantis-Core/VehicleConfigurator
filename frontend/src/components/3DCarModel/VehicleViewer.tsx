@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { IoRefreshOutline, IoPauseOutline } from "react-icons/io5";
 import styles from './VehicleViewer.module.css';
+import { Color } from '../../types/types';
 
 interface TurntableProps {
   autoRotate: boolean;
@@ -31,7 +32,7 @@ function Turntable({ autoRotate, autoRotateSpeed, children }: TurntableProps) {
 
 interface VehicleViewerProps {
   modelPath: string;
-  color: string;
+  color?: Color;
   height?: string;
   width?: string;
   autoRotate?: boolean;
@@ -129,7 +130,7 @@ const VehicleViewer = ({
           enableDamping={true}
           dampingFactor={0.05}
           minDistance={2.5}
-          maxDistance={5}
+          maxDistance={4}
           minPolarAngle={Math.PI / 3}
           maxPolarAngle={Math.PI / 3 + 0.4}
           target={[0, 0.4, 0]}
@@ -139,7 +140,8 @@ const VehicleViewer = ({
             {modelPath && (
               <CarModel
                 url={getImageUrl(modelPath)}
-                color={color}
+                color={color?.hexCode || '#000000'}
+                finish={color?.type || 'metallic'}
                 position={[0.5, 0, 8.4]}
                 scale={0.8}
                 initialRotation={Math.PI}

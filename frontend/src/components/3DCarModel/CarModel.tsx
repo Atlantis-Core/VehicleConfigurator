@@ -51,18 +51,14 @@ export const CarModel = forwardRef<CarModelHandle, CarModelProps>(({
     const bodyParts: Mesh[] = [];
     
     const processObject = (object: Object3D) => {
-      console.log(`Processing object: ${object.name}`);
-      
       let foundAny = false;
       
       // Process the object if it's a mesh, OR process its children if the name matches
       if (shouldColorObject(object.name)) {
-        console.log(`Found target object: ${object.name}`);
         
         // If it's a mesh, color it directly
         if (object instanceof Mesh) {
           bodyParts.push(object);
-          console.log(`Found body part mesh to color: ${object.name}`);
           applyColorToMesh(object, color, finish === 'matte');
           foundAny = true;
         }
@@ -71,7 +67,6 @@ export const CarModel = forwardRef<CarModelHandle, CarModelProps>(({
         object.children.forEach(child => {
           if (child instanceof Mesh) {
             bodyParts.push(child);
-            console.log(`Found child mesh to color: ${child.name} (child of ${object.name})`);
             applyColorToMesh(child, color, finish === 'matte');
             foundAny = true;
           } else {

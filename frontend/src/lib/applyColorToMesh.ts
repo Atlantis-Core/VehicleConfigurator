@@ -4,8 +4,6 @@ import { Mesh, MeshStandardMaterial } from "three";
 export const applyColorToMesh = (mesh: Mesh, color: string, isMatte: boolean = false) => {
   if (!mesh.material) return;
   
-  console.log(`Applying color ${color} to mesh ${mesh.name}`);
-  
   if (Array.isArray(mesh.material)) {
     mesh.material.forEach(mat => {
       if (mat instanceof MeshStandardMaterial) {
@@ -14,8 +12,6 @@ export const applyColorToMesh = (mesh: Mesh, color: string, isMatte: boolean = f
         // Adjust material properties based on finish
         if ('metalness' in mat) mat.metalness = isMatte ? 0.1 : 0.7;
         if ('roughness' in mat) mat.roughness = isMatte ? 0.8 : 0.2;
-        
-        console.log(`Set color on array material: ${color}`);
       }
     });
   } else if (mesh.material instanceof MeshStandardMaterial) {
@@ -24,7 +20,5 @@ export const applyColorToMesh = (mesh: Mesh, color: string, isMatte: boolean = f
     // Adjust material properties based on finish
     if ('metalness' in mesh.material) mesh.material.metalness = isMatte ? 0.1 : 0.7;
     if ('roughness' in mesh.material) mesh.material.roughness = isMatte ? 0.8 : 0.2;
-    
-    console.log(`Set color on material: ${color}`);
   }
 };

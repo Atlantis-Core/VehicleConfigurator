@@ -1,62 +1,126 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getModels, getRims } from '@api/api';
+import { getColors, getEngines, getModels, getRims } from '@api/api';
 import VehicleViewer from '@components/3DCarModel/VehicleViewer';
 import styles from './Configurator.module.css';
-import { IoArrowBack } from "react-icons/io5";
+import { IoArrowBack, IoRefreshOutline, IoCheckmarkCircle } from "react-icons/io5";
 import { BsBookmark } from "react-icons/bs";
-import { IoRefreshOutline } from "react-icons/io5";
-import { Rim } from '../../types/types';
+import { MdKeyboardArrowRight } from "react-icons/md";
+import { FaRegCircle, FaCircle, FaCar, FaPaintBrush, FaCogs, FaStar, FaChair } from "react-icons/fa";
+import { Color, Engine, Model, Rim } from '../../types/types';
+import { getCategories } from '@lib/getCategories';
+import { getNextSubcategory } from '@lib/getNextSubcategory';
+import Logo from "@assets/logo.svg";
+import ExteriorColor from '@components/categoryContent/exteriorColor';
+import Rims from '@components/categoryContent/rims';
+import { default as EngineCategory } from '@components/categoryContent/engines';
 
 function Configurator() {
   const { modelId } = useParams();
   const navigate = useNavigate();
-  const [model, setModel] = useState<any>(null);
+
+  // State variables
+  const [model, setModel] = useState<Model>();
   const [rims, setRims] = useState<Rim[]>([]);
-  const [selectedColor, setSelectedColor] = useState('red');
-  const [selectedRim, setSelectedRim] = useState<Number>(-1);
-  const [activeCategory, setActiveCategory] = useState('Exterior');
-
-  // Demo data
-  const colors = [
-    { id: 1, name: 'Ruby Red', value: '#b30000' },
-    { id: 2, name: 'Obsidian Black', value: '#000000' },
-    { id: 3, name: 'Silver Arrow', value: '#C0C0C0' },
-    { id: 4, name: 'Alpine White', value: '#FFFFFF' },
-    { id: 5, name: 'Ocean Blue', value: '#0047AB' },
-  ];
+  const [colors, setColors] = useState<Color[]>([]);
+  const [engines, setEngines] = useState<Engine[]>([]);
   
-  const packages = [
-    { id: 1, name: 'Sport', price: '$2,500', features: ['Sport Suspension', 'Performance Exhaust', 'Sport Steering Wheel'] },
-    { id: 2, name: 'Comfort', price: '$1,800', features: ['Heated Seats', 'Premium Sound System', 'Ambient Lighting'] },
-    { id: 3, name: 'Technology', price: '$3,200', features: ['360° Camera', 'Head-up Display', 'Adaptive Cruise Control'] },
-  ];
+  // Selected options
+  const [selectedColor, setSelectedColor] = useState<Color>();
+  const [selectedRim, setSelectedRim] = useState<Rim>();
+  const [selectedEngine, setSelectedEngine] = useState<Engine>();
 
-  const categories = [
-    'Engine', 'Variants', 'Styles', 'Packages', 'Exterior', 'Interior', 
-    'Multimedia', 'Assistance Systems', 'Summary'
-  ];
+  const [activeCategory, setActiveCategory] = useState<string>('motorization');
+  const [activeSubcategory, setActiveSubcategory] = useState<string>('engine');
+  const [completedSteps, setCompletedSteps] = useState<Record<string, boolean>>({});
+  const categories = getCategories();
+
+  // Get category icon based on id
+  const getCategoryIcon = (categoryId: string) => {
+    switch (categoryId) {
+      case 'motorization': return <FaCar />;
+      case 'exterior': return <FaPaintBrush />;
+      case 'interior': return <FaChair />;
+      case 'features': return <FaCogs />;
+      case 'summary': return <FaStar />;
+      default: return <FaCar />;
+    }
+  };
+
+  // Calculate overall progress
+  const calculateProgress = () => {
+    const totalSteps = categories.reduce((acc, cat) => acc + cat.subcategories.length, 0);
+    const completedCount = Object.values(completedSteps).filter(Boolean).length;
+    return Math.round((completedCount / totalSteps) * 100);
+  };
 
   useEffect(() => {
     async function loadData() {
       try {
-        const [models, r] = await Promise.all([
-          getModels(), getRims(),
+        // Fetch data in parallel with proper typing
+        const [models, rims, colors, engines] = await Promise.all([
+          getModels(),
+          getRims(),
+          getColors(),
+          getEngines()
         ]);
-        const found = models.find((m) => m.id === parseInt(modelId || ''));
-        if (found) setModel(found);
-        setRims(r);
-        if (r.length > 0) setSelectedRim(r[0].id);
+
+        // Set model state if found
+        const foundModel = models.find((m) => m.id === parseInt(modelId || ''));
+        if (foundModel) setModel(foundModel);
+
+        // Set collections
+        setRims(rims);
+        setColors(colors);
+        setEngines(engines);
       } catch (err) {
-        console.error('Error loading config data', err);
+        console.error('Error loading config data:', err);
       }
     }
+
     loadData();
   }, [modelId]);
 
   const handleBack = () => {
     navigate('/configurator');
   };
+
+  const getNextCategory = () => {
+    return getNextSubcategory(categories, activeCategory, activeSubcategory);
+  };
+
+  const handleNextClick = () => {
+    const next = getNextCategory();
+    if (next) {
+      setActiveCategory(next.categoryId);
+      setActiveSubcategory(next.subcategoryId);
+    }
+  };
+
+  // When selecting a category, select its first subcategory automatically
+  const handleCategoryClick = (categoryId: string) => {
+    setActiveCategory(categoryId);
+    const category = categories.find(c => c.id === categoryId);
+    if (category && category.subcategories.length > 0) {
+      setActiveSubcategory(category.subcategories[0].id);
+    }
+  };
+
+  // Handle selection and mark step as completed
+  const handleColorSelect = (color: Color) => {
+    setSelectedColor(color);
+    setCompletedSteps(prev => ({ ...prev, 'exterior-color': true }));
+  };
+
+  const handleRimSelect = (rim: Rim) => {
+    setSelectedRim(rim);
+    setCompletedSteps(prev => ({ ...prev, 'rims': true }));
+  };
+
+  const handleSelectEngine = (engine: Engine) => {
+    setSelectedEngine(engine);
+    setCompletedSteps(prev => ({ ...prev, 'engine': true }));
+  } 
 
   if (!model) return (
     <div className={styles.loadingContainer}>
@@ -65,64 +129,73 @@ function Configurator() {
     </div>
   );
 
-  const renderActiveCategoryContent = () => {
-    switch (activeCategory) {
-      case 'Exterior':
+  const renderActiveContent = () => {
+    // Render based on the active subcategory
+    switch (activeSubcategory) {
+      case 'engine':
         return (
-          <div className={styles.categoryContent}>
-            <h3>Exterior Color</h3>
-            <div className={styles.colorOptions}>
-              {colors.map((color) => (
-                <div 
-                  key={color.id}
-                  className={`${styles.colorOption} ${selectedColor === color.value ? styles.selected : ''}`}
-                  onClick={() => setSelectedColor(color.value)}
-                >
-                  <div 
-                    className={styles.colorSwatch} 
-                    style={{ backgroundColor: color.value }}
-                  ></div>
-                  <span className={styles.colorName}>{color.name}</span>
-                </div>
-              ))}
-            </div>
+          <EngineCategory
+            engines={engines}
+            selectedEngine={selectedEngine}
+            handleSelectEngine={handleSelectEngine}
+          />
+        );
+      case 'transmission':
+        return (
+          <div>
 
-            <h3>Wheels</h3>
-            <div className={styles.rimOptions}>
-              {rims.map((rim) => (
-                <div 
-                  key={rim.id}
-                  className={`${styles.rimOption} ${selectedRim === rim.id ? styles.selected : ''}`}
-                  onClick={() => setSelectedRim(rim.id)}
-                >
-                  <div className={styles.rimImage}>
-                    <img src={rim.imagePath || '/placeholder-rim.png'} alt={rim.name} />
-                  </div>
-                  <div className={styles.rimInfo}>
-                    <span className={styles.rimName}>{rim.name}</span>
-                    <span className={styles.rimPrice}>+${rim?.toLocaleString()}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         );
-      case 'Packages':
+      case 'exterior-color':
         return (
-          <div className={styles.categoryContent}>
-            <h3>Equipment Packages</h3>
-            <div className={styles.packageOptions}>
-              {packages.map((pkg) => (
-                <div>
-                </div>
-              ))}
-            </div>
+          <ExteriorColor
+            colors={colors}
+            selectedColor={selectedColor}
+            onSelectColor={handleColorSelect}
+          />
+        );
+
+      case 'rims':
+        return (
+          <Rims
+            rims={rims}
+            selectedRim={selectedRim}
+            handleRimSelect={handleRimSelect}
+          />
+        );
+        
+      case 'upholstery':
+        return (
+          <div>
+
           </div>
         );
-      default:
+
+      case 'assistance':
         return (
-          <div className={styles.categoryContent}>
-            <p>Please select options for {activeCategory}</p>
+          <div>
+
+          </div>
+        );
+
+      case 'comfort':
+        return (
+          <div>
+
+          </div>
+        );
+
+      case 'configuration':
+        return (
+          <div>
+
+          </div>
+        );
+
+      case 'pricing':
+        return (
+          <div>
+
           </div>
         );
     }
@@ -138,21 +211,21 @@ function Configurator() {
             <span>Back</span>
           </button>
         </div>
-        
+
         <div className={styles.headerCenter}>
           <h1 className={styles.modelName}>{model.name}</h1>
-          <div className={styles.modelSubtitle}>{model.subtitle || 'Premium Vehicle'}</div>
+          <div className={styles.modelSubtitle}>{model.type}</div>
         </div>
-        
+
         <div className={styles.headerRight}>
           <div className={styles.priceWrapper}>
             <div className={styles.priceDetail}>
               <div className={styles.priceLabel}>Base Price</div>
-              <div className={styles.priceValue}>{model.price?.toLocaleString()} €</div>
+              <div className={styles.priceValue}>{model.basePrice.toLocaleString()} €</div>
             </div>
-            
+
             <div className={styles.priceDivider}></div>
-            
+
             <div className={styles.priceDetail}>
               <div className={styles.priceLabel}>Monthly Leasing</div>
               <div className={styles.priceValue}>
@@ -161,7 +234,7 @@ function Configurator() {
               </div>
             </div>
           </div>
-          
+
           <button className={styles.saveButton}>
             <BsBookmark />
             <span>Save</span>
@@ -174,31 +247,105 @@ function Configurator() {
         {/* Left sidebar navigation */}
         <div className={styles.sidebar}>
           <nav className={styles.categoryNav}>
-            {categories.map((category) => (
-              <div 
-                key={category} 
-                className={`${styles.categoryItem} ${activeCategory === category ? styles.active : ''}`}
-                onClick={() => setActiveCategory(category)}
+            {categories.map((category, index) => (
+              <div
+                key={category.id}
+                className={styles.categoryGroup}
               >
-                {category}
+                <div
+                  className={`${styles.categoryItem} ${activeCategory === category.id ? styles.active : ''}`}
+                  onClick={() => handleCategoryClick(category.id)}
+                >
+                  <div className={styles.categoryIcon}>
+                    {getCategoryIcon(category.id)}
+                  </div>
+                  <span className={styles.categoryLabel}>{category.label}</span>
+                  <div className={styles.categoryStatus}>
+                    {category.subcategories.some(sub => completedSteps[sub.id]) && (
+                      <IoCheckmarkCircle className={styles.completedIcon} />
+                    )}
+                  </div>
+                </div>
+
+                {activeCategory === category.id && (
+                  <div className={styles.subcategoryList}>
+                    {category.subcategories.map((subcategory, idx) => (
+                      <div
+                        key={subcategory.id}
+                        className={`${styles.subcategoryItem} ${activeSubcategory === subcategory.id ? styles.active : ''}`}
+                        onClick={() => setActiveSubcategory(subcategory.id)}
+                        style={{ "--animation-order": idx } as React.CSSProperties}
+                      >
+                        <div className={styles.subcategoryStatus}>
+                          {completedSteps[subcategory.id] ? (
+                            <FaCircle className={styles.stepComplete} />
+                          ) : (
+                            <FaRegCircle className={styles.stepIncomplete} />
+                          )}
+                        </div>
+                        <span>{subcategory.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </nav>
+
+          {/* Progress indicator */}
+          <div className={styles.configProgress}>
+            <div className={styles.progressHeader}>
+              <span className={styles.progressTitle}>Configuration Progress</span>
+              <span className={styles.progressValue}>{calculateProgress()}%</span>
+            </div>
+            <div className={styles.progressBar}>
+              <div
+                className={styles.progressFill}
+                style={{ width: `${calculateProgress()}%` }}
+              ></div>
+            </div>
+          </div>
+
+          {/* Sidebar footer */}
+          <div className={styles.sidebarFooter}>
+            <div className={styles.brandLogo}>
+              <img src={Logo} alt="Logo" />
+            </div>
+            <div className={styles.brandTagline}>Premium Vehicle Configuration</div>
+          </div>
         </div>
 
         {/* Center car viewer area */}
         <div className={styles.viewerWrapper}>
           <div className={styles.viewer}>
-            <VehicleViewer modelPath={model.model3dPath} color={selectedColor} />
+            <VehicleViewer modelPath={model.model3dPath} color={selectedColor} autoRotateSpeed={0.3} />
             <div className={styles.rotateIndicator}>
               <IoRefreshOutline />
               360°
             </div>
           </div>
-          
+
           {/* Bottom options panel */}
           <div className={styles.optionsPanel}>
-            {renderActiveCategoryContent()}
+            {renderActiveContent()}
+
+            {/* Navigation buttons */}
+            <div className={styles.configNavigation}>
+              {getNextCategory() && (
+                <button
+                  className={styles.nextButton}
+                  onClick={handleNextClick}
+                >
+                  Next: {getNextCategory()?.categoryId === activeCategory
+                    ? categories.find(c => c.id === activeCategory)?.subcategories.find(s => s.id === getNextCategory()?.subcategoryId)?.label
+                    : categories.find(c => c.id === getNextCategory()?.categoryId)?.label
+                  }
+                  <MdKeyboardArrowRight
+                    size={24}
+                  />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
