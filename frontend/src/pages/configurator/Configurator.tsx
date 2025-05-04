@@ -20,6 +20,7 @@ import Assistance from '@components/categoryContent/assistance';
 import Comfort from '@components/categoryContent/comfort';
 import Pricing from '@components/categoryContent/pricing';
 import LeasingModal from '@components/leasingModal';
+import ConfigurationReview from '@components/categoryContent/configurationReview';
 
 function Configurator() {
   const { modelId } = useParams();
@@ -190,6 +191,11 @@ function Configurator() {
     setCompletedSteps(prev => ({ ...prev, 'comfort': true }));
   };
 
+  const goToSection = (category: string, subcategory: string) => {
+    setActiveCategory(category);
+    setActiveSubcategory(subcategory);
+  };
+
   if (!model) return (
     <div className={styles.loadingContainer}>
       <div className={styles.loader}></div>
@@ -258,8 +264,25 @@ function Configurator() {
         );
       case 'pricing':
         return (
-          <Pricing
+          <div>
+            <Pricing totalPrice={totalPrice} />
+          </div>
+        );
+      case 'review':
+        return (
+          <ConfigurationReview
+            model={model}
             totalPrice={totalPrice}
+            selectedColor={selectedColor}
+            selectedRim={selectedRim}
+            selectedEngine={selectedEngine}
+            selectedTransmission={selectedTransmission}
+            selectedUpholstery={selectedUpholstery}
+            selectedAssistance={selectedAssistance}
+            selectedComfort={selectedComfort}
+            onEditSection={(category: string, subcategory: string) => {
+              goToSection(category, subcategory);
+            }}
           />
         );
       default:

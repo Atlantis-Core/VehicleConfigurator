@@ -719,6 +719,32 @@
   visibility: visible;
 }
 
+/* Complete Button Styles */
+.completeButtonContainer {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.completeButton {
+  background-color: #0056b3;
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 86, 179, 0.2);
+}
+
+.completeButton:hover {
+  background-color: #003f85;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 86, 179, 0.3);
+}
+
 /* Animations */
 @keyframes expandIn {
   from { 
