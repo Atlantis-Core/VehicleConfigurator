@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styles from './ConfigurationSummary.module.css';
+import styles from './SummaryPage.module.css';
 import { 
   Model, 
   Color, 
@@ -14,7 +14,9 @@ import { IoArrowBack, IoCheckmarkCircle } from "react-icons/io5";
 import { FaCreditCard, FaPaypal, FaApplePay, FaGooglePay } from 'react-icons/fa';
 import Logo from "@assets/logo.svg";
 
-interface ConfigurationSummaryProps {
+interface SummaryPageProps {}
+
+interface ConfigurationSummary {
   model: Model;
   selectedColor?: Color;
   selectedRim?: Rim;
@@ -26,10 +28,10 @@ interface ConfigurationSummaryProps {
   totalPrice: number;
 }
 
-const ConfigurationSummary: React.FC<ConfigurationSummaryProps> = () => {
+const SummaryPage: React.FC<SummaryPageProps> = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [configuration, setConfiguration] = useState<ConfigurationSummaryProps | null>(null);
+  const [configuration, setConfiguration] = useState<ConfigurationSummary | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<string>('card');
   const [contactInfo, setContactInfo] = useState({
     name: '',
@@ -91,7 +93,7 @@ const ConfigurationSummary: React.FC<ConfigurationSummaryProps> = () => {
           <h1>Your order has been placed!</h1>
           <p>Thank you for your purchase. We've sent a confirmation email to {contactInfo.email}.</p>
           <p>Your configuration ID: <strong>CFG-{Math.floor(Math.random() * 100000)}</strong></p>
-          <button
+          <button 
             className={styles.homeButton} 
             onClick={() => navigate('/')}
           >
@@ -129,7 +131,6 @@ const ConfigurationSummary: React.FC<ConfigurationSummaryProps> = () => {
               <div className={styles.configItem}>
                 <span className={styles.itemLabel}>Engine</span>
                 <span className={styles.itemValue}>{configuration.selectedEngine.name}</span>
-                <span className={styles.itemPrice}>+ {configuration.selectedEngine.additionalPrice.toLocaleString()} €</span>
               </div>
             )}
             
@@ -229,7 +230,7 @@ const ConfigurationSummary: React.FC<ConfigurationSummaryProps> = () => {
           <form className={styles.contactForm} onSubmit={handleSubmit}>
             <h2>Contact Information</h2>
             <div className={styles.formGroup}>
-              <label htmlFor="name">Full Name *</label>
+              <label htmlFor="name">Full Name</label>
               <input 
                 type="text" 
                 id="name" 
@@ -240,7 +241,7 @@ const ConfigurationSummary: React.FC<ConfigurationSummaryProps> = () => {
               />
             </div>
             <div className={styles.formGroup}>
-              <label htmlFor="email">Email Address *</label>
+              <label htmlFor="email">Email Address</label>
               <input 
                 type="email" 
                 id="email" 
@@ -256,6 +257,7 @@ const ConfigurationSummary: React.FC<ConfigurationSummaryProps> = () => {
                 type="tel" 
                 id="phone" 
                 name="phone" 
+                required 
                 value={contactInfo.phone} 
                 onChange={handleContactInfoChange}
               />
@@ -275,4 +277,4 @@ const ConfigurationSummary: React.FC<ConfigurationSummaryProps> = () => {
   );
 }
 
-export default ConfigurationSummary;
+export default SummaryPage;

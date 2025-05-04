@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import StartPage from '@pages/startPage';
 import ModelPicker from '@pages/modelPicker';
 import Configurator from '@pages/configurator';
-import ConfigurationSummary from '@pages/configurationSummary';
+import SummaryPage from '@pages/summaryPage';
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
         <Route path="/" element={<StartPage />} />
         <Route path="/configurator" element={<ModelPicker />} />
         <Route path="/configurator/:modelId" element={<Configurator />} />
-        <Route path="/summary" element={<ConfigurationSummary />} />
+        <Route path="/summary" element={<SummaryPage />} />
       </Routes>
     </Router>
   );
