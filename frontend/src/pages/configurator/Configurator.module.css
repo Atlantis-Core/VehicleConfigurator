@@ -162,6 +162,7 @@
   font-size: 0.8rem;
   color: #666;
   margin-bottom: 0.2rem;
+  text-wrap: nowrap;
 }
 
 .priceValue {
@@ -659,6 +660,63 @@
   .configProgress {
     margin-bottom: 0;
   }
+}
+
+/* Info Button Styles */
+.infoButton {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-left: 6px;
+  cursor: pointer;
+  display: inline;
+  align-items: center;
+  justify-content: center;
+  color: #007bff;
+  position: relative;
+  transition: transform 0.2s ease-in-out;
+}
+
+.infoIconWrapper {
+  display: inline-flex;
+  font-size: 14px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.infoButton:hover {
+  transform: scale(1.2);
+  color: #0056b3;
+}
+
+.infoButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  border-radius: 50%;
+}
+
+/* Add tooltip on hover */
+.infoButton::after {
+  content: "View leasing options";
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.infoButton:hover::after {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Animations */

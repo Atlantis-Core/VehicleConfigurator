@@ -1,0 +1,250 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+
+  font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+}
+
+.modalContent {
+  background: #fff;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  padding: 0;
+  animation: modalFadeIn 0.3s ease-out;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.modalTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modalTitle h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #222;
+}
+
+.modalIcon {
+  color: #0056b3;
+  font-size: 1.5rem;
+}
+
+.closeModalButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+}
+
+.closeModalButton:hover {
+  background-color: #f0f0f0;
+  color: #222;
+}
+
+.modalDescription {
+  padding: 16px 24px;
+  color: #555;
+}
+
+.leasingPlans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 0 24px 24px;
+}
+
+.leasingPlan {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 24px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  background-color: #fff;
+}
+
+.leasingPlan:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.activePlan {
+  border-color: #0056b3;
+  box-shadow: 0 5px 15px rgba(0, 86, 179, 0.15);
+}
+
+.planHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.planHeader h3 {
+  margin: 0;
+  color: #333;
+}
+
+.checkIcon {
+  color: #0056b3;
+}
+
+.planPrice {
+  margin-bottom: 8px;
+}
+
+.amount {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #0056b3;
+}
+
+.period {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.planRate {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.planFeatures {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.planFeatures li {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  display: flex;
+}
+
+.featureBullet {
+  color: #0056b3;
+  margin-right: 8px;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.infoNote {
+  background-color: #f5f9ff;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 0 24px 24px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.infoIcon {
+  color: #0056b3;
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.infoNote p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.modalActions {
+  padding: 20px 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  border-top: 1px solid #eaeaea;
+}
+
+.primaryButton {
+  background-color: #0056b3;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 180px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.primaryButton:hover {
+  background-color: #003f85;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.secondaryButton {
+  background-color: #f0f0f0;
+  color: #333;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.secondaryButton:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .leasingPlans {
+    grid-template-columns: 1fr;
+  }
+  
+  .modalContent {
+    width: 95%;
+    max-height: 80vh;
+  }
+}

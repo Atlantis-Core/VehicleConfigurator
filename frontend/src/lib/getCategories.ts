@@ -46,7 +46,7 @@ export const getCategories = (): Category[] => {
       id: 'summary',
       label: 'Summary',
       subcategories: [
-        { id: 'pricing', label: 'Pricing & Financing' }
+        { id: 'pricing', label: 'Financing options' }
       ]
     }
   ];

@@ -1,10 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { getColors, getEngines, getModels, getRims, getTransmissions, getFeatures, getInteriors } from '@api/api';
 import VehicleViewer from '@components/3DCarModel/VehicleViewer';
 import styles from './Configurator.module.css';
 import { IoArrowBack, IoRefreshOutline, IoCheckmarkCircle } from "react-icons/io5";
-import { BsBookmark } from "react-icons/bs";
+import { BsBookmark, BsInfoCircleFill } from "react-icons/bs";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { FaRegCircle, FaCircle, FaCar, FaPaintBrush, FaCogs, FaStar, FaChair } from "react-icons/fa";
 import { Color, Engine, Model, Rim, Transmission, Feature, Interior } from '../../types/types';
@@ -18,7 +18,8 @@ import Transmissions from '@components/categoryContent/transmissions';
 import Upholstery from '@components/categoryContent/upholstery';
 import Assistance from '@components/categoryContent/assistance';
 import Comfort from '@components/categoryContent/comfort';
-//import Pricing from '@components/categoryContent/pricing';
+import Pricing from '@components/categoryContent/pricing';
+import LeasingModal from '@components/leasingModal';
 
 function Configurator() {
   const { modelId } = useParams();
@@ -48,6 +49,11 @@ function Configurator() {
   const [completedSteps, setCompletedSteps] = useState<Record<string, boolean>>({});
   const categories = getCategories();
 
+  const [isLeasingModalOpen, setIsLeasingModalOpen] = useState(false);
+
+  const openLeasingModal = () => setIsLeasingModalOpen(true);
+  const closeLeasingModal = () => setIsLeasingModalOpen(false);
+
   // Get category icon based on id
   const getCategoryIcon = (categoryId: string) => {
     switch (categoryId) {
@@ -66,6 +72,26 @@ function Configurator() {
     const completedCount = Object.values(completedSteps).filter(Boolean).length;
     return Math.round((completedCount / totalSteps) * 100);
   };
+
+  const totalPrice = useMemo(() => {
+    return (
+      (model?.basePrice || 0) +
+      (selectedColor?.additionalPrice || 0) +
+      (selectedRim?.additionalPrice || 0) +
+      (selectedEngine?.additionalPrice || 0) +
+      (selectedUpholstery?.additionalPrice || 0) +
+      (selectedAssistance?.additionalPrice || 0) +
+      (selectedComfort?.additionalPrice || 0)
+    );
+  }, [
+    model,
+    selectedColor,
+    selectedRim,
+    selectedEngine,
+    selectedUpholstery,
+    selectedAssistance,
+    selectedComfort
+  ]);
 
   useEffect(() => {
     async function loadData() {
@@ -232,19 +258,9 @@ function Configurator() {
         );
       case 'pricing':
         return (
-          <div style={{ display: 'none' }}>
-            {/*
-              <Pricing
-                selectedEngine={selectedEngine}
-                selectedTransmission={selectedTransmission}
-                selectedColor={selectedColor}
-                selectedRim={selectedRim}
-                selectedUpholstery={selectedUpholstery}
-                selectedAssistance={selectedAssistance}
-                selectedComfort={selectedComfort}
-              />
-            */}
-          </div>
+          <Pricing
+            totalPrice={totalPrice}
+          />
         );
       default:
         return null;
@@ -270,20 +286,37 @@ function Configurator() {
         <div className={styles.headerRight}>
           <div className={styles.priceWrapper}>
             <div className={styles.priceDetail}>
-              <div className={styles.priceLabel}>Base Price</div>
-              <div className={styles.priceValue}>{model.basePrice.toLocaleString()} €</div>
+              <div className={styles.priceLabel}>Total Price</div>
+              <div className={styles.priceValue}>{totalPrice.toLocaleString()} €</div>
             </div>
 
             <div className={styles.priceDivider}></div>
 
             <div className={styles.priceDetail}>
-              <div className={styles.priceLabel}>Monthly Leasing</div>
+              <div className={styles.priceLabel}>
+                Monthly Leasing
+                <button
+                  className={styles.infoButton}
+                  onClick={openLeasingModal}
+                  aria-label="View leasing options"
+                >
+                  <span className={styles.infoIconWrapper}>
+                    <BsInfoCircleFill />
+                  </span>
+                </button>
+              </div>
               <div className={styles.priceValue}>
                 300,36 €
                 <span className={styles.leaseTerms}>/mo.</span>
               </div>
             </div>
           </div>
+
+          <LeasingModal
+            isOpen={isLeasingModalOpen}
+            onClose={closeLeasingModal}
+            basePrice={totalPrice}
+          />
 
           <button className={styles.saveButton}>
             <BsBookmark />
