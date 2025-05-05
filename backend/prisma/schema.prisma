@@ -14,6 +14,8 @@ model Customer {
   email          String          @unique
   phone          String
   address        String
+  emailVerified    Boolean  @default(false)
+  verificationCode String?  // or use a Date + token combo
   configurations Configuration[]
   orders         Order[]
 }
