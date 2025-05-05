@@ -1,14 +1,14 @@
-import dotenv from 'dotenv'
-import { app } from './app'
+import dotenv from "dotenv";
+import { app } from "./app";
 
-dotenv.config()
+dotenv.config();
 
-const PORT = process.env.PORT || 5001;
+const PORT = Number(process.env.PORT) || 5001;
 
 try {
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`)
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
   });
 } catch (error) {
-  console.error('Error starting server:', error)
+  console.error("Error starting server:", error);
 }

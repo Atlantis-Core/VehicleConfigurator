@@ -7,7 +7,7 @@
     "dev": "nodemon src/server.ts",
     "build": "tsc",
     "prisma:generate": "prisma generate",
-    "start": "npm run prisma:generate && node dist/server.js"
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +21,7 @@
     "express": "^5.1.0",
     "nanoid": "^5.1.5",
     "nodemailer": "^7.0.2",
-    "prisma": "^6.6.0",
+    "prisma": "^6.7.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
