@@ -132,15 +132,26 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
           <div className={styles.successIcon}>
             <IoCheckmarkCircle />
           </div>
-          <h1>Your order has been placed!</h1>
-          <p>Thank you for your purchase, {contactInfo.firstName} {contactInfo.lastName}. We've sent a confirmation email to {contactInfo.email}.</p>
-          <p>Your configuration ID: <strong>CFG-{Math.floor(Math.random() * 100000)}</strong></p>
-          <button
-            className={styles.homeButton}
-            onClick={() => navigate('/')}
-          >
-            Back to Home
-          </button>
+          <h1>Thank You for Your Order!</h1>
+          <p>Congratulations, {contactInfo.firstName}! Your {configuration.model.name} has been configured successfully.</p>
+          <p className={styles.confirmationDetails}>
+            We've sent a detailed confirmation to <strong>{contactInfo.email}</strong> with all the specifications of your dream car.
+          </p>
+          <div className={styles.orderInfo}>
+            <p>Configuration ID: <strong>CFG-{Math.floor(Math.random() * 100000)}</strong></p>
+            <p>Order Date: <strong>{new Date().toLocaleDateString()}</strong></p>
+          </div>
+          <p className={styles.nextSteps}>
+            A dealer representative will contact you within 24-48 hours to discuss delivery options and finalize your purchase.
+          </p>
+          <div className={styles.buttonGroup}>
+            <button
+              className={styles.homeButton}
+              onClick={() => navigate('/')}
+            >
+              Back to Home
+            </button>
+          </div>
         </div>
       </div>
     );
