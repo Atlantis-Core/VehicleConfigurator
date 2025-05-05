@@ -3,7 +3,7 @@ import { app } from "./app";
 
 dotenv.config();
 
-const PORT = Number(process.env.PORT) || 5001;
+const PORT = 3000;
 
 try {
   app.listen(PORT, "0.0.0.0", () => {
