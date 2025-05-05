@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./ModelPicker.module.css";
 import { Model } from "../../types/types";
-import { getModels } from "@api/api";
+import { getModels } from "@api/getter";
 import LogoIcon from "@assets/logo.svg";
 import { useNavigate } from "react-router-dom";
 import ModelCard from "@components/modelCard";

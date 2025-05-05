@@ -1,4 +1,4 @@
-import { getModels } from "@api/api";
+import { getModels } from "@api/getter";
 
 export async function getModelTypes(): Promise<String[]> {
   const models = await getModels();

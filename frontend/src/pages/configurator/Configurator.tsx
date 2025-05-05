@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
-import { getColors, getEngines, getModels, getRims, getTransmissions, getFeatures, getInteriors } from '@api/api';
+import { getColors, getEngines, getModels, getRims, getTransmissions, getFeatures, getInteriors } from '@api/getter';
 import VehicleViewer from '@components/3DCarModel/VehicleViewer';
 import styles from './Configurator.module.css';
 import { IoArrowBack, IoRefreshOutline, IoCheckmarkCircle } from "react-icons/io5";

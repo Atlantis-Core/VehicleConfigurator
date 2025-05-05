@@ -1,4 +1,43 @@
-// src/types/types.ts
+export interface Customer {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  address: string;
+  emailVerified: boolean;
+}
+
+export interface Configuration {
+  id: number;
+  customerId: number;
+  modelId: number;
+  engineId: number;
+  transmissionId: number;
+  colorId: number;
+  interiorId: number;
+  rimId: number;
+  totalPrice: number;
+  features: ConfigurationFeature[];
+  //orders: Order[]
+}
+
+export interface ConfigurationFeature {
+  configurationId: number;
+  featureId: number;
+}
+
+export interface ConfigurationSummary {
+  model: Model;
+  selectedColor?: Color;
+  selectedRim?: Rim;
+  selectedEngine?: Engine;
+  selectedTransmission?: Transmission;
+  selectedUpholstery?: Interior;
+  selectedAssistance?: Feature | null;
+  selectedComfort?: Feature | null;
+  totalPrice: number;
+}
 
 export interface Model {
   id: number;

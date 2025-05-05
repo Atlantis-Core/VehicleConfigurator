@@ -29,6 +29,7 @@ router.post('/find-or-create', async (req: Request, res: Response) => {
           email,
           phone: phone || '',
           address: address || '',
+          emailVerified: false,
           verificationCode
         },
       });

@@ -32,4 +32,10 @@ router.get('/verify', async (req: Request, res: Response) => {
   res.status(200).send('Email verified successfully.');
 });
 
+router.get('/check-verification', async (req, res) => {
+  const { email } = req.query;
+  const customer = await prisma.customer.findUnique({ where: { email: String(email) } });
+  res.send({ verified: customer?.emailVerified });
+});
+
 export default router

@@ -1,45 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './SummaryPage.module.css';
-import { 
-  Model, 
-  Color, 
-  Rim, 
-  Engine, 
-  Transmission, 
-  Interior, 
-  Feature 
-} from '../../types/types';
+import { ConfigurationSummary, Customer } from '../../types/types';
 import { IoArrowBack, IoCheckmarkCircle } from "react-icons/io5";
 import { FaCreditCard, FaPaypal, FaApplePay, FaGooglePay } from 'react-icons/fa';
 import Logo from "@assets/logo.svg";
+import { findOrCreateCustomer, saveConfiguration } from '@api/setter';
+import { useEmailVerification } from '@hooks/useEmailVerification';
 
-interface SummaryPageProps {}
-
-interface ConfigurationSummary {
-  model: Model;
-  selectedColor?: Color;
-  selectedRim?: Rim;
-  selectedEngine?: Engine;
-  selectedTransmission?: Transmission;
-  selectedUpholstery?: Interior;
-  selectedAssistance?: Feature | null;
-  selectedComfort?: Feature | null;
-  totalPrice: number;
-}
+interface SummaryPageProps { }
 
 const SummaryPage: React.FC<SummaryPageProps> = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [configuration, setConfiguration] = useState<ConfigurationSummary | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<string>('card');
-  const [contactInfo, setContactInfo] = useState({
-    name: '',
+  const [contactInfo, setContactInfo] = useState<Customer>({
+    id: 0,
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
+    address: '',
+    emailVerified: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [awaitingVerification, setAwaitingVerification] = useState(false);
+  const isVerified = useEmailVerification(contactInfo.email, awaitingVerification);
 
   useEffect(() => {
     // Get configuration data from location state
@@ -50,39 +38,93 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
       navigate('/configurator');
     }
   }, [location, navigate]);
-  
+
+  useEffect(() => {
+    console.log("Running effect:", { isVerified, configuration, id: contactInfo.id });
+    if (isVerified && configuration) {
+      saveConfiguration(configuration, contactInfo.id).then(() => {
+        setIsComplete(true);
+        setAwaitingVerification(false);
+      });
+    }
+  }, [isVerified, configuration, contactInfo.id]);
+
   const handleBack = () => {
     navigate(-1);
   };
-  
-  const handleContactInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleContactInfoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setContactInfo(prev => ({
       ...prev,
       [name]: value
     }));
   };
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate API call
-    try {
-      // In a real app, you'd send this data to your backend
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      setIsComplete(true);
-    } catch (error) {
-      console.error('Error submitting order:', error);
-    } finally {
-      setIsSubmitting(false);
+
+    if (configuration) {
+      try {
+        const customer = await findOrCreateCustomer(contactInfo);
+        setContactInfo(prev => ({ ...prev, id: customer.id }));
+
+        if (!customer.emailVerified) {
+          setAwaitingVerification(true);
+        } else {
+          await saveConfiguration(configuration, customer.id);
+          setIsComplete(true);
+        }
+      } catch (error) {
+        console.error('Error saving configuration:', error);
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
-  
+
   if (!configuration) {
     return <div className={styles.loading}>Loading your configuration...</div>;
   }
-  
+
+  if (awaitingVerification) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.verificationNotice}>
+          <h2>Almost done!</h2>
+          <p>Please verify your email to complete your order.</p>
+          <p>We've sent a confirmation link to <strong>{contactInfo.email}</strong>.</p>
+          
+          <div className={styles.verificationProgress}>
+            <div className={styles.progressBar}>
+              <div className={styles.progressBarFill}></div>
+            </div>
+            <p>Waiting for verification...</p>
+          </div>
+          
+          <p>If you don't receive the email within a few minutes, please check your spam folder or try refreshing.</p>
+          
+          <button 
+            className={styles.refreshButton}
+            onClick={() => {
+              // Force re-check of verification status
+              const checkAgain = !awaitingVerification;
+              setAwaitingVerification(checkAgain);
+              setTimeout(() => setAwaitingVerification(true), 100);
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M23 4v6h-6"></path>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+            </svg>
+            Refresh Status
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (isComplete) {
     return (
       <div className={styles.container}>
@@ -91,10 +133,10 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
             <IoCheckmarkCircle />
           </div>
           <h1>Your order has been placed!</h1>
-          <p>Thank you for your purchase. We've sent a confirmation email to {contactInfo.email}.</p>
+          <p>Thank you for your purchase, {contactInfo.firstName} {contactInfo.lastName}. We've sent a confirmation email to {contactInfo.email}.</p>
           <p>Your configuration ID: <strong>CFG-{Math.floor(Math.random() * 100000)}</strong></p>
-          <button 
-            className={styles.homeButton} 
+          <button
+            className={styles.homeButton}
             onClick={() => navigate('/')}
           >
             Back to Home
@@ -103,7 +145,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
       </div>
     );
   }
-  
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -115,17 +157,17 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
           <img src={Logo} alt="Logo" />
         </div>
       </header>
-      
+
       <main className={styles.content}>
         <h1 className={styles.title}>Order Summary</h1>
-        
+
         <div className={styles.summaryCard}>
           <h2>Your Configuration</h2>
           <div className={styles.modelInfo}>
             <h3>{configuration.model.name}</h3>
             <p className={styles.modelType}>{configuration.model.type}</p>
           </div>
-          
+
           <div className={styles.configItems}>
             {configuration.selectedEngine && (
               <div className={styles.configItem}>
@@ -133,20 +175,20 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
                 <span className={styles.itemValue}>{configuration.selectedEngine.name}</span>
               </div>
             )}
-            
+
             {configuration.selectedTransmission && (
               <div className={styles.configItem}>
                 <span className={styles.itemLabel}>Transmission</span>
                 <span className={styles.itemValue}>{configuration.selectedTransmission.name}</span>
               </div>
             )}
-            
+
             {configuration.selectedColor && (
               <div className={styles.configItem}>
                 <span className={styles.itemLabel}>Exterior Color</span>
                 <div className={styles.colorValue}>
-                  <span 
-                    className={styles.colorSwatch} 
+                  <span
+                    className={styles.colorSwatch}
                     style={{ backgroundColor: configuration.selectedColor.hexCode }}
                   ></span>
                   <span>{configuration.selectedColor.name}</span>
@@ -154,7 +196,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
                 <span className={styles.itemPrice}>+ {configuration.selectedColor.additionalPrice.toLocaleString()} €</span>
               </div>
             )}
-            
+
             {configuration.selectedRim && (
               <div className={styles.configItem}>
                 <span className={styles.itemLabel}>Rims</span>
@@ -162,7 +204,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
                 <span className={styles.itemPrice}>+ {configuration.selectedRim.additionalPrice.toLocaleString()} €</span>
               </div>
             )}
-            
+
             {configuration.selectedUpholstery && (
               <div className={styles.configItem}>
                 <span className={styles.itemLabel}>Upholstery</span>
@@ -170,7 +212,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
                 <span className={styles.itemPrice}>+ {configuration.selectedUpholstery.additionalPrice.toLocaleString()} €</span>
               </div>
             )}
-            
+
             {configuration.selectedAssistance && (
               <div className={styles.configItem}>
                 <span className={styles.itemLabel}>Assistance Package</span>
@@ -178,7 +220,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
                 <span className={styles.itemPrice}>+ {configuration.selectedAssistance.additionalPrice.toLocaleString()} €</span>
               </div>
             )}
-            
+
             {configuration.selectedComfort && (
               <div className={styles.configItem}>
                 <span className={styles.itemLabel}>Comfort Package</span>
@@ -187,38 +229,38 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
               </div>
             )}
           </div>
-          
+
           <div className={styles.totalPrice}>
             <span className={styles.totalLabel}>Total Price</span>
             <span className={styles.totalValue}>{configuration.totalPrice.toLocaleString()} €</span>
           </div>
         </div>
-        
+
         <div className={styles.paymentSection}>
           <h2>Payment Method</h2>
           <div className={styles.paymentOptions}>
-            <div 
+            <div
               className={`${styles.paymentOption} ${paymentMethod === 'card' ? styles.selected : ''}`}
               onClick={() => setPaymentMethod('card')}
             >
               <FaCreditCard className={styles.paymentIcon} />
               <span>Credit Card</span>
             </div>
-            <div 
+            <div
               className={`${styles.paymentOption} ${paymentMethod === 'paypal' ? styles.selected : ''}`}
               onClick={() => setPaymentMethod('paypal')}
             >
               <FaPaypal className={styles.paymentIcon} />
               <span>PayPal</span>
             </div>
-            <div 
+            <div
               className={`${styles.paymentOption} ${paymentMethod === 'applepay' ? styles.selected : ''}`}
               onClick={() => setPaymentMethod('applepay')}
             >
               <FaApplePay className={styles.paymentIcon} />
               <span>Apple Pay</span>
             </div>
-            <div 
+            <div
               className={`${styles.paymentOption} ${paymentMethod === 'googlepay' ? styles.selected : ''}`}
               onClick={() => setPaymentMethod('googlepay')}
             >
@@ -226,46 +268,80 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
               <span>Google Pay</span>
             </div>
           </div>
-          
+
           <form className={styles.contactForm} onSubmit={handleSubmit}>
             <h2>Contact Information</h2>
+
+            <div className={styles.formRow}>
+              <div className={styles.formGroup}>
+                <label htmlFor="firstName">First Name *</label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  required
+                  value={contactInfo.firstName}
+                  onChange={handleContactInfoChange}
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="lastName">Last Name *</label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  required
+                  value={contactInfo.lastName}
+                  onChange={handleContactInfoChange}
+                />
+              </div>
+            </div>
+
             <div className={styles.formGroup}>
-              <label htmlFor="name">Full Name</label>
-              <input 
-                type="text" 
-                id="name" 
-                name="name" 
-                required 
-                value={contactInfo.name} 
+              <label htmlFor="email">Email Address *</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                value={contactInfo.email}
                 onChange={handleContactInfoChange}
               />
             </div>
+
             <div className={styles.formGroup}>
-              <label htmlFor="email">Email Address</label>
-              <input 
-                type="email" 
-                id="email" 
-                name="email" 
-                required 
-                value={contactInfo.email} 
+              <label htmlFor="phone">Phone Number *</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                required
+                value={contactInfo.phone}
                 onChange={handleContactInfoChange}
               />
             </div>
+
             <div className={styles.formGroup}>
-              <label htmlFor="phone">Phone Number</label>
-              <input 
-                type="tel" 
-                id="phone" 
-                name="phone" 
-                required 
-                value={contactInfo.phone} 
-                onChange={handleContactInfoChange}
+              <label htmlFor="address">Address *</label>
+              <textarea
+                id="address"
+                name="address"
+                required
+                value={contactInfo.address}
+                onChange={(e) =>
+                  setContactInfo(prev => ({
+                    ...prev,
+                    address: e.target.value
+                  }))
+                }
+                rows={3}
               />
             </div>
-            
-            <button 
-              className={styles.submitButton} 
-              type="submit" 
+
+            <button
+              className={styles.submitButton}
+              type="submit"
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Processing...' : 'Complete Purchase'}
