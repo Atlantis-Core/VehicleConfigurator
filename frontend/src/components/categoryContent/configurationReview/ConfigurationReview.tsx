@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import styles from './ConfigurationReview.module.css';
 import { 
   Model, 
@@ -20,8 +19,9 @@ interface ConfigurationReviewProps {
   selectedEngine?: Engine;
   selectedTransmission?: Transmission;
   selectedUpholstery?: Interior;
-  selectedAssistance?: Feature | null;
-  selectedComfort?: Feature | null;
+  selectedAssistance?: Feature[];
+  selectedComfort?: Feature[];
+  onComplete: () => void;
   onEditSection: (category: string, subcategory: string) => void;
 }
 
@@ -35,27 +35,9 @@ const ConfigurationReview: React.FC<ConfigurationReviewProps> = ({
   selectedUpholstery,
   selectedAssistance,
   selectedComfort,
+  onComplete,
   onEditSection
 }) => {
-  const navigate = useNavigate();
-
-  const navigateToSummary = () => {
-    navigate('/summary', {
-      state: {
-        configuration: {
-          model,
-          selectedColor,
-          selectedRim,
-          selectedEngine,
-          selectedTransmission,
-          selectedUpholstery,
-          selectedAssistance,
-          selectedComfort,
-          totalPrice
-        }
-      }
-    });
-  };
 
   return (
     <div className={styles.reviewContainer}>
@@ -209,13 +191,17 @@ const ConfigurationReview: React.FC<ConfigurationReviewProps> = ({
               <div className={styles.configItem}>
                 <span className={styles.configLabel}>Assistance Systems:</span>
                 <span className={styles.configValue}>
-                  {selectedAssistance ? (
-                    <>
-                      {selectedAssistance.name}
-                      {selectedAssistance.additionalPrice > 0 && 
-                        <span className={styles.additionalPrice}>+{selectedAssistance.additionalPrice.toLocaleString()} €</span>
-                      }
-                    </>
+                  {selectedAssistance && selectedAssistance.length > 0 ? (
+                    <ul className={styles.featuresList}>
+                      {selectedAssistance.map((feature, index) => (
+                        <li key={index} className={styles.featureItem}>
+                          {feature.name}
+                          {feature.additionalPrice > 0 && 
+                            <span className={styles.additionalPrice}>+{feature.additionalPrice.toLocaleString()} €</span>
+                          }
+                        </li>
+                      ))}
+                    </ul>
                   ) : (
                     <span className={styles.notSelected}>None selected</span>
                   )}
@@ -225,13 +211,17 @@ const ConfigurationReview: React.FC<ConfigurationReviewProps> = ({
               <div className={styles.configItem}>
                 <span className={styles.configLabel}>Comfort Features:</span>
                 <span className={styles.configValue}>
-                  {selectedComfort ? (
-                    <>
-                      {selectedComfort.name}
-                      {selectedComfort.additionalPrice > 0 && 
-                        <span className={styles.additionalPrice}>+{selectedComfort.additionalPrice.toLocaleString()} €</span>
-                      }
-                    </>
+                  {selectedComfort && selectedComfort.length > 0 ? (
+                    <ul className={styles.featuresList}>
+                      {selectedComfort.map((feature, index) => (
+                        <li key={index} className={styles.featureItem}>
+                          {feature.name}
+                          {feature.additionalPrice > 0 && 
+                            <span className={styles.additionalPrice}>+{feature.additionalPrice.toLocaleString()} €</span>
+                          }
+                        </li>
+                      ))}
+                    </ul>
                   ) : (
                     <span className={styles.notSelected}>None selected</span>
                   )}
@@ -245,7 +235,7 @@ const ConfigurationReview: React.FC<ConfigurationReviewProps> = ({
       <div className={styles.completionActions}>
         <button 
           className={styles.proceedButton} 
-          onClick={navigateToSummary}
+          onClick={onComplete}
         >
           <FaCheck className={styles.buttonIcon} />
           Proceed to Checkout

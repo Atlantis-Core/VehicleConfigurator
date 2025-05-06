@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './Pricing.module.css';
 import { BsInfoCircleFill } from 'react-icons/bs';
+import { useSharedLeasing } from '@context/LeasingContext';
 
 interface PricingProps {
   totalPrice: number;
@@ -9,11 +10,7 @@ interface PricingProps {
 const Pricing: React.FC<PricingProps> = ({ totalPrice }) => {
   const [selectedOption, setSelectedOption] = useState<'cash' | 'leasing' | 'financing'>('cash');
 
-  const leasingDetails = {
-    duration: 36, // in months
-    interestRate: 0.03, // 3% annual interest
-    downPayment: totalPrice * 0.2, // 20% of total price
-  };
+  const { selectedOption: leasingSelectedOption, leasingOptions, getMonthlyPaymentFor } = useSharedLeasing();
 
   const financingDetails = {
     duration: 60, // in months
@@ -42,12 +39,6 @@ const Pricing: React.FC<PricingProps> = ({ totalPrice }) => {
           </div>
         );
       case 'leasing':
-        const leasingMonthlyCost = calculateMonthlyCost(
-          totalPrice,
-          leasingDetails.duration,
-          leasingDetails.interestRate,
-          leasingDetails.downPayment
-        );
         return (
           <div className={styles.pricingDetails}>
             <h4>
@@ -56,9 +47,12 @@ const Pricing: React.FC<PricingProps> = ({ totalPrice }) => {
                 <BsInfoCircleFill />
               </span>
             </h4>
-            <p><strong>Monatliche Kosten:</strong> {leasingMonthlyCost.toFixed(2)} €</p>
-            <p><strong>Laufzeit:</strong> {leasingDetails.duration} Monate</p>
-            <p><strong>Anzahlung:</strong> {leasingDetails.downPayment.toLocaleString()} €</p>
+            {leasingOptions.filter((leasingOption) => leasingOption.months === leasingSelectedOption).map((leasingOption) => (
+              <div key={leasingOption.months}>
+                <p><strong>Monatliche Kosten:</strong> {getMonthlyPaymentFor(leasingOption.months)} €</p>
+                <p><strong>Laufzeit:</strong> {leasingOption.months} Monate</p>
+              </div>
+            ))}
           </div>
         );
       case 'financing':

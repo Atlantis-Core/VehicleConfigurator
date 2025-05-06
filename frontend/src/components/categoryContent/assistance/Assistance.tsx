@@ -4,7 +4,7 @@ import { Feature } from '../../../types/types';
 
 interface AssistanceProps {
   assistances: Feature[];
-  selectedAssistance?: Feature | null;
+  selectedAssistance: Feature[];
   handleSelectAssistance: (assistance: Feature | null) => void;
 }
 
@@ -14,9 +14,8 @@ const Assistance: React.FC<AssistanceProps> = ({ assistances, selectedAssistance
       <h3>Assistance Features</h3>
       <div className={styles.assistanceOptions}>
         <div
-          className={`${styles.assistanceOption} ${
-            !selectedAssistance ? styles.selected : ''
-          }`}
+          className={`${styles.assistanceOption} ${selectedAssistance.length === 0 ? styles.selected : ''
+            }`}
           onClick={() => handleSelectAssistance(null)} // Deselect any selected assistance
         >
           <div className={styles.assistanceDetails}>
@@ -26,9 +25,8 @@ const Assistance: React.FC<AssistanceProps> = ({ assistances, selectedAssistance
         {assistances.map((assistance) => (
           <div
             key={assistance.id}
-            className={`${styles.assistanceOption} ${
-              selectedAssistance?.id === assistance.id ? styles.selected : ''
-            }`}
+            className={`${styles.assistanceOption} ${selectedAssistance?.some(item => item.id === assistance.id) ? styles.selected : ''
+              }`}
             onClick={() => handleSelectAssistance(assistance)}
           >
             <img

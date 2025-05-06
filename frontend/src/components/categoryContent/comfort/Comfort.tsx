@@ -4,7 +4,7 @@ import { Feature } from '../../../types/types';
 
 interface ComfortProps {
   comforts: Feature[];
-  selectedComfort?: Feature | null;
+  selectedComfort: Feature[];
   handleSelectComfort: (comfort: Feature | null) => void;
 }
 
@@ -15,7 +15,7 @@ const Comfort: React.FC<ComfortProps> = ({ comforts, selectedComfort, handleSele
       <div className={styles.comfortOptions}>
         <div
           className={`${styles.comfortOption} ${
-            !selectedComfort ? styles.selected : ''
+            selectedComfort.length === 0 ? styles.selected : ''
           }`}
           onClick={() => handleSelectComfort(null)} // Deselect any selected comfort
         >
@@ -27,7 +27,7 @@ const Comfort: React.FC<ComfortProps> = ({ comforts, selectedComfort, handleSele
           <div
             key={comfort.id}
             className={`${styles.comfortOption} ${
-              selectedComfort?.id === comfort.id ? styles.selected : ''
+              selectedComfort.some(item => item.id === comfort.id) ? styles.selected : ''
             }`}
             onClick={() => handleSelectComfort(comfort)}
           >

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './SummaryPage.module.css';
 import { ConfigurationSummary, Customer } from '../../types/types';
 import { IoArrowBack, IoCheckmarkCircle } from "react-icons/io5";
-import { FaCreditCard, FaPaypal, FaApplePay, FaGooglePay } from 'react-icons/fa';
+import { FaCreditCard, FaUniversity, FaHandHoldingUsd, FaFileContract } from 'react-icons/fa';
 import Logo from "@assets/logo.svg";
 import { findOrCreateCustomer, saveConfiguration } from '@api/setter';
 import { useEmailVerification } from '@hooks/useEmailVerification';
@@ -224,19 +224,35 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
               </div>
             )}
 
-            {configuration.selectedAssistance && (
+            {configuration.selectedAssistance && configuration.selectedAssistance.length > 0 && (
               <div className={styles.configItem}>
-                <span className={styles.itemLabel}>Assistance Package</span>
-                <span className={styles.itemValue}>{configuration.selectedAssistance.name}</span>
-                <span className={styles.itemPrice}>+ {configuration.selectedAssistance.additionalPrice.toLocaleString()} €</span>
+                <span className={styles.itemLabel}>Assistance Systems</span>
+                <span className={styles.itemValue}>
+                  <ul className={styles.featureList}>
+                    {configuration.selectedAssistance.map((item, index) => (
+                      <li key={index}>{item.name}</li>
+                    ))}
+                  </ul>
+                </span>
+                <span className={styles.itemPrice}>
+                  + {configuration.selectedAssistance.reduce((sum, item) => sum + item.additionalPrice, 0).toLocaleString()} €
+                </span>
               </div>
             )}
 
-            {configuration.selectedComfort && (
+            {configuration.selectedComfort && configuration.selectedComfort.length > 0 && (
               <div className={styles.configItem}>
-                <span className={styles.itemLabel}>Comfort Package</span>
-                <span className={styles.itemValue}>{configuration.selectedComfort.name}</span>
-                <span className={styles.itemPrice}>+ {configuration.selectedComfort.additionalPrice.toLocaleString()} €</span>
+                <span className={styles.itemLabel}>Comfort Features</span>
+                <span className={styles.itemValue}>
+                  <ul className={styles.featureList}>
+                    {configuration.selectedComfort.map((item, index) => (
+                      <li key={index}>{item.name}</li>
+                    ))}
+                  </ul>
+                </span>
+                <span className={styles.itemPrice}>
+                  + {configuration.selectedComfort.reduce((sum, item) => sum + item.additionalPrice, 0).toLocaleString()} €
+                </span>
               </div>
             )}
           </div>
@@ -251,34 +267,82 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
           <h2>Payment Method</h2>
           <div className={styles.paymentOptions}>
             <div
+              className={`${styles.paymentOption} ${paymentMethod === 'financing' ? styles.selected : ''}`}
+              onClick={() => setPaymentMethod('financing')}
+            >
+              <FaFileContract className={styles.paymentIcon} />
+              <span>Financing</span>
+            </div>
+            <div
+              className={`${styles.paymentOption} ${paymentMethod === 'bank' ? styles.selected : ''}`}
+              onClick={() => setPaymentMethod('bank')}
+            >
+              <FaUniversity className={styles.paymentIcon} />
+              <span>Bank Transfer</span>
+            </div>
+            <div
+              className={`${styles.paymentOption} ${paymentMethod === 'cash' ? styles.selected : ''}`}
+              onClick={() => setPaymentMethod('cash')}
+            >
+              <FaHandHoldingUsd className={styles.paymentIcon} />
+              <span>Cash</span>
+            </div>
+            <div
               className={`${styles.paymentOption} ${paymentMethod === 'card' ? styles.selected : ''}`}
               onClick={() => setPaymentMethod('card')}
             >
               <FaCreditCard className={styles.paymentIcon} />
               <span>Credit Card</span>
             </div>
-            <div
-              className={`${styles.paymentOption} ${paymentMethod === 'paypal' ? styles.selected : ''}`}
-              onClick={() => setPaymentMethod('paypal')}
-            >
-              <FaPaypal className={styles.paymentIcon} />
-              <span>PayPal</span>
-            </div>
-            <div
-              className={`${styles.paymentOption} ${paymentMethod === 'applepay' ? styles.selected : ''}`}
-              onClick={() => setPaymentMethod('applepay')}
-            >
-              <FaApplePay className={styles.paymentIcon} />
-              <span>Apple Pay</span>
-            </div>
-            <div
-              className={`${styles.paymentOption} ${paymentMethod === 'googlepay' ? styles.selected : ''}`}
-              onClick={() => setPaymentMethod('googlepay')}
-            >
-              <FaGooglePay className={styles.paymentIcon} />
-              <span>Google Pay</span>
-            </div>
           </div>
+
+          {paymentMethod === 'financing' && (
+            <div className={styles.paymentDetails}>
+              <h3>Financing Options</h3>
+              <div className={styles.financingOptions}>
+                <div className={styles.financingOption}>
+                  <input 
+                    type="radio" 
+                    id="option1" 
+                    name="financingOption" 
+                    defaultChecked 
+                  />
+                  <label htmlFor="option1">
+                    <span className={styles.term}>36 months</span>
+                    <span className={styles.rate}>3.9% APR</span>
+                    <span className={styles.monthly}>{Math.round(configuration.totalPrice / 36 * 1.039).toLocaleString()} €/month</span>
+                  </label>
+                </div>
+                <div className={styles.financingOption}>
+                  <input 
+                    type="radio" 
+                    id="option2" 
+                    name="financingOption" 
+                  />
+                  <label htmlFor="option2">
+                    <span className={styles.term}>48 months</span>
+                    <span className={styles.rate}>4.5% APR</span>
+                    <span className={styles.monthly}>{Math.round(configuration.totalPrice / 48 * 1.045).toLocaleString()} €/month</span>
+                  </label>
+                </div>
+                <div className={styles.financingOption}>
+                  <input 
+                    type="radio" 
+                    id="option3" 
+                    name="financingOption" 
+                  />
+                  <label htmlFor="option3">
+                    <span className={styles.term}>60 months</span>
+                    <span className={styles.rate}>5.2% APR</span>
+                    <span className={styles.monthly}>{Math.round(configuration.totalPrice / 60 * 1.052).toLocaleString()} €/month</span>
+                  </label>
+                </div>
+              </div>
+              <p className={styles.disclaimer}>
+                Financing subject to credit approval. Rates may vary based on creditworthiness.
+              </p>
+            </div>
+          )}
 
           <form className={styles.contactForm} onSubmit={handleSubmit}>
             <h2>Contact Information</h2>

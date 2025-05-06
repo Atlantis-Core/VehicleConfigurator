@@ -1,25 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactModal from 'react-modal';
 import styles from './LeasingModal.module.css';
 import { IoMdClose } from 'react-icons/io';
 import { FaCar, FaCheck, FaInfoCircle } from 'react-icons/fa';
-import { calculateLeasingPrice } from '@lib/calculateLeasingPrice';
+import { useSharedLeasing } from '@context/LeasingContext';
 
 interface LeasingModalProps {
   isOpen: boolean;
   onClose: () => void;
-  basePrice: number;
 }
 
-const LeasingModal: React.FC<LeasingModalProps> = ({ isOpen, onClose, basePrice }) => {
-  const [activePlan, setActivePlan] = useState<number>(36); // Default to 36 months
+const LeasingModal: React.FC<LeasingModalProps> = ({ isOpen, onClose }) => {
   
-  const leasingOptions = [
-    { months: 12, label: '12 Months', rate: '4.5%', features: ['Higher monthly payments', 'Newest model sooner', 'Lower total cost'] },
-    { months: 24, label: '24 Months', rate: '3.8%', features: ['Balanced option', '2 year warranty coverage', 'Moderate payments'] },
-    { months: 36, label: '36 Months', rate: '3.2%', features: ['Most popular plan', 'Lower monthly cost', 'Balanced ownership period'] },
-    { months: 48, label: '48 Months', rate: '2.8%', features: ['Lowest monthly payments', 'Longer commitment', 'Higher total interest'] }
-  ];
+  const {
+    leasingOptions,
+    selectedOption,
+    getMonthlyPaymentFor,
+    selectLeasingOption
+  } = useSharedLeasing();
 
   return (
     <ReactModal
@@ -44,31 +42,37 @@ const LeasingModal: React.FC<LeasingModalProps> = ({ isOpen, onClose, basePrice 
       </div>
 
       <div className={styles.leasingPlans}>
-        {leasingOptions.map(option => (
-          <div 
-            key={option.months}
-            className={`${styles.leasingPlan} ${activePlan === option.months ? styles.activePlan : ''}`}
-            onClick={() => setActivePlan(option.months)}
-          >
-            <div className={styles.planHeader}>
-              <h3>{option.label}</h3>
-              {activePlan === option.months && <FaCheck className={styles.checkIcon} />}
+        {leasingOptions.map(option => {
+          const payment = getMonthlyPaymentFor(option.months);
+          
+          return (
+            <div 
+              key={option.months}
+              className={`${styles.leasingPlan} ${selectedOption === option.months ? styles.activePlan : ''}`}
+              onClick={() => selectLeasingOption(option.months)}
+            >
+              <div className={styles.planHeader}>
+                <h3>{option.label}</h3>
+                {selectedOption === option.months && <FaCheck className={styles.checkIcon} />}
+              </div>
+              <div className={styles.planPrice}>
+                <span className={styles.amount}>
+                  {payment.toLocaleString()} €
+                </span>
+                <span className={styles.period}>/month</span>
+              </div>
+              <div className={styles.planRate}>Interest rate: {option.rate}</div>
+              <ul className={styles.planFeatures}>
+                {option.features.map((feature, index) => (
+                  <li key={index}>
+                    <span className={styles.featureBullet}>•</span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className={styles.planPrice}>
-              <span className={styles.amount}>{calculateLeasingPrice(option.months, basePrice)} €</span>
-              <span className={styles.period}>/month</span>
-            </div>
-            <div className={styles.planRate}>Interest rate: {option.rate}</div>
-            <ul className={styles.planFeatures}>
-              {option.features.map((feature, index) => (
-                <li key={index}>
-                  <span className={styles.featureBullet}>•</span>
-                  {feature}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className={styles.infoNote}>
@@ -81,7 +85,7 @@ const LeasingModal: React.FC<LeasingModalProps> = ({ isOpen, onClose, basePrice 
           Cancel
         </button>
         <button onClick={onClose} className={styles.primaryButton}>
-          Apply {activePlan} Month Plan
+          Apply {selectedOption} Month Plan
         </button>
       </div>
     </ReactModal>

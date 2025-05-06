@@ -21,6 +21,9 @@ import Comfort from '@components/categoryContent/comfort';
 import Pricing from '@components/categoryContent/pricing';
 import LeasingModal from '@components/leasingModal';
 import ConfigurationReview from '@components/categoryContent/configurationReview';
+import { toast, ToastContainer } from 'react-toastify';
+import { useLeasing } from '@hooks/useLeasing';
+import { LeasingProvider, useSharedLeasing } from '@context/LeasingContext';
 
 function Configurator() {
   const { modelId } = useParams();
@@ -42,8 +45,8 @@ function Configurator() {
   const [selectedEngine, setSelectedEngine] = useState<Engine>();
   const [selectedTransmission, setSelectedTransmission] = useState<Transmission>();
   const [selectedUpholstery, setSelectedUpholstery] = useState<Interior>();
-  const [selectedAssistance, setSelectedAssistance] = useState<Feature | null>();
-  const [selectedComfort, setSelectedComfort] = useState<Feature | null>();
+  const [selectedAssistance, setSelectedAssistance] = useState<Feature[]>([]);
+  const [selectedComfort, setSelectedComfort] = useState<Feature[]>([]);
 
   const [activeCategory, setActiveCategory] = useState<string>('motorization');
   const [activeSubcategory, setActiveSubcategory] = useState<string>('engine');
@@ -68,7 +71,7 @@ function Configurator() {
   };
 
   // Calculate overall progress
-  const calculateProgress = () => {
+  const calculateProgress = (): number => {
     const totalSteps = categories.reduce((acc, cat) => acc + cat.subcategories.length, 0);
     const completedCount = Object.values(completedSteps).filter(Boolean).length;
     return Math.round((completedCount / totalSteps) * 100);
@@ -81,8 +84,8 @@ function Configurator() {
       (selectedRim?.additionalPrice || 0) +
       (selectedEngine?.additionalPrice || 0) +
       (selectedUpholstery?.additionalPrice || 0) +
-      (selectedAssistance?.additionalPrice || 0) +
-      (selectedComfort?.additionalPrice || 0)
+      selectedAssistance.reduce((sum, item) => sum + (item?.additionalPrice || 0), 0) +
+      selectedComfort.reduce((sum, item) => sum + (item?.additionalPrice || 0), 0)
     );
   }, [
     model,
@@ -93,6 +96,8 @@ function Configurator() {
     selectedAssistance,
     selectedComfort
   ]);
+
+  const { selectedOption: selectedLeasingOption, getMonthlyPaymentFor } = useSharedLeasing();
 
   useEffect(() => {
     async function loadData() {
@@ -138,6 +143,28 @@ function Configurator() {
     return getNextSubcategory(categories, activeCategory, activeSubcategory);
   };
 
+  const completeConfiguration = () => {
+    if (calculateProgress() === 100) {
+      navigate('/summary', {
+        state: {
+          configuration: {
+            model,
+            selectedColor,
+            selectedRim,
+            selectedEngine,
+            selectedTransmission,
+            selectedUpholstery,
+            selectedAssistance,
+            selectedComfort,
+            totalPrice
+          }
+        }
+      });
+    } else {
+      toast.error("Please complete all configuration steps before proceeding to checkout");
+    }
+  }
+
   const handleNextClick = () => {
     const next = getNextCategory();
     if (next) {
@@ -146,12 +173,18 @@ function Configurator() {
     }
   };
 
-  // When selecting a category, select its first subcategory automatically
+  // When selecting a category, select its first subcategory automatically and mark it as viewed
   const handleCategoryClick = (categoryId: string) => {
     setActiveCategory(categoryId);
     const category = categories.find(c => c.id === categoryId);
     if (category && category.subcategories.length > 0) {
-      setActiveSubcategory(category.subcategories[0].id);
+      const subcategoryId = category.subcategories[0].id;
+      setActiveSubcategory(subcategoryId);
+
+      // Mark subcategory as completed when viewed
+      if (subcategoryId === 'assistance' || subcategoryId === 'comfort' || subcategoryId === 'pricing' || subcategoryId === 'review') {
+        setCompletedSteps(prev => ({ ...prev, [subcategoryId]: true }));
+      }
     }
   };
 
@@ -174,7 +207,7 @@ function Configurator() {
   const handleSelectTransmission = (transmission: Transmission) => {
     setSelectedTransmission(transmission);
     setCompletedSteps(prev => ({ ...prev, 'transmission': true }));
-  } 
+  }
 
   const handleSelectUpholstery = (upholstery: Interior) => {
     setSelectedUpholstery(upholstery);
@@ -182,12 +215,28 @@ function Configurator() {
   };
 
   const handleSelectAssistance = (assistance: Feature | null) => {
-    setSelectedAssistance(assistance);
+    if (assistance === null) {
+      setSelectedAssistance([]);
+    } else if (assistance !== null) {
+      if (selectedAssistance.length > 0 && selectedAssistance.some(item => item.id === assistance.id)) {
+        setSelectedAssistance(selectedAssistance.filter(item => item.id !== assistance.id));
+      } else {
+        setSelectedAssistance([...selectedAssistance, assistance]);
+      }
+    }
     setCompletedSteps(prev => ({ ...prev, 'assistance': true }));
   };
 
   const handleSelectComfort = (comfort: Feature | null) => {
-    setSelectedComfort(comfort);
+    if (comfort === null) {
+      setSelectedComfort([]);
+    } else if (comfort !== null) {
+      if (selectedComfort.length > 0 && selectedComfort.some(item => item.id === comfort.id)) {
+        setSelectedComfort(selectedComfort.filter(item => item.id !== comfort.id));
+      } else {
+        setSelectedComfort([...selectedComfort, comfort]);
+      }
+    }
     setCompletedSteps(prev => ({ ...prev, 'comfort': true }));
   };
 
@@ -204,6 +253,23 @@ function Configurator() {
   );
 
   const renderActiveContent = () => {
+    // Mark steps as viewed/completed
+    if (activeSubcategory === 'assistance' && !completedSteps['assistance']) {
+      setCompletedSteps(prev => ({ ...prev, 'assistance': true }));
+    }
+
+    if (activeSubcategory === 'comfort' && !completedSteps['comfort']) {
+      setCompletedSteps(prev => ({ ...prev, 'comfort': true }));
+    }
+
+    if (activeSubcategory === 'pricing' && !completedSteps['pricing']) {
+      setCompletedSteps(prev => ({ ...prev, 'pricing': true }));
+    }
+
+    if (activeSubcategory === 'review' && !completedSteps['review']) {
+      setCompletedSteps(prev => ({ ...prev, 'review': true }));
+    }
+
     // Render based on the active subcategory
     switch (activeSubcategory) {
       case 'engine':
@@ -280,6 +346,7 @@ function Configurator() {
             selectedUpholstery={selectedUpholstery}
             selectedAssistance={selectedAssistance}
             selectedComfort={selectedComfort}
+            onComplete={completeConfiguration}
             onEditSection={(category: string, subcategory: string) => {
               goToSection(category, subcategory);
             }}
@@ -291,171 +358,179 @@ function Configurator() {
   };
 
   return (
-    <div className={styles.configuratorContainer}>
-      {/* Top header with back button, model info and save button */}
-      <div className={styles.topHeader}>
-        <div className={styles.headerLeft}>
-          <button onClick={handleBack} className={styles.backButton}>
-            <IoArrowBack />
-            <span>Back</span>
-          </button>
-        </div>
+    <LeasingProvider totalPrice={totalPrice}>
+      <div className={styles.configuratorContainer}>
+        {/* Top header with back button, model info and save button */}
+        <div className={styles.topHeader}>
+          <div className={styles.headerLeft}>
+            <button onClick={handleBack} className={styles.backButton}>
+              <IoArrowBack />
+              <span>Back</span>
+            </button>
+          </div>
 
-        <div className={styles.headerCenter}>
-          <h1 className={styles.modelName}>{model.name}</h1>
-          <div className={styles.modelSubtitle}>{model.type}</div>
-        </div>
+          <div className={styles.headerCenter}>
+            <h1 className={styles.modelName}>{model.name}</h1>
+            <div className={styles.modelSubtitle}>{model.type}</div>
+          </div>
 
-        <div className={styles.headerRight}>
-          <div className={styles.priceWrapper}>
-            <div className={styles.priceDetail}>
-              <div className={styles.priceLabel}>Total Price</div>
-              <div className={styles.priceValue}>{totalPrice.toLocaleString()} €</div>
+          <div className={styles.headerRight}>
+            <div className={styles.priceWrapper}>
+              <div className={styles.priceDetail}>
+                <div className={styles.priceLabel}>Total Price</div>
+                <div className={styles.priceValue}>{totalPrice.toLocaleString()} €</div>
+              </div>
+
+              <div className={styles.priceDivider}></div>
+
+              <div className={styles.priceDetail}>
+                <div className={styles.priceLabel}>
+                  Monthly Leasing
+                  <button
+                    className={styles.infoButton}
+                    onClick={openLeasingModal}
+                    aria-label="View leasing options"
+                  >
+                    <span className={styles.infoIconWrapper}>
+                      <BsInfoCircleFill />
+                    </span>
+                  </button>
+                </div>
+                <div className={styles.priceValue}>
+                  { getMonthlyPaymentFor(selectedLeasingOption)}
+                  <span className={styles.leaseTerms}>/mo.</span>
+                </div>
+              </div>
             </div>
 
-            <div className={styles.priceDivider}></div>
+            <LeasingModal
+              isOpen={isLeasingModalOpen}
+              onClose={closeLeasingModal}
+            />
 
-            <div className={styles.priceDetail}>
-              <div className={styles.priceLabel}>
-                Monthly Leasing
-                <button
-                  className={styles.infoButton}
-                  onClick={openLeasingModal}
-                  aria-label="View leasing options"
+            <button className={styles.saveButton}>
+              <BsBookmark />
+              <span>Save</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Main content with sidebar and viewer */}
+        <div className={styles.mainContent}>
+          {/* Left sidebar navigation */}
+          <div className={styles.sidebar}>
+            <nav className={styles.categoryNav}>
+              {categories.map((category, index) => (
+                <div
+                  key={category.id}
+                  className={styles.categoryGroup}
                 >
-                  <span className={styles.infoIconWrapper}>
-                    <BsInfoCircleFill />
-                  </span>
-                </button>
+                  <div
+                    className={`${styles.categoryItem} ${activeCategory === category.id ? styles.active : ''}`}
+                    onClick={() => handleCategoryClick(category.id)}
+                  >
+                    <div className={styles.categoryIcon}>
+                      {getCategoryIcon(category.id)}
+                    </div>
+                    <span className={styles.categoryLabel}>{category.label}</span>
+                    <div className={styles.categoryStatus}>
+                      {category.subcategories.some(sub => completedSteps[sub.id]) && (
+                        <IoCheckmarkCircle className={styles.completedIcon} />
+                      )}
+                    </div>
+                  </div>
+
+                  {activeCategory === category.id && (
+                    <div className={styles.subcategoryList}>
+                      {category.subcategories.map((subcategory, idx) => (
+                        <div
+                          key={subcategory.id}
+                          className={`${styles.subcategoryItem} ${activeSubcategory === subcategory.id ? styles.active : ''}`}
+                          onClick={() => setActiveSubcategory(subcategory.id)}
+                          style={{ "--animation-order": idx } as React.CSSProperties}
+                        >
+                          <div className={styles.subcategoryStatus}>
+                            {completedSteps[subcategory.id] ? (
+                              <FaCircle className={styles.stepComplete} />
+                            ) : (
+                              <FaRegCircle className={styles.stepIncomplete} />
+                            )}
+                          </div>
+                          <span>{subcategory.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </nav>
+
+            {/* Progress indicator */}
+            <div className={styles.configProgress}>
+              <div className={styles.progressHeader}>
+                <span className={styles.progressTitle}>Configuration Progress</span>
+                <span className={styles.progressValue}>{calculateProgress()}%</span>
               </div>
-              <div className={styles.priceValue}>
-                300,36 €
-                <span className={styles.leaseTerms}>/mo.</span>
+              <div className={styles.progressBar}>
+                <div
+                  className={styles.progressFill}
+                  style={{ width: `${calculateProgress()}%` }}
+                ></div>
               </div>
+            </div>
+
+            {/* Sidebar footer */}
+            <div className={styles.sidebarFooter}>
+              <div className={styles.brandLogo}>
+                <img src={Logo} alt="Logo" />
+              </div>
+              <div className={styles.brandTagline}>Premium Vehicle Configuration</div>
             </div>
           </div>
 
-          <LeasingModal
-            isOpen={isLeasingModalOpen}
-            onClose={closeLeasingModal}
-            basePrice={totalPrice}
-          />
+          {/* Center car viewer area */}
+          <div className={styles.viewerWrapper}>
+            <div className={styles.viewer}>
+              <VehicleViewer modelPath={model.model3dPath} color={selectedColor} autoRotateSpeed={0.3} />
+              <div className={styles.rotateIndicator}>
+                <IoRefreshOutline />
+                360°
+              </div>
+            </div>
 
-          <button className={styles.saveButton}>
-            <BsBookmark />
-            <span>Save</span>
-          </button>
-        </div>
-      </div>
+            {/* Bottom options panel */}
+            <div className={styles.optionsPanel}>
+              {renderActiveContent()}
 
-      {/* Main content with sidebar and viewer */}
-      <div className={styles.mainContent}>
-        {/* Left sidebar navigation */}
-        <div className={styles.sidebar}>
-          <nav className={styles.categoryNav}>
-            {categories.map((category, index) => (
-              <div
-                key={category.id}
-                className={styles.categoryGroup}
-              >
-                <div
-                  className={`${styles.categoryItem} ${activeCategory === category.id ? styles.active : ''}`}
-                  onClick={() => handleCategoryClick(category.id)}
-                >
-                  <div className={styles.categoryIcon}>
-                    {getCategoryIcon(category.id)}
-                  </div>
-                  <span className={styles.categoryLabel}>{category.label}</span>
-                  <div className={styles.categoryStatus}>
-                    {category.subcategories.some(sub => completedSteps[sub.id]) && (
-                      <IoCheckmarkCircle className={styles.completedIcon} />
-                    )}
-                  </div>
-                </div>
-
-                {activeCategory === category.id && (
-                  <div className={styles.subcategoryList}>
-                    {category.subcategories.map((subcategory, idx) => (
-                      <div
-                        key={subcategory.id}
-                        className={`${styles.subcategoryItem} ${activeSubcategory === subcategory.id ? styles.active : ''}`}
-                        onClick={() => setActiveSubcategory(subcategory.id)}
-                        style={{ "--animation-order": idx } as React.CSSProperties}
-                      >
-                        <div className={styles.subcategoryStatus}>
-                          {completedSteps[subcategory.id] ? (
-                            <FaCircle className={styles.stepComplete} />
-                          ) : (
-                            <FaRegCircle className={styles.stepIncomplete} />
-                          )}
-                        </div>
-                        <span>{subcategory.label}</span>
-                      </div>
-                    ))}
-                  </div>
+              {/* Navigation buttons */}
+              <div className={styles.configNavigation}>
+                {getNextCategory() && (
+                  <button
+                    className={styles.nextButton}
+                    onClick={handleNextClick}
+                  >
+                    Next: {getNextCategory()?.categoryId === activeCategory
+                      ? categories.find(c => c.id === activeCategory)?.subcategories.find(s => s.id === getNextCategory()?.subcategoryId)?.label
+                      : categories.find(c => c.id === getNextCategory()?.categoryId)?.label
+                    }
+                    <MdKeyboardArrowRight
+                      size={24}
+                    />
+                  </button>
                 )}
               </div>
-            ))}
-          </nav>
-
-          {/* Progress indicator */}
-          <div className={styles.configProgress}>
-            <div className={styles.progressHeader}>
-              <span className={styles.progressTitle}>Configuration Progress</span>
-              <span className={styles.progressValue}>{calculateProgress()}%</span>
-            </div>
-            <div className={styles.progressBar}>
-              <div
-                className={styles.progressFill}
-                style={{ width: `${calculateProgress()}%` }}
-              ></div>
-            </div>
-          </div>
-
-          {/* Sidebar footer */}
-          <div className={styles.sidebarFooter}>
-            <div className={styles.brandLogo}>
-              <img src={Logo} alt="Logo" />
-            </div>
-            <div className={styles.brandTagline}>Premium Vehicle Configuration</div>
-          </div>
-        </div>
-
-        {/* Center car viewer area */}
-        <div className={styles.viewerWrapper}>
-          <div className={styles.viewer}>
-            <VehicleViewer modelPath={model.model3dPath} color={selectedColor} autoRotateSpeed={0.3} />
-            <div className={styles.rotateIndicator}>
-              <IoRefreshOutline />
-              360°
-            </div>
-          </div>
-
-          {/* Bottom options panel */}
-          <div className={styles.optionsPanel}>
-            {renderActiveContent()}
-
-            {/* Navigation buttons */}
-            <div className={styles.configNavigation}>
-              {getNextCategory() && (
-                <button
-                  className={styles.nextButton}
-                  onClick={handleNextClick}
-                >
-                  Next: {getNextCategory()?.categoryId === activeCategory
-                    ? categories.find(c => c.id === activeCategory)?.subcategories.find(s => s.id === getNextCategory()?.subcategoryId)?.label
-                    : categories.find(c => c.id === getNextCategory()?.categoryId)?.label
-                  }
-                  <MdKeyboardArrowRight
-                    size={24}
-                  />
-                </button>
-              )}
             </div>
           </div>
         </div>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          stacked={true}
+          newestOnTop={true}
+          style={{ marginRight: "1.5rem", marginBottom: "0.75rem" }}
+        />
       </div>
-    </div>
+    </LeasingProvider>
   );
 }
 

@@ -29,13 +29,13 @@ export interface ConfigurationFeature {
 
 export interface ConfigurationSummary {
   model: Model;
-  selectedColor?: Color;
-  selectedRim?: Rim;
-  selectedEngine?: Engine;
-  selectedTransmission?: Transmission;
-  selectedUpholstery?: Interior;
-  selectedAssistance?: Feature | null;
-  selectedComfort?: Feature | null;
+  selectedColor: Color;
+  selectedRim: Rim;
+  selectedEngine: Engine;
+  selectedTransmission: Transmission;
+  selectedUpholstery: Interior;
+  selectedAssistance: Feature[];
+  selectedComfort: Feature[];
   totalPrice: number;
 }
 

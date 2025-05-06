@@ -170,6 +170,75 @@
   color: #0056b3;
 }
 
+.paymentDetails {
+  margin-top: 24px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.paymentDetails h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.financingOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.financingOption {
+  display: flex;
+  align-items: center;
+}
+
+.financingOption input {
+  margin-right: 12px;
+}
+
+.financingOption label {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-weight: normal;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.financingOption input:checked + label {
+  border-color: #0056b3;
+  background-color: rgba(0, 86, 179, 0.05);
+}
+
+.term {
+  font-weight: 600;
+  color: #333;
+}
+
+.rate {
+  color: #666;
+}
+
+.monthly {
+  font-weight: 600;
+  color: #0056b3;
+}
+
+.disclaimer {
+  font-size: 0.8rem;
+  color: #666;
+  font-style: italic;
+  margin-top: 16px;
+}
+
 .contactForm {
   margin-top: 30px;
 }
@@ -229,6 +298,21 @@
 .submitButton:disabled {
   background-color: #999;
   cursor: not-allowed;
+}
+
+/* Feature List */
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.featureList li {
+  padding: 2px 0;
+}
+
+.featureList li:not(:last-child) {
+  border-bottom: 1px dotted #f0f0f0;
 }
 
 /* Success page styles */
