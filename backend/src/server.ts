@@ -3,11 +3,12 @@ import { app } from "./app";
 
 dotenv.config();
 
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
+const BACKEND_RUNNING_URL = process.env.BACKEND_RUNNING_URL || "localhost";
 
 try {
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
+  app.listen(PORT, BACKEND_RUNNING_URL, () => {
+    console.log(`🚀 Server running on http://${BACKEND_RUNNING_URL}:${PORT}`);
   });
 } catch (error) {
   console.error("Error starting server:", error);
