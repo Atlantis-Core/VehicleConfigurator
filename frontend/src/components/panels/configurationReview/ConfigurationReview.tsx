@@ -1,43 +1,34 @@
 import React from 'react';
 import styles from './ConfigurationReview.module.css';
-import { 
-  Model, 
-  Color, 
-  Rim, 
-  Engine, 
-  Transmission, 
-  Interior, 
-  Feature 
-} from '../../../types/types';
 import { FaCheck, FaEdit } from 'react-icons/fa';
+import { useConfiguration } from '@context/ConfigurationContext';
 
 interface ConfigurationReviewProps {
-  model: Model;
-  totalPrice: number;
-  selectedColor?: Color;
-  selectedRim?: Rim;
-  selectedEngine?: Engine;
-  selectedTransmission?: Transmission;
-  selectedUpholstery?: Interior;
-  selectedAssistance?: Feature[];
-  selectedComfort?: Feature[];
   onComplete: () => void;
   onEditSection: (category: string, subcategory: string) => void;
 }
 
 const ConfigurationReview: React.FC<ConfigurationReviewProps> = ({
-  model,
-  totalPrice,
-  selectedColor,
-  selectedRim,
-  selectedEngine,
-  selectedTransmission,
-  selectedUpholstery,
-  selectedAssistance,
-  selectedComfort,
   onComplete,
   onEditSection
 }) => {
+  // Access all configuration data directly from context
+  const {
+    model,
+    totalPrice,
+    selectedColor,
+    selectedRim,
+    selectedEngine,
+    selectedTransmission,
+    selectedUpholstery,
+    selectedAssistance,
+    selectedComfort
+  } = useConfiguration();
+
+  // Make sure model exists before rendering
+  if (!model) {
+    return <div className={styles.loading}>Loading configuration...</div>;
+  }
 
   return (
     <div className={styles.reviewContainer}>

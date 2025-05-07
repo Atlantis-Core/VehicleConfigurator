@@ -1,10 +1,9 @@
 .categoryContent {
-  margin: 0 auto;
-  animation: fadeIn 0.4s ease-out;
   padding: 1.5rem;
   background-color: #f9f9f9;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  width: 100%;
 }
 
 .categoryContent h3 {
@@ -27,16 +26,13 @@
   border-radius: 2px;
 }
 
-.engineList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
+.comfortOptions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1rem;
 }
 
-.engineItem {
+.comfortOption {
   padding: 1rem;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -45,39 +41,50 @@
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  align-items: center;
+  text-align: center;
 }
 
-.engineItem:hover {
+.comfortOption:hover {
   background-color: #f0f8ff;
   border-color: #1a73e8;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(26, 115, 232, 0.1);
 }
 
-.engineItem.selected {
+.comfortOption.selected {
   background-color: #e8f0fe;
   border-color: #1a73e8;
   box-shadow: 0 4px 12px rgba(26, 115, 232, 0.2);
 }
 
-.engineName {
-  font-size: 1.2rem;
+.comfortImage {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.comfortDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.comfortName {
+  font-size: 1rem;
   font-weight: 600;
   color: #333;
 }
 
-.engineDescription {
-  font-size: 0.9rem;
-  color: #666;
-  line-height: 1.4;
-}
-
-.engineDetails {
+.comfortPrice {
   font-size: 0.9rem;
   font-weight: 500;
   color: #1a73e8;
-  margin-top: 0.5rem;
-  display: flex;
-  justify-content: flex-end;
+}
+
+.comfortIncluded {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #28a745;
 }

@@ -3,6 +3,27 @@
   background-color: #f9f9f9;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+.categoryContent h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.categoryContent h3::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 80px;
+  height: 3px;
+  background: var(#00a4dc);
+  border-radius: 2px;
 }
 
 .upholsteryOptions {

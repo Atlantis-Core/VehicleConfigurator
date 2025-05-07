@@ -1,11 +1,8 @@
 .categoryContent {
   margin: 0 auto;
   animation: fadeIn 0.4s ease-out;
-}
-
-.categoryContent {
-  margin: 0 auto;
-  animation: fadeIn 0.4s ease-out;
+  width: 100%;
+  padding: 1.5rem;
 }
 
 .categoryContent h3 {
