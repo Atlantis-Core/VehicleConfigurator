@@ -1,7 +1,8 @@
 .container {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   background-color: #f8f8f8;
+  overflow-y: scroll;
 }
 
 .header {
@@ -335,6 +336,80 @@
 
 .backButton svg {
   font-size: 1.2rem;
+}
+
+.configSpecs {
+  margin: 1rem 0;
+  padding: 0.8rem;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.specRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.specRow:last-child {
+  border-bottom: none;
+}
+
+.specLabel {
+  color: #666;
+  font-weight: 500;
+}
+
+.specValue {
+  color: #333;
+  font-weight: 400;
+  text-align: right;
+}
+
+.colorDisplay {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.colorSwatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+}
+
+.featuresSection {
+  margin-top: 1rem;
+}
+
+.featuresSectionTitle {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.configFeatures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.feature {
+  background-color: #f0f0f0;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.moreFeatures {
+  font-size: 0.8rem;
+  color: #999;
+  padding: 0.3rem 0;
 }
 
 @media (max-width: 768px) {

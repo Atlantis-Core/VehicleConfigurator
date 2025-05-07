@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { IoArrowBack, IoRefreshOutline } from "react-icons/io5"; // Added IoRefreshOutline for reset icon
+import React, { useState, useEffect, useCallback } from 'react'; // Added useCallback
+import { IoArrowBack, IoRefreshOutline } from "react-icons/io5";
 import { BsBookmark, BsInfoCircleFill } from "react-icons/bs";
 import LeasingModal from '@components/leasingModal';
 import { Model } from '../../../types/types';
 import styles from './ConfiguratorHeader.module.css';
 import { useSharedLeasing } from '@context/LeasingContext';
-import { saveConfigurationLocally, clearConfigurationLocally } from '@hooks/useLocalConfiguration';
+import { deleteConfigurationLocally, saveConfigurationLocally, loadConfigurationsForModel, getAllSavedConfigurations } from '@hooks/useLocalConfiguration';
 import { useConfiguration } from '@context/ConfigurationContext';
 import { toast } from 'react-toastify';
 
@@ -13,9 +13,10 @@ interface ConfiguratorHeaderProps {
   onBack: () => void;
   model: Model;
   totalPrice: number;
+  loadedSavedConfig: string | null;
 }
 
-const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, totalPrice }) => {
+const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, totalPrice, loadedSavedConfig }) => {
   const [isLeasingModalOpen, setIsLeasingModalOpen] = useState(false);
   const { selectedOption: selectedLeasingOption, getMonthlyPaymentFor } = useSharedLeasing();
 
@@ -28,8 +29,9 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
     selectedAssistance, selectedComfort
   } = useConfiguration();
 
-  const saveConfiguration = () => {
-    saveConfigurationLocally({
+  const saveConfiguration = useCallback(() => {
+    // Create an ID and save it
+    const configId = saveConfigurationLocally({
       model,
       selectedColor,
       selectedRim,
@@ -41,23 +43,50 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
       totalPrice
     });
 
-    toast.success('Configuration saved successfully!');
-  };
+    toast.success('Configuration saved successfully!', {
+      toastId: 'config-saved', // Prevent duplicate toasts
+    });
+    
+    return configId;
+  }, [
+    model,
+    selectedColor,
+    selectedRim,
+    selectedEngine,
+    selectedTransmission,
+    selectedUpholstery,
+    selectedAssistance,
+    selectedComfort,
+    totalPrice
+  ]);
 
-    const resetConfiguration = () => {
+  const resetConfiguration = useCallback(() => {
     // Ask for confirmation
     if (window.confirm('Are you sure you want to reset your configuration?')) {
-      // Clear saved configuration from localStorage
-      clearConfigurationLocally(model.id);
-      
-      // Add a flag to URL to indicate we're reloading after reset
-      const url = new URL(window.location.href);
-      url.searchParams.set('reset', 'true');
-      
-      // Replace current URL with the new one (with the reset parameter)
-      window.location.href = url.toString();
+      try {
+        // First, delete the saved configuration if one is loaded
+        if (loadedSavedConfig) {
+          deleteConfigurationLocally(loadedSavedConfig);
+        }
+        
+        // Use navigation instead of direct page reload
+        const url = new URL(window.location.href);
+        url.searchParams.set('reset', 'true');
+        
+        // Add a unique timestamp to ensure the browser doesn't use cached content
+        url.searchParams.set('t', Date.now().toString());
+        
+        // Force a full page refresh to completely reset the React state tree
+        window.location.href = url.toString();
+      } catch (error) {
+        console.error('Error during reset:', error);
+        toast.error('An error occurred while resetting the configuration');
+        
+        // Force page reload as a fallback to reset everything
+        window.location.reload();
+      }
     }
-  };
+  }, [loadedSavedConfig, model]);
   
   // Check for reset parameter
   useEffect(() => {
@@ -67,9 +96,16 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
       url.searchParams.delete('reset');
       window.history.replaceState({}, document.title, url.toString());
       
-      setTimeout(() => toast.info('Configuration has been reset'), 10);
+      // Show toast
+      setTimeout(() => toast.info('Configuration has been reset', {
+        toastId: 'config-reset'
+      }), 100);
     }
   }, []);
+
+  const handleSaveClick = useCallback(() => {
+    saveConfiguration();
+  }, [saveConfiguration]);
 
   return (
     <div className={styles.topHeader}>
@@ -120,7 +156,7 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
         />
 
         <div className={styles.buttonGroup}>
-          <button className={styles.saveButton} onClick={saveConfiguration}>
+          <button className={styles.saveButton} onClick={handleSaveClick}>
             <BsBookmark />
             <span>Save</span>
           </button>

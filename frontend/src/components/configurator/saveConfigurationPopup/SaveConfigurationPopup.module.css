@@ -1,0 +1,125 @@
+
+.savePopupContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.savePopupContent p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #555;
+}
+
+.configSummary {
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  padding: 1.25rem;
+  border: 1px solid #eee;
+}
+
+.configModelName {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.configSpecs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.configSpec {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #eee;
+}
+
+.configSpec:last-child {
+  border-bottom: none;
+}
+
+.specLabel {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.specValue {
+  color: #333;
+  font-weight: 500;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.colorSwatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.configTotalPrice {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+  font-weight: 500;
+}
+
+.priceValue {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.popupActions {
+  display: flex;
+  gap: 1rem;
+}
+
+.primaryButton,
+.secondaryButton {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.primaryButton {
+  background-color: #000;
+  color: white;
+  border: none;
+}
+
+.primaryButton:hover {
+  background-color: #333;
+}
+
+.secondaryButton {
+  background-color: transparent;
+  color: #555;
+  border: 1px solid #ddd;
+}
+
+.secondaryButton:hover {
+  background-color: #f5f5f5;
+  border-color: #ccc;
+  color: #333;
+}
+
+@media (max-width: 576px) {
+  .popupActions {
+    flex-direction: column-reverse;
+  }
+}

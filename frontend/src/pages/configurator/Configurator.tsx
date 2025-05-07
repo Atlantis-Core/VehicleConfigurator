@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { IoRefreshOutline } from "react-icons/io5";
 import { MdKeyboardArrowRight } from "react-icons/md";
@@ -10,11 +10,15 @@ import { toast, ToastContainer } from 'react-toastify';
 import { LeasingProvider } from '@context/LeasingContext';
 import { ConfigurationProvider as ConfiguratorProvider, useConfiguration } from '@context/ConfigurationContext';
 import { ConfiguratorHeader, ConfiguratorContent, ConfiguratorSidebar } from '@components/configurator';
-import { loadConfigurationLocally, saveConfigurationLocally } from '@hooks/useLocalConfiguration';
+import { loadConfigurationById, saveConfigurationLocally, loadConfigurationsForModel } from '@hooks/useLocalConfiguration';
+import Popup from '@components/Popup';
+import { Feature } from '../../types/types';
+import SaveConfigurationPopup from '@components/configurator/saveConfigurationPopup';
 
 const ConfiguratorLayout = () => {
   const { modelId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const {
     model, selectedColor, selectedRim, selectedEngine,
     selectedTransmission, selectedUpholstery,
@@ -25,8 +29,16 @@ const ConfiguratorLayout = () => {
     toggleAssistance, toggleComfort
   } = useConfiguration();
 
-  // Add state to track if we've already loaded the saved config for this model
-  const [loadedSavedConfig, setLoadedSavedConfig] = useState<number | null>(null);
+  // Track if we've already loaded the saved config
+  const [loadedSavedConfig, setLoadedSavedConfig] = useState<string | null>(null);
+
+  // Check if we have a specific configuration ID from navigation state
+  const configurationId = location.state?.configurationId;
+
+  const [isSavePopupOpen, setIsSavePopupOpen] = useState(false);
+
+  // Flag to prevent auto-loading after saving
+  const [preventAutoLoad, setPreventAutoLoad] = useState(false);
 
   useEffect(() => {
     const loadAndApplySavedConfig = async () => {
@@ -34,8 +46,14 @@ const ConfiguratorLayout = () => {
 
       await loadModelData(modelId);
 
-      if (model && loadedSavedConfig !== model.id) {
-        const savedConfig = loadConfigurationLocally(model.id);
+      // If we just saved, don't trigger auto-loading
+      if (preventAutoLoad) {
+        return;
+      }
+
+      if (configurationId && loadedSavedConfig !== configurationId) {
+        // Load the specific saved configuration
+        const savedConfig = loadConfigurationById(configurationId);
 
         if (savedConfig) {
           // Apply the saved configuration
@@ -47,27 +65,71 @@ const ConfiguratorLayout = () => {
 
           // Handle array items
           if (savedConfig.selectedAssistance && savedConfig.selectedAssistance.length > 0) {
+            // Clear existing selections first
             toggleAssistance(null);
-            savedConfig.selectedAssistance.forEach(item => toggleAssistance(item));
+            savedConfig.selectedAssistance.forEach((item: Feature) => toggleAssistance(item));
           }
 
           if (savedConfig.selectedComfort && savedConfig.selectedComfort.length > 0) {
+            // Clear existing selections first
             toggleComfort(null);
-            savedConfig.selectedComfort.forEach(item => toggleComfort(item));
+            savedConfig.selectedComfort.forEach((item: Feature) => toggleComfort(item));
           }
 
           // Show toast only once
-          toast.info("Loaded your saved configuration");
+          toast.info("Loaded your saved configuration", {
+            toastId: 'config-loaded-specific'
+          });
 
-          // Mark this model as having had its config loaded
-          setLoadedSavedConfig(model.id);
+          // Mark this configuration as loaded
+          setLoadedSavedConfig(configurationId);
+        } else {
+          toast.error("Could not find the saved configuration", {
+            toastId: 'config-not-found'
+          });
+        }
+      } else if (model && !configurationId && loadedSavedConfig === null) {
+        // Default behavior - try to find any saved config for this model
+        const savedConfigs = loadConfigurationsForModel(parseInt(modelId));
+
+        if (savedConfigs.length > 0) {
+          // Take the most recent configuration
+          const mostRecent = savedConfigs.sort((a, b) =>
+            new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime()
+          )[0];
+
+          // Apply the saved configuration
+          if (mostRecent.selectedColor) setSelectedColor(mostRecent.selectedColor);
+          if (mostRecent.selectedRim) setSelectedRim(mostRecent.selectedRim);
+          if (mostRecent.selectedEngine) setSelectedEngine(mostRecent.selectedEngine);
+          if (mostRecent.selectedTransmission) setSelectedTransmission(mostRecent.selectedTransmission);
+          if (mostRecent.selectedUpholstery) setSelectedUpholstery(mostRecent.selectedUpholstery);
+
+          // Handle array items
+          if (mostRecent.selectedAssistance && mostRecent.selectedAssistance.length > 0) {
+            toggleAssistance(null);
+            mostRecent.selectedAssistance.forEach((item: Feature) => toggleAssistance(item));
+          }
+
+          if (mostRecent.selectedComfort && mostRecent.selectedComfort.length > 0) {
+            toggleComfort(null);
+            mostRecent.selectedComfort.forEach((item: Feature) => toggleComfort(item));
+          }
+
+          // Show toast with unique ID
+          toast.info("Loaded your most recent configuration", {
+            toastId: 'config-loaded-recent'
+          });
+
+          // Mark as loaded
+          setLoadedSavedConfig('default');
         }
       }
     };
 
     loadAndApplySavedConfig();
 
-  }, [modelId, model, loadModelData]);
+  }, [modelId, model, loadModelData, configurationId, loadedSavedConfig, preventAutoLoad]);
 
   // UI state
   const [activeCategory, setActiveCategory] = useState<string>('motorization');
@@ -90,42 +152,64 @@ const ConfiguratorLayout = () => {
     return getNextSubcategory(categories, activeCategory, activeSubcategory);
   };
 
-  const completeConfiguration = () => {
+  const handleCompleteConfiguration = () => {
     if (calculateProgress() === 100) {
 
-      if (!model) toast.error('Could not complete configuration!')
-      else 
-      saveConfigurationLocally({
-        model,
-        selectedColor,
-        selectedRim,
-        selectedEngine,
-        selectedTransmission,
-        selectedUpholstery,
-        selectedAssistance,
-        selectedComfort,
-        totalPrice
-      });
-
-      navigate('/summary', {
-        state: {
-          configuration: {
-            model,
-            selectedColor,
-            selectedRim,
-            selectedEngine,
-            selectedTransmission,
-            selectedUpholstery,
-            selectedAssistance,
-            selectedComfort,
-            totalPrice
-          }
-        }
-      });
-
+      // first ask if the configuration should be saved
+      setIsSavePopupOpen(true);
     } else {
       toast.error("Please complete all configuration steps before proceeding to checkout");
     }
+  }
+
+  const completeConfigurationWithSave = () => {
+    if (!model) {
+      toast.error('Could not complete configuration!');
+      return;
+    }
+
+    // Set the flag to prevent auto-loading
+    setPreventAutoLoad(true);
+
+    const savedId = saveConfigurationLocally({
+      model,
+      selectedColor,
+      selectedRim,
+      selectedEngine,
+      selectedTransmission,
+      selectedUpholstery,
+      selectedAssistance,
+      selectedComfort,
+      totalPrice
+    });
+
+    // Update the loaded config ID after saving
+    setLoadedSavedConfig(savedId);
+
+    // Show save success toast with unique ID
+    toast.success('Configuration saved successfully!', {
+      toastId: 'config-saved-success'
+    });
+
+    completeConfiguration();
+  }
+
+  const completeConfiguration = () => {
+    navigate('/summary', {
+      state: {
+        configuration: {
+          model,
+          selectedColor,
+          selectedRim,
+          selectedEngine,
+          selectedTransmission,
+          selectedUpholstery,
+          selectedAssistance,
+          selectedComfort,
+          totalPrice
+        }
+      }
+    });
   }
 
   const handleNextClick = () => {
@@ -186,6 +270,7 @@ const ConfiguratorLayout = () => {
           onBack={handleBack}
           model={model}
           totalPrice={totalPrice}
+          loadedSavedConfig={loadedSavedConfig}
         />
 
         {/* Main content with sidebar and viewer */}
@@ -214,7 +299,7 @@ const ConfiguratorLayout = () => {
             <div className={styles.optionsPanel}>
               <ConfiguratorContent
                 activeSubcategory={activeSubcategory}
-                completeConfiguration={completeConfiguration}
+                completeConfiguration={handleCompleteConfiguration}
                 goToSection={goToSection}
               />
 
@@ -243,6 +328,14 @@ const ConfiguratorLayout = () => {
           newestOnTop={true}
           style={{ marginRight: "1.5rem", marginBottom: "0.75rem" }}
         />
+
+        <Popup isOpen={isSavePopupOpen} onClose={() => setIsSavePopupOpen(false)} title="Save Configuration">
+          <SaveConfigurationPopup
+            model={model}
+            onContinue={completeConfiguration}
+            onSaveAndContinue={completeConfigurationWithSave}
+          />
+        </Popup>
       </div>
     </LeasingProvider>
   );
