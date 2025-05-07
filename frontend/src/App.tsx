@@ -3,6 +3,7 @@ import StartPage from '@pages/startPage';
 import ModelPicker from '@pages/modelPicker';
 import Configurator from '@pages/configurator';
 import SummaryPage from '@pages/summaryPage';
+import SavedConfigurations from '@pages/savedConfigurations';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/configurator" element={<ModelPicker />} />
         <Route path="/configurator/:modelId" element={<Configurator />} />
         <Route path="/summary" element={<SummaryPage />} />
+        <Route path="/saved-configurations" element={<SavedConfigurations />} />
       </Routes>
     </Router>
   );

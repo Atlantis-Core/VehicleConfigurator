@@ -1,31 +1,62 @@
 .container {
   width: 100%;
   height: 100vh;
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 
 .header {
-  display: flex;
-  justify-content: center;
   width: 100%;
-  background-color: #000;
-  min-height: 60px;
-  padding: 0.5rem 0;
-  position: relative;
+  background-color: #111;
+  padding: 0;
+  position: sticky;
+  top: 0;
   z-index: 10;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+}
+
+.headerContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0.75rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
 }
 
 .logoImage {
-  width: 2.5rem;
+  width: 2.25rem;
   height: auto;
-  cursor: pointer;
-  transition: transform 0.3s ease;
   filter: invert(1);
+  transition: transform 0.3s ease;
 }
 
-.logoImage:hover {
+.logoContainer:hover .logoImage {
   transform: scale(1.1);
+}
+
+.logoText {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 300;
+  letter-spacing: 1px;
+  display: block;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .upperSection {
@@ -275,6 +306,50 @@
   color: #000;
 }
 
+.savedConfigsButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 4px;
+  padding: 0.6rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.savedConfigsButton:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.savedConfigsButton:active {
+  transform: translateY(0);
+}
+
+.savedConfigsButton svg {
+  font-size: 1rem;
+}
+
+.configCount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #00ADEF;
+  color: white;
+  border-radius: 50%;
+  min-width: 20px;
+  height: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0 4px;
+}
+
 @media (max-width: 1200px) {
   .modelCards {
     grid-template-columns: repeat(2, 1fr);
@@ -321,5 +396,36 @@
   .continueButton {
     padding: 12px 24px;
     font-size: 14px;
+  }
+
+  .headerContent {
+    padding: 0.75rem 1rem;
+  }
+  
+  .logoText {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .savedConfigsButton {
+    padding: 0.6rem;
+  }
+  
+  .configCount {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    min-width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+  }
+
+  .logoText {
+    display: none;
+  }
+  
+  .buttonText {
+    display: none;
   }
 }

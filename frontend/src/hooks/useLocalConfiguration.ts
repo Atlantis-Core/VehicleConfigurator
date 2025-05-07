@@ -2,7 +2,7 @@ import { ConfigurationSummaryIncomplete } from '../types/types';
 
 const STORAGE_KEY = 'vehicleConfiguratorSaved';
 
-type SavedConfigurations = Record<string, ConfigurationSummaryIncomplete>;
+export type SavedConfigurations = Record<string, ConfigurationSummaryIncomplete>;
 
 export function saveConfigurationLocally(config: ConfigurationSummaryIncomplete) {
   const raw = localStorage.getItem(STORAGE_KEY);

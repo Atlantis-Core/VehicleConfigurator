@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import ModelCard from "@components/modelCard";
 import { motion } from "framer-motion";
 import { getModelTypes } from "@lib/getModelTypes";
+import { BsBookmark } from "react-icons/bs";
+import { getAllSavedConfigurations } from "@hooks/useLocalConfiguration";
 
 const ModelPicker = () => {
   const [models, setModels] = useState<Model[]>([]);
@@ -14,6 +16,7 @@ const ModelPicker = () => {
   const [modelTypes, setModelTypes] = useState<String[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState<String>('All');
+  const [savedCount, setSavedCount] = useState(0);
 
   const navigate = useNavigate();
 
@@ -34,6 +37,10 @@ const ModelPicker = () => {
     };
 
     fetchData();
+
+    // Update saved configurations count whenever component mounts
+    const savedConfigs = getAllSavedConfigurations();
+    setSavedCount(Object.keys(savedConfigs).length);
   }, []);
 
   const handleSelectModel = (model: Model) => {
@@ -57,14 +64,36 @@ const ModelPicker = () => {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <img 
-          src={LogoIcon} 
-          alt="Logo Icon"
-          onClick={() => navigate("/")}
-          className={styles.logoImage}
-        />
-      </header>
+      <motion.header 
+        className={styles.header}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ type: "tween", stiffness: 100 }}
+      >
+        <div className={styles.headerContent}>
+          <div className={styles.logoContainer}>
+            <img 
+              src={LogoIcon} 
+              alt="Vehicle Configurator"
+              onClick={() => navigate("/")}
+              className={styles.logoImage}
+            />
+            <span className={styles.logoText}>Vehicle Configurator</span>
+          </div>
+          
+          <div className={styles.headerActions}>
+            <button
+              className={styles.savedConfigsButton}
+              onClick={() => navigate("/saved-configurations")}
+              aria-label="View saved configurations"
+            >
+              <BsBookmark />
+              <span className={styles.buttonText}>My Configurations</span>
+              {savedCount > 0 && <span className={styles.configCount}>{savedCount}</span>}
+            </button>
+          </div>
+        </div>
+      </motion.header>
 
       <motion.div 
         className={styles.upperSection}
