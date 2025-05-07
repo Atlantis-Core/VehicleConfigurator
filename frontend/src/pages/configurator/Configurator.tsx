@@ -10,16 +10,64 @@ import { toast, ToastContainer } from 'react-toastify';
 import { LeasingProvider } from '@context/LeasingContext';
 import { ConfigurationProvider as ConfiguratorProvider, useConfiguration } from '@context/ConfigurationContext';
 import { ConfiguratorHeader, ConfiguratorContent, ConfiguratorSidebar } from '@components/configurator';
+import { loadConfigurationLocally, saveConfigurationLocally } from '@hooks/useLocalConfiguration';
 
 const ConfiguratorLayout = () => {
   const { modelId } = useParams();
   const navigate = useNavigate();
   const {
     model, selectedColor, selectedRim, selectedEngine,
-    selectedTransmission, selectedUpholstery, 
+    selectedTransmission, selectedUpholstery,
     selectedAssistance, selectedComfort, totalPrice,
-    loadModelData
+    loadModelData,
+    setSelectedColor, setSelectedRim, setSelectedEngine,
+    setSelectedTransmission, setSelectedUpholstery,
+    toggleAssistance, toggleComfort
   } = useConfiguration();
+
+  // Add state to track if we've already loaded the saved config for this model
+  const [loadedSavedConfig, setLoadedSavedConfig] = useState<number | null>(null);
+
+  useEffect(() => {
+    const loadAndApplySavedConfig = async () => {
+      if (!modelId) return;
+
+      await loadModelData(modelId);
+
+      if (model && loadedSavedConfig !== model.id) {
+        const savedConfig = loadConfigurationLocally(model.id);
+
+        if (savedConfig) {
+          // Apply the saved configuration
+          if (savedConfig.selectedColor) setSelectedColor(savedConfig.selectedColor);
+          if (savedConfig.selectedRim) setSelectedRim(savedConfig.selectedRim);
+          if (savedConfig.selectedEngine) setSelectedEngine(savedConfig.selectedEngine);
+          if (savedConfig.selectedTransmission) setSelectedTransmission(savedConfig.selectedTransmission);
+          if (savedConfig.selectedUpholstery) setSelectedUpholstery(savedConfig.selectedUpholstery);
+
+          // Handle array items
+          if (savedConfig.selectedAssistance && savedConfig.selectedAssistance.length > 0) {
+            toggleAssistance(null);
+            savedConfig.selectedAssistance.forEach(item => toggleAssistance(item));
+          }
+
+          if (savedConfig.selectedComfort && savedConfig.selectedComfort.length > 0) {
+            toggleComfort(null);
+            savedConfig.selectedComfort.forEach(item => toggleComfort(item));
+          }
+
+          // Show toast only once
+          toast.info("Loaded your saved configuration");
+
+          // Mark this model as having had its config loaded
+          setLoadedSavedConfig(model.id);
+        }
+      }
+    };
+
+    loadAndApplySavedConfig();
+
+  }, [modelId, model, loadModelData]);
 
   // UI state
   const [activeCategory, setActiveCategory] = useState<string>('motorization');
@@ -34,12 +82,6 @@ const ConfiguratorLayout = () => {
     return Math.round((completedCount / totalSteps) * 100);
   };
 
-  useEffect(() => {
-    if (modelId) {
-      loadModelData(modelId);
-    }
-  }, [modelId, loadModelData]);
-
   const handleBack = () => {
     navigate('/configurator');
   };
@@ -50,6 +92,21 @@ const ConfiguratorLayout = () => {
 
   const completeConfiguration = () => {
     if (calculateProgress() === 100) {
+
+      if (!model) toast.error('Could not complete configuration!')
+      else 
+      saveConfigurationLocally({
+        model,
+        selectedColor,
+        selectedRim,
+        selectedEngine,
+        selectedTransmission,
+        selectedUpholstery,
+        selectedAssistance,
+        selectedComfort,
+        totalPrice
+      });
+
       navigate('/summary', {
         state: {
           configuration: {
@@ -65,6 +122,7 @@ const ConfiguratorLayout = () => {
           }
         }
       });
+
     } else {
       toast.error("Please complete all configuration steps before proceeding to checkout");
     }
@@ -124,7 +182,7 @@ const ConfiguratorLayout = () => {
   return (
     <LeasingProvider totalPrice={totalPrice}>
       <div className={styles.configuratorContainer}>
-        <ConfiguratorHeader 
+        <ConfiguratorHeader
           onBack={handleBack}
           model={model}
           totalPrice={totalPrice}
@@ -132,7 +190,7 @@ const ConfiguratorLayout = () => {
 
         {/* Main content with sidebar and viewer */}
         <div className={styles.mainContent}>
-          <ConfiguratorSidebar 
+          <ConfiguratorSidebar
             categories={categories}
             activeCategory={activeCategory}
             activeSubcategory={activeSubcategory}
@@ -190,7 +248,7 @@ const ConfiguratorLayout = () => {
   );
 }
 
-function Configurator() {
+const Configurator = () => {
   return (
     <ConfiguratorProvider>
       <ConfiguratorLayout />

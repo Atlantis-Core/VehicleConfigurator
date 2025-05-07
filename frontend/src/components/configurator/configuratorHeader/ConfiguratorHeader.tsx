@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import { IoArrowBack } from "react-icons/io5";
+import React, { useState, useEffect } from 'react';
+import { IoArrowBack, IoRefreshOutline } from "react-icons/io5"; // Added IoRefreshOutline for reset icon
 import { BsBookmark, BsInfoCircleFill } from "react-icons/bs";
 import LeasingModal from '@components/leasingModal';
 import { Model } from '../../../types/types';
 import styles from './ConfiguratorHeader.module.css';
 import { useSharedLeasing } from '@context/LeasingContext';
+import { saveConfigurationLocally, clearConfigurationLocally } from '@hooks/useLocalConfiguration';
+import { useConfiguration } from '@context/ConfigurationContext';
+import { toast } from 'react-toastify';
 
 interface ConfiguratorHeaderProps {
   onBack: () => void;
@@ -12,16 +15,61 @@ interface ConfiguratorHeaderProps {
   totalPrice: number;
 }
 
-const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ 
-  onBack, 
-  model, 
-  totalPrice 
-}) => {
+const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, totalPrice }) => {
   const [isLeasingModalOpen, setIsLeasingModalOpen] = useState(false);
   const { selectedOption: selectedLeasingOption, getMonthlyPaymentFor } = useSharedLeasing();
 
   const openLeasingModal = () => setIsLeasingModalOpen(true);
   const closeLeasingModal = () => setIsLeasingModalOpen(false);
+
+  const {
+    selectedColor, selectedRim, selectedEngine,
+    selectedTransmission, selectedUpholstery, 
+    selectedAssistance, selectedComfort
+  } = useConfiguration();
+
+  const saveConfiguration = () => {
+    saveConfigurationLocally({
+      model,
+      selectedColor,
+      selectedRim,
+      selectedEngine,
+      selectedTransmission,
+      selectedUpholstery,
+      selectedAssistance,
+      selectedComfort,
+      totalPrice
+    });
+
+    toast.success('Configuration saved successfully!');
+  };
+
+    const resetConfiguration = () => {
+    // Ask for confirmation
+    if (window.confirm('Are you sure you want to reset your configuration?')) {
+      // Clear saved configuration from localStorage
+      clearConfigurationLocally(model.id);
+      
+      // Add a flag to URL to indicate we're reloading after reset
+      const url = new URL(window.location.href);
+      url.searchParams.set('reset', 'true');
+      
+      // Replace current URL with the new one (with the reset parameter)
+      window.location.href = url.toString();
+    }
+  };
+  
+  // Check for reset parameter
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('reset') === 'true') {
+      // Remove the parameter
+      url.searchParams.delete('reset');
+      window.history.replaceState({}, document.title, url.toString());
+      
+      setTimeout(() => toast.info('Configuration has been reset'), 10);
+    }
+  }, []);
 
   return (
     <div className={styles.topHeader}>
@@ -71,10 +119,17 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({
           onClose={closeLeasingModal}
         />
 
-        <button className={styles.saveButton}>
-          <BsBookmark />
-          <span>Save</span>
-        </button>
+        <div className={styles.buttonGroup}>
+          <button className={styles.saveButton} onClick={saveConfiguration}>
+            <BsBookmark />
+            <span>Save</span>
+          </button>
+          
+          <button className={styles.resetButton} onClick={resetConfiguration}>
+            <IoRefreshOutline />
+            <span>Reset</span>
+          </button>
+        </div>
       </div>
     </div>
   );

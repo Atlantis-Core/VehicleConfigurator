@@ -208,6 +208,34 @@
   visibility: visible;
 }
 
+.buttonGroup {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.resetButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #f3f4f6;
+  color: #374151;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.resetButton:hover {
+  background-color: #e5e7eb;
+}
+
+.resetButton svg {
+  font-size: 1.125rem;
+}
+
 @media (max-width: 1024px) {
   .topHeader {
     padding: 1rem;
