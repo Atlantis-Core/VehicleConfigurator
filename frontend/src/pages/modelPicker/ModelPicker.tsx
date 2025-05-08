@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import { getModelTypes } from "@lib/getModelTypes";
 import { BsBookmark } from "react-icons/bs";
 import { getAllSavedConfigurations } from "@hooks/useLocalConfiguration";
+import { HiOutlineShoppingCart } from "react-icons/hi2";
 
 const ModelPicker = () => {
   const [models, setModels] = useState<Model[]>([]);
@@ -16,7 +17,9 @@ const ModelPicker = () => {
   const [modelTypes, setModelTypes] = useState<String[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState<String>('All');
-  const [savedCount, setSavedCount] = useState(0);
+
+  const [savedConfigCount, setSavedConfigCount] = useState(0);
+  const [savedOrdersCount, setSavedOrdersCount] = useState(0);
 
   const navigate = useNavigate();
 
@@ -38,9 +41,8 @@ const ModelPicker = () => {
 
     fetchData();
 
-    // Update saved configurations count whenever component mounts
     const savedConfigs = getAllSavedConfigurations();
-    setSavedCount(Object.keys(savedConfigs).length);
+    setSavedConfigCount(Object.keys(savedConfigs).length);
   }, []);
 
   const handleSelectModel = (model: Model) => {
@@ -81,17 +83,32 @@ const ModelPicker = () => {
             <span className={styles.logoText}>Vehicle Configurator</span>
           </div>
           
-          <div className={styles.headerActions}>
-            <button
-              className={styles.savedConfigsButton}
-              onClick={() => navigate("/saved-configurations")}
-              aria-label="View saved configurations"
-            >
-              <BsBookmark />
-              <span className={styles.buttonText}>My Configurations</span>
-              {savedCount > 0 && <span className={styles.configCount}>{savedCount}</span>}
-            </button>
+          <div className={styles.headerActionsContainer}>
+            <div className={styles.headerActions}>
+              <button
+                className={styles.savedConfigsButton}
+                onClick={() => navigate("/orders")}
+                aria-label="View Orders"
+              >
+                <HiOutlineShoppingCart />
+                <span className={styles.buttonText}>View Orders</span>
+                {savedOrdersCount > 0 && <span className={styles.configCount}>{savedOrdersCount}</span>}
+              </button>
+            </div>
+
+            <div className={styles.headerActions}>
+              <button
+                className={styles.savedConfigsButton}
+                onClick={() => navigate("/saved-configurations")}
+                aria-label="View saved configurations"
+              >
+                <BsBookmark />
+                <span className={styles.buttonText}>My Configurations</span>
+                {savedConfigCount > 0 && <span className={styles.configCount}>{savedConfigCount}</span>}
+              </button>
+            </div>
           </div>
+            
         </div>
       </motion.header>
 

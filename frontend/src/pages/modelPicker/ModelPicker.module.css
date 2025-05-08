@@ -53,6 +53,12 @@
   display: block;
 }
 
+.headerActionsContainer {
+  display: flex;
+  gap: 1.5rem;
+  flex-direction: row;
+}
+
 .headerActions {
   display: flex;
   align-items: center;
