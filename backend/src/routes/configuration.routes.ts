@@ -30,7 +30,7 @@ router.post('/save', async (req: Request, res: Response) => {
         transmission: { connect: { id: transmissionId } },
         interior: { connect: { id: interiorId } },
         totalPrice
-        // TODO: Handle features saving if needed
+        // TODO: Handle features saving
       }
     });
 
