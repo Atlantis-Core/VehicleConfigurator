@@ -1,3 +1,12 @@
+export interface Order {
+  id: number;
+  customerId: number;
+  configurationId: number;
+  paymentOption: string;
+  financing: string | null; // json with financing parameters (rate, months, ...)
+  orderDate: string;
+}
+
 export interface Customer {
   id: number;
   firstName: string;

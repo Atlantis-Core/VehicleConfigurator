@@ -1,9 +1,9 @@
-import { ConfigurationSummary, Customer } from "../types/types";
+import { ConfigurationSummary, Customer, Order } from "../types/types";
 
 const API_URL = import.meta.env.VITE_API_URL
 
 
-export async function saveConfiguration(config: ConfigurationSummary, customerId: number): Promise<string> {
+export async function saveConfiguration(config: ConfigurationSummary, customerId: number): Promise<number> {
   
   const configPayload = {
     customerId: customerId,
@@ -31,7 +31,7 @@ export async function saveConfiguration(config: ConfigurationSummary, customerId
   }
 
   const result = await response.json();
-  return result.message || "Saved successfully";
+  return result.configId as number;
 }
 
 export async function findOrCreateCustomer(customer: Customer): Promise<Customer> {
@@ -48,4 +48,21 @@ export async function findOrCreateCustomer(customer: Customer): Promise<Customer
 
   const result = await response.json();
   return result as Customer;
+}
+
+export async function submitOrder(order: Order): Promise<Order> {
+
+  const response = await fetch(`${API_URL}/order/submit`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(order)
+  })
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to find or create order: ${response.status} ${errorText}`);
+  }
+
+  const result = await response.json();
+  return result as Order;
 }

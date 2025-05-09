@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './SummaryPage.module.css';
-import { ConfigurationSummary, Customer } from '../../types/types';
+import { ConfigurationSummary, Customer, Order } from '../../types/types';
 import { IoArrowBack, IoCheckmarkCircle } from "react-icons/io5";
 import { FaCreditCard, FaUniversity, FaHandHoldingUsd, FaFileContract } from 'react-icons/fa';
 import Logo from "@assets/logo.svg";
-import { findOrCreateCustomer, saveConfiguration } from '@api/setter';
+import { findOrCreateCustomer, saveConfiguration, submitOrder } from '@api/setter';
 import { useEmailVerification } from '@hooks/useEmailVerification';
+import { useLeasing } from '@hooks/useLeasing';
 
 interface SummaryPageProps { }
 
 const SummaryPage: React.FC<SummaryPageProps> = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
   const [configuration, setConfiguration] = useState<ConfigurationSummary | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<string>('card');
   const [contactInfo, setContactInfo] = useState<Customer>({
@@ -26,6 +28,9 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [orderId, setOrderId] = useState(0);
+
+  // email
   const [awaitingVerification, setAwaitingVerification] = useState(false);
   const isVerified = useEmailVerification(contactInfo.email, awaitingVerification);
 
@@ -39,8 +44,14 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
     }
   }, [location, navigate]);
 
+  const {
+    leasingOptions,
+    selectedOption,
+    selectLeasingOption,
+    getMonthlyPaymentFor
+  } = useLeasing(configuration?.totalPrice || 0);
+
   useEffect(() => {
-    console.log("Running effect:", { isVerified, configuration, id: contactInfo.id });
     if (isVerified && configuration) {
       saveConfiguration(configuration, contactInfo.id).then(() => {
         setIsComplete(true);
@@ -61,23 +72,53 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
     }));
   };
 
+  // Clean up the financing and order submission code
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     if (configuration) {
       try {
+        // Get or create customer
         const customer = await findOrCreateCustomer(contactInfo);
         setContactInfo(prev => ({ ...prev, id: customer.id }));
+
+        const selectedFinancingOption = paymentMethod === 'financing'
+          ? leasingOptions.find(option => option.months === selectedOption)
+          : null;
+
+        const financingDetails = selectedFinancingOption
+          ? {
+            months: selectedFinancingOption.months,
+            rate: selectedFinancingOption.rate,
+            monthlyPayment: getMonthlyPaymentFor(selectedOption),
+            totalAmount: configuration.totalPrice,
+            label: selectedFinancingOption.label
+          }
+          : null;
 
         if (!customer.emailVerified) {
           setAwaitingVerification(true);
         } else {
-          await saveConfiguration(configuration, customer.id);
+          // Save configuration
+          const configurationId = await saveConfiguration(configuration, customer.id);
+
+          const orderInformation: Order = {
+            id: 0, // handled in backend
+            customerId: customer.id,
+            configurationId: configurationId,
+            paymentOption: paymentMethod,
+            financing: financingDetails ? JSON.stringify(financingDetails) : null,
+            orderDate: "" // handled in backend
+          }
+
+          // Submit order
+          const order = await submitOrder(orderInformation);
+          setOrderId(order.id);
           setIsComplete(true);
         }
       } catch (error) {
-        console.error('Error saving configuration:', error);
+        console.error('Error during order process:', error);
       } finally {
         setIsSubmitting(false);
       }
@@ -95,17 +136,17 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
           <h2>Almost done!</h2>
           <p>Please verify your email to complete your order.</p>
           <p>We've sent a confirmation link to <strong>{contactInfo.email}</strong>.</p>
-          
+
           <div className={styles.verificationProgress}>
             <div className={styles.progressBar}>
               <div className={styles.progressBarFill}></div>
             </div>
             <p>Waiting for verification...</p>
           </div>
-          
+
           <p>If you don't receive the email within a few minutes, please check your spam folder or try refreshing.</p>
-          
-          <button 
+
+          <button
             className={styles.refreshButton}
             onClick={() => {
               // Force re-check of verification status
@@ -138,8 +179,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
             We've sent a detailed confirmation to <strong>{contactInfo.email}</strong> with all the specifications of your dream car.
           </p>
           <div className={styles.orderInfo}>
-            <p>Configuration ID: <strong>CFG-{Math.floor(Math.random() * 100000)}</strong></p>
-            <p>Order Date: <strong>{new Date().toLocaleDateString()}</strong></p>
+            <p>Order Date: <strong>CFG-{orderId.toString()}</strong></p>
           </div>
           <p className={styles.nextSteps}>
             A dealer representative will contact you within 24-48 hours to discuss delivery options and finalize your purchase.
@@ -300,43 +340,24 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
             <div className={styles.paymentDetails}>
               <h3>Financing Options</h3>
               <div className={styles.financingOptions}>
-                <div className={styles.financingOption}>
-                  <input 
-                    type="radio" 
-                    id="option1" 
-                    name="financingOption" 
-                    defaultChecked 
-                  />
-                  <label htmlFor="option1">
-                    <span className={styles.term}>36 months</span>
-                    <span className={styles.rate}>3.9% APR</span>
-                    <span className={styles.monthly}>{Math.round(configuration.totalPrice / 36 * 1.039).toLocaleString()} €/month</span>
-                  </label>
-                </div>
-                <div className={styles.financingOption}>
-                  <input 
-                    type="radio" 
-                    id="option2" 
-                    name="financingOption" 
-                  />
-                  <label htmlFor="option2">
-                    <span className={styles.term}>48 months</span>
-                    <span className={styles.rate}>4.5% APR</span>
-                    <span className={styles.monthly}>{Math.round(configuration.totalPrice / 48 * 1.045).toLocaleString()} €/month</span>
-                  </label>
-                </div>
-                <div className={styles.financingOption}>
-                  <input 
-                    type="radio" 
-                    id="option3" 
-                    name="financingOption" 
-                  />
-                  <label htmlFor="option3">
-                    <span className={styles.term}>60 months</span>
-                    <span className={styles.rate}>5.2% APR</span>
-                    <span className={styles.monthly}>{Math.round(configuration.totalPrice / 60 * 1.052).toLocaleString()} €/month</span>
-                  </label>
-                </div>
+                {leasingOptions.map(option => (
+                  <div key={option.months} className={styles.financingOption}>
+                    <input
+                      type="radio"
+                      id={`option-${option.months}`}
+                      name="financingOption"
+                      checked={selectedOption === option.months}
+                      onChange={() => selectLeasingOption(option.months)}
+                    />
+                    <label htmlFor={`option-${option.months}`}>
+                      <span className={styles.term}>{option.months} months</span>
+                      <span className={styles.rate}>{option.rate}</span>
+                      <span className={styles.monthly}>
+                        {getMonthlyPaymentFor(option.months).toLocaleString()} €/month
+                      </span>
+                    </label>
+                  </div>
+                ))}
               </div>
               <p className={styles.disclaimer}>
                 Financing subject to credit approval. Rates may vary based on creditworthiness.

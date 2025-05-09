@@ -14,6 +14,7 @@ import r2BucketRoutes from './routes/r2bucket.routes';
 import configRoutes from './routes/configuration.routes';
 import customerRoutes from './routes/customer.routes';
 import verifyEmailRoutes from './routes/verifyEmail.routes';
+import ordersRoutes from './routes/orders.routes';
 
 const app = express()
 app.use(cors());
@@ -35,6 +36,7 @@ app.use('/api/engines', enginesRoutes);
 app.use('/api/colors', colorsRoutes);
 app.use('/api/storage', r2BucketRoutes);
 
+app.use('/api/order', ordersRoutes);
 app.use('/api/configurations', configRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api', verifyEmailRoutes);

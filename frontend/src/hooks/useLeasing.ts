@@ -52,7 +52,6 @@ export const useLeasing = (basePrice: number) => {
 
   // Save to localStorage when option changes
   useEffect(() => {
-    console.log(`Leasing rate updated ${selectedOption.toString()}!`);
     localStorage.setItem('selectedLeasingOption', selectedOption.toString());
   }, [selectedOption]);
 

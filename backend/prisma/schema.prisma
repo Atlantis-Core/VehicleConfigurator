@@ -119,8 +119,7 @@ model Order {
   customerId      Int
   configurationId Int
   paymentOption   String
-  monthlyRate     Int?
-  downpayment     Int?
+  financing       String?
   orderDate       DateTime @default(now())
 
   customer      Customer      @relation(fields: [customerId], references: [id])

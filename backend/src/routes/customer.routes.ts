@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { sendVerificationEmail } from '../services/sendVerificationEmail';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -20,7 +20,7 @@ router.post('/find-or-create', async (req: Request, res: Response) => {
     });
 
     if (!customer) {
-      const verificationCode = uuidv4();
+      const verificationCode = uuid();
 
       customer = await prisma.customer.create({
         data: {

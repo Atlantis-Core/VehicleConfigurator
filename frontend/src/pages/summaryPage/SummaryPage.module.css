@@ -171,72 +171,120 @@
 }
 
 .paymentDetails {
-  margin-top: 24px;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  border: 1px solid #eee;
+  background-color: #f9fafb;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+  border: 1px solid #eaeaea;
 }
 
 .paymentDetails h3 {
+  font-size: 1.1rem;
   margin-top: 0;
   margin-bottom: 16px;
-  font-size: 1.2rem;
   color: #333;
+  font-weight: 500;
 }
 
 .financingOptions {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-bottom: 16px;
 }
 
 .financingOption {
   display: flex;
   align-items: center;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background-color: white;
+  transition: all 0.2s ease;
+  overflow: hidden;
 }
 
-.financingOption input {
-  margin-right: 12px;
+.financingOption:hover {
+  border-color: #c0c0c0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.financingOption input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .financingOption label {
   display: flex;
-  flex: 1;
+  align-items: center;
   justify-content: space-between;
-  padding: 10px 16px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-weight: normal;
+  width: 100%;
+  padding: 16px 20px;
   cursor: pointer;
+  position: relative;
+}
+
+.financingOption input[type="radio"] + label::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid #d0d0d0;
+  border-radius: 50%;
+  margin-right: 16px;
   transition: all 0.2s;
 }
 
-.financingOption input:checked + label {
-  border-color: #0056b3;
-  background-color: rgba(0, 86, 179, 0.05);
+.financingOption input[type="radio"]:checked + label::before {
+  border-width: 6px;
+  border-color: #2563eb;
+  background-color: white;
+}
+
+.financingOption input[type="radio"]:checked + label {
+  background-color: #f0f7ff;
+}
+
+.financingOption input[type="radio"]:checked + label::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: #2563eb;
 }
 
 .term {
-  font-weight: 600;
+  font-weight: 500;
   color: #333;
+  font-size: 1.05rem;
+  margin-left: 16px;
+  flex: 1;
 }
 
 .rate {
   color: #666;
+  font-size: 0.9rem;
+  background-color: #f0f0f0;
+  padding: 4px 10px;
+  border-radius: 16px;
+  margin: 0 16px;
 }
 
 .monthly {
   font-weight: 600;
-  color: #0056b3;
+  color: #2563eb;
+  font-size: 1.1rem;
+  white-space: nowrap;
 }
 
 .disclaimer {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: #666;
   font-style: italic;
   margin-top: 16px;
+  line-height: 1.4;
 }
 
 .contactForm {
@@ -675,5 +723,26 @@
   .formRow {
     grid-template-columns: 1fr;
     gap: 8px;
+  }
+
+  .financingOption label {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 16px;
+  }
+  
+  .term, .rate, .monthly {
+    margin-left: 36px;
+  }
+  
+  .monthly {
+    align-self: flex-end;
+    margin-top: 8px;
+    margin-right: 16px;
+  }
+  
+  .term {
+    font-size: 1rem;
   }
 }
