@@ -1,30 +1,34 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Verification Code</title>
   <link rel="stylesheet" href="./verificationCode.css">
 </head>
+
 <body>
   <div class="container">
     <div class="header">
       <h2>Your Verification Code</h2>
       <p>Use the code below to access your orders</p>
     </div>
-    
+
     <div class="code-container">
       <p class="verification-code">{{code}}</p>
     </div>
-    
+
     <div class="info">
+      <p>This code will expire after {{expiryMinutes}} minutes for security purposes.</p>
       <p>If you didn't request this code, you can safely ignore this email.</p>
     </div>
-    
+
     <div class="footer">
       <p>&copy; {{year}} Vehicle Configurator. All rights reserved.</p>
       <p>This is an automated message, please do not reply.</p>
     </div>
   </div>
 </body>
+
 </html>

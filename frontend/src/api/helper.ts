@@ -28,3 +28,19 @@ export async function verifyCustomer(email: string): Promise<boolean> {
   }
   return (await response.json()).success;
 }
+
+export async function verifyCustomerCode(
+  email: string,
+  code: string
+): Promise<boolean> {
+  const response = await fetch(`${API_URL}/customers/verify-code`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: email, code: code }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch models");
+  }
+  return (await response.json()).verified;
+}

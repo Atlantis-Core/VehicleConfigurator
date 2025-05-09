@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { sendVerificationEmail } from "../services/sendVerificationEmail";
 import { v4 as uuid } from "uuid";
 import { sendVerificationCodeEmail } from "../services/sendVerificationCodeEmail";
+import { verificationStore } from "../services/VerificationCodeStore";
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -90,12 +91,43 @@ router.post("/verify", async (req: Request, res: Response) => {
     100000 + Math.random() * 900000
   ).toString();
 
+  const expiryMinutes = 15;
+
+  verificationStore.storeCode(email, verificationCode, expiryMinutes);
+
   try {
-    await sendVerificationCodeEmail(email, verificationCode);
+    await sendVerificationCodeEmail(email, verificationCode, expiryMinutes);
     res.status(200).json({ success: true, message: "Verification code sent" });
   } catch (error) {
     console.error("Error sending verification code:", error);
     res.status(500).json({ error: `Internal server error: ${error}` });
+  }
+});
+
+// Verify code
+router.post("verify-code", async (req: Request, res: Response) => {
+  const { email, code } = req.body;
+
+  if (!email || !code) {
+    res.status(404).json({ error: "Email or verification code not found" });
+  }
+
+  try {
+    const isCodeValid = verificationStore.verifyCode(email, code);
+
+    if (!isCodeValid) {
+      res.status(400).json({
+        verified: false,
+        error: "Invalid or expired verification code",
+      });
+    }
+
+    res
+      .status(200)
+      .json({ verified: true, message: "Email successfully verified" });
+  } catch (error) {
+    console.error("Error verifying code:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

@@ -1,10 +1,11 @@
 import { transporter } from "../utils/mailer";
 import { loadTemplate } from "../utils/loadTemplate";
 
-export async function sendVerificationCodeEmail(to: string, code: string) {
+export async function sendVerificationCodeEmail(to: string, code: string, expiryMinutes: number) {
   // Load and render the email template
   const htmlContent = loadTemplate('verificationCode', {
     code,
+    expiryMinutes,
     year: new Date().getFullYear()
   });
 

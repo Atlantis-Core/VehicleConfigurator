@@ -4,10 +4,10 @@ import { FaArrowLeft, FaUser, FaFileAlt, FaCarAlt } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from './Orders.module.css';
-import { findCustomerByEmail, verifyCustomer } from '@api/helper';
+import { findCustomerByEmail, verifyCustomer, verifyCustomerCode } from '@api/helper';
 import { formatDistanceToNow } from 'date-fns';
 import { Customer } from '../../types/types';
-import { CustomerSession, saveLocalCustomer } from '@hooks/useLocalCustomer';
+import { CustomerSession, getLocalCustomer, saveLocalCustomer } from '@hooks/useLocalCustomer';
 
 interface Order {
   id: string;
@@ -104,7 +104,7 @@ const Orders = () => {
       const customer: Customer = await findCustomerByEmail(email);
 
       if (customer.firstName === firstName && customer.lastName === lastName) {
-        
+
         saveLocalCustomer({
           id: customer.id,
           firstName,
@@ -136,18 +136,19 @@ const Orders = () => {
 
     try {
       const { email, verificationCode } = formData;
-      /*
-      const response = await verifyCode(email, verificationCode);
-      
-      if (response.data.verified) {
+
+      const isVerified = await verifyCustomerCode(email, verificationCode);
+
+      if (isVerified) {
         // Update customer session in localStorage
-        const customerSessionEncoded = localStorage.getItem('customerSession');
-        if (customerSessionEncoded) {
-          const customerSession: CustomerSession = JSON.parse(atob(customerSessionEncoded));
+
+        const customerSession = getLocalCustomer();
+        if (customerSession) {
           customerSession.verified = true;
-          
-          localStorage.setItem('customerSession', btoa(JSON.stringify(customerSession)));
-          
+
+          // update local customer
+          saveLocalCustomer(customerSession);
+
           // Fetch orders
           fetchOrders(customerSession.id);
           setLoginStep('verified');
@@ -156,7 +157,6 @@ const Orders = () => {
       } else {
         toast.error('Invalid verification code');
       }
-      */
     } catch (error) {
       console.error('Error during verification:', error);
       toast.error('Failed to verify code');
