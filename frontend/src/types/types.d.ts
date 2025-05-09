@@ -7,6 +7,19 @@ export interface Order {
   orderDate: string;
 }
 
+export interface OrderWithDetails extends Order {
+  configuration: ConfigurationSummary;
+}
+
+export interface PaginationOrderResponse {
+  orders: OrderWithDetails[];
+  pagination: {
+    total: number;
+    page: number;
+    pages: number;
+  };
+}
+
 export interface Customer {
   id: number;
   firstName: string;

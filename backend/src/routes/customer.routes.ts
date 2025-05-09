@@ -105,7 +105,7 @@ router.post("/verify", async (req: Request, res: Response) => {
 });
 
 // Verify code
-router.post("verify-code", async (req: Request, res: Response) => {
+router.post("/verify-code", async (req: Request, res: Response) => {
   const { email, code } = req.body;
 
   if (!email || !code) {

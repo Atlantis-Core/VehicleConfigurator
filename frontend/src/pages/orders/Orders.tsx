@@ -1,40 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaUser, FaFileAlt, FaCarAlt } from 'react-icons/fa';
+import { FaArrowLeft, FaUser, FaFileAlt } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from './Orders.module.css';
 import { findCustomerByEmail, verifyCustomer, verifyCustomerCode } from '@api/helper';
 import { formatDistanceToNow } from 'date-fns';
-import { Customer } from '../../types/types';
-import { CustomerSession, getLocalCustomer, saveLocalCustomer } from '@hooks/useLocalCustomer';
-
-interface Order {
-  id: string;
-  orderDate: string;
-  paymentOption: string;
-  financing: string | null;
-  configuration: {
-    totalPrice: number;
-    model: {
-      name: string;
-      type: string;
-      imagePath: string;
-    };
-    color: {
-      name: string;
-      hexCode: string;
-    };
-    engine: {
-      name: string;
-    };
-  };
-}
+import { Customer, OrderWithDetails } from '../../types/types';
+import { getLocalCustomer, removeLocalCustomer, saveLocalCustomer } from '@hooks/useLocalCustomer';
+import { getOrdersByCustomer } from '@api/getter';
+import OrderCard from '@components/orderCard';
 
 const Orders = () => {
   const navigate = useNavigate();
   const [loginStep, setLoginStep] = useState<'login' | 'verify' | 'verified'>('login');
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<OrderWithDetails[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -45,27 +25,28 @@ const Orders = () => {
 
   // Check if customer is already authenticated from localStorage
   useEffect(() => {
-    const customerSessionEncoded = localStorage.getItem('customerSession');
-    if (customerSessionEncoded) {
+    const localCustomer = getLocalCustomer();
+    if (localCustomer) {
       try {
-        // Simple base64 decode - you might want to use a more secure method
-        const customerSession: CustomerSession = JSON.parse(atob(customerSessionEncoded));
-
-        if (customerSession.verified) {
+        if (localCustomer.verified) {
           setLoginStep('verified');
-          fetchOrders(customerSession.id);
+          fetchOrders(localCustomer.id);
+          setFormData({
+            ...localCustomer,
+            verificationCode: ''
+          })
         } else {
           setFormData(prev => ({
             ...prev,
-            firstName: customerSession.firstName,
-            lastName: customerSession.lastName,
-            email: customerSession.email
+            firstName: localCustomer.firstName,
+            lastName: localCustomer.lastName,
+            email: localCustomer.email
           }));
           setLoginStep('verify');
         }
       } catch (error) {
         console.error('Error parsing customer session:', error);
-        localStorage.removeItem('customerSession');
+        removeLocalCustomer();
       }
     }
   }, []);
@@ -74,8 +55,9 @@ const Orders = () => {
   const fetchOrders = async (customerId: number) => {
     setIsLoading(true);
     try {
-      //const response = await getOrdersByCustomer(customerId);
-      //setOrders(response.data.orders);
+      const result = await getOrdersByCustomer(customerId);
+      // TODO: Unhandled pagination
+      setOrders(result.orders);
     } catch (error) {
       console.error('Error fetching orders:', error);
       toast.error('Failed to retrieve orders');
@@ -167,7 +149,7 @@ const Orders = () => {
 
   // Handle logout
   const handleLogout = () => {
-    localStorage.removeItem('customerSession');
+    removeLocalCustomer();
     setLoginStep('login');
     setFormData({
       firstName: '',
@@ -176,27 +158,6 @@ const Orders = () => {
       verificationCode: ''
     });
     setOrders([]);
-  };
-
-  // Format date for display
-  const formatDate = (dateString: string) => {
-    try {
-      return formatDistanceToNow(new Date(dateString), { addSuffix: true });
-    } catch (e) {
-      return 'Unknown date';
-    }
-  };
-
-  // Get financing details
-  const getFinancingDetails = (financing: string | null) => {
-    if (!financing) return null;
-
-    try {
-      const details = JSON.parse(financing);
-      return details;
-    } catch (e) {
-      return null;
-    }
   };
 
   return (
@@ -341,88 +302,17 @@ const Orders = () => {
             ) : (
               <div className={styles.ordersList}>
                 {orders.map(order => (
-                  <div key={order.id} className={styles.orderCard}>
-                    <div className={styles.orderHeader}>
-                      <div className={styles.orderInfo}>
-                        <h3>Order #{order.id}</h3>
-                        <span className={styles.orderDate}>
-                          {formatDate(order.orderDate)}
-                        </span>
-                      </div>
-                      <div className={styles.orderAmount}>
-                        ${order.configuration.totalPrice.toLocaleString()}
-                      </div>
-                    </div>
-
-                    <div className={styles.orderDetails}>
-                      <div className={styles.vehicleInfo}>
-                        <FaCarAlt className={styles.vehicleIcon} />
-                        <div>
-                          <h4>{order.configuration.model.name}</h4>
-                          <p>{order.configuration.model.type}</p>
-                          <div className={styles.specRow}>
-                            <span className={styles.specLabel}>Color:</span>
-                            <span className={styles.specValue}>
-                              <span
-                                className={styles.colorSwatch}
-                                style={{ backgroundColor: order.configuration.color.hexCode }}
-                              ></span>
-                              {order.configuration.color.name}
-                            </span>
-                          </div>
-                          <div className={styles.specRow}>
-                            <span className={styles.specLabel}>Engine:</span>
-                            <span className={styles.specValue}>
-                              {order.configuration.engine.name}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className={styles.paymentInfo}>
-                        <div className={styles.paymentMethod}>
-                          <span className={styles.paymentLabel}>Payment Method:</span>
-                          <span className={styles.paymentValue}>{order.paymentOption}</span>
-                        </div>
-
-                        {order.financing && getFinancingDetails(order.financing) && (
-                          <div className={styles.financingDetails}>
-                            <h5>Financing Plan</h5>
-                            <div className={styles.financingRow}>
-                              <span>Term:</span>
-                              <span>{getFinancingDetails(order.financing)?.months} months</span>
-                            </div>
-                            <div className={styles.financingRow}>
-                              <span>Rate:</span>
-                              <span>{getFinancingDetails(order.financing)?.rate}</span>
-                            </div>
-                            <div className={styles.financingRow}>
-                              <span>Monthly Payment:</span>
-                              <span>${getFinancingDetails(order.financing)?.monthlyPayment.toLocaleString()}</span>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className={styles.orderActions}>
-                      <button
-                        className={styles.detailsButton}
-                        onClick={() => navigate(`/orders/${order.id}`)}
-                      >
-                        View Details
-                      </button>
-                    </div>
-                  </div>
+                  <OrderCard order={order} />
                 ))}
               </div>
             )}
           </div>
-        )}
-      </main>
+        )
+        }
+      </main >
 
       <ToastContainer position="bottom-right" />
-    </div>
+    </div >
   );
 };
 

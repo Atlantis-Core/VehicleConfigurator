@@ -16,3 +16,7 @@ export function getLocalCustomer(): CustomerSession | null {
   const data = localStorage.getItem(STORAGE_KEY);
   return data ? JSON.parse(data) : null;
 }
+
+export function removeLocalCustomer() {
+  localStorage.removeItem(STORAGE_KEY);
+}
