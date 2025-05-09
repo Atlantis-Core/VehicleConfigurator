@@ -28,7 +28,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
-  const [orderId, setOrderId] = useState(0);
+  const [orderId, setOrderId] = useState("-");
 
   // email
   const [awaitingVerification, setAwaitingVerification] = useState(false);
@@ -104,7 +104,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
           const configurationId = await saveConfiguration(configuration, customer.id);
 
           const orderInformation: Order = {
-            id: 0, // handled in backend
+            id: "", // handled in backend
             customerId: customer.id,
             configurationId: configurationId,
             paymentOption: paymentMethod,
@@ -179,7 +179,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
             We've sent a detailed confirmation to <strong>{contactInfo.email}</strong> with all the specifications of your dream car.
           </p>
           <div className={styles.orderInfo}>
-            <p>Order Date: <strong>CFG-{orderId.toString()}</strong></p>
+            <p>Order Date: <strong>CFG-{orderId}</strong></p>
           </div>
           <p className={styles.nextSteps}>
             A dealer representative will contact you within 24-48 hours to discuss delivery options and finalize your purchase.

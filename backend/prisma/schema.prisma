@@ -115,7 +115,7 @@ model ConfigurationFeature {
 }
 
 model Order {
-  id              Int      @id @default(autoincrement())
+  id              String      @id @default(cuid())
   customerId      Int
   configurationId Int
   paymentOption   String

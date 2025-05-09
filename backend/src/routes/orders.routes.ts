@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import { v4 as uuid } from "uuid";
 
 const router = express.Router();
 const prisma = new PrismaClient();
