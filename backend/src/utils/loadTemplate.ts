@@ -4,7 +4,7 @@ import handlebars from 'handlebars';
 
 export function loadTemplate(templateName: string, data: Record<string, any>): string {
   // Construct path to the template file
-  const templatePath = path.join(__dirname, '..', 'templates', 'emails', templateName, `${templateName}.html`);
+  const templatePath = path.join(__dirname, '..', 'templates', 'emails', `${templateName}.html`);
   
   // Read the template file
   const template = fs.readFileSync(templatePath, 'utf8');

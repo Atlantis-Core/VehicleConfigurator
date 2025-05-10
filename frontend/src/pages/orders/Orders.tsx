@@ -82,11 +82,10 @@ const Orders = () => {
 
     try {
       const { firstName, lastName, email } = formData;
-
       const customer: Customer = await findCustomerByEmail(email);
 
-      if (customer.firstName === firstName && customer.lastName === lastName) {
-
+      if (customer.firstName.trim().toLowerCase() === firstName.trim().toLowerCase() && 
+          customer.lastName.trim().toLowerCase() === lastName.trim().toLowerCase()) {
         saveLocalCustomer({
           id: customer.id,
           firstName,

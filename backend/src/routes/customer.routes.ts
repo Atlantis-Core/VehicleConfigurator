@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import { sendVerificationEmail } from "../services/sendVerificationEmail";
 import { v4 as uuid } from "uuid";
+import { sendVerificationLinkEmail } from "../services/sendVerificationLinkEmail";
 import { sendVerificationCodeEmail } from "../services/sendVerificationCodeEmail";
 import { verificationStore } from "../services/VerificationCodeStore";
 
@@ -36,7 +36,7 @@ router.post("/find-or-create", async (req: Request, res: Response) => {
         },
       });
 
-      await sendVerificationEmail(email, verificationCode);
+      await sendVerificationLinkEmail(email, verificationCode);
     }
 
     res.status(200).json(customer);

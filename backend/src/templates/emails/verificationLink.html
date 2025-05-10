@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Your Email</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+      line-height: 1.6;
+      color: #333333;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 30px;
+      border-radius: 8px;
+      background-color: #ffffff;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eaeaea;
+    }
+    
+    .header-title {
+      color: #2c3e50;
+      margin-bottom: 12px;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    .header-subtitle {
+      color: #5d6778;
+      font-size: 16px;
+      margin-top: 0;
+    }
+    
+    .button-container {
+      text-align: center;
+      margin: 30px 0;
+    }
+    
+    .verification-button {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #3498db;
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    
+    .info-section {
+      color: #5d6778;
+      font-size: 15px;
+      line-height: 1.6;
+      padding: 0 10px;
+    }
+    
+    .info-text {
+      margin: 12px 0;
+    }
+    
+    .manual-link {
+      word-break: break-all;
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 15px 0;
+      border: 1px solid #eaeaea;
+    }
+    
+    .footer {
+      margin-top: 35px;
+      padding-top: 20px;
+      border-top: 1px solid #eaeaea;
+      color: #8a97a8;
+      font-size: 13px;
+      text-align: center;
+    }
+    
+    .footer-text {
+      margin: 8px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2 class="header-title">Verify Your Email</h2>
+      <p class="header-subtitle">Click the button below to access your orders</p>
+    </div>
+
+    <div class="button-container">
+      <a href="{{verificationLink}}" class="verification-button">Access My Orders</a>
+    </div>
+
+    <div class="info-section">
+      <p class="info-text">If the button above doesn't work, copy and paste this link into your browser:</p>
+      <p class="manual-link">{{verificationLink}}</p>
+      <p class="info-text">If you didn't request access to your orders, you can safely ignore this email.</p>
+    </div>
+
+    <div class="footer">
+      <p class="footer-text">&copy; {{year}} Vehicle Configurator. All rights reserved.</p>
+      <p class="footer-text">This is an automated message, please do not reply.</p>
+    </div>
+  </div>
+</body>
+</html>

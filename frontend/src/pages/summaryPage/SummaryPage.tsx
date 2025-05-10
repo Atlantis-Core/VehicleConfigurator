@@ -8,8 +8,30 @@ import Logo from "@assets/logo.svg";
 import { findOrCreateCustomer, saveConfiguration, submitOrder } from '@api/setter';
 import { useEmailVerification } from '@hooks/useEmailVerification';
 import { useLeasing } from '@hooks/useLeasing';
+import { toast } from 'react-toastify';
 
 interface SummaryPageProps { }
+
+const createFinancingDetails = (
+  paymentMethod: string,
+  selectedOption: number | null,
+  leasingOptions: any[],
+  getMonthlyPaymentFor: (months: number) => number,
+  totalPrice: number
+) => {
+  if (paymentMethod !== 'financing' || !selectedOption) return null;
+
+  const selectedFinancingOption = leasingOptions.find(option => option.months === selectedOption);
+  if (!selectedFinancingOption) return null;
+
+  return {
+    months: selectedFinancingOption.months,
+    rate: selectedFinancingOption.rate,
+    monthlyPayment: getMonthlyPaymentFor(selectedOption),
+    totalAmount: totalPrice,
+    label: selectedFinancingOption.label
+  };
+};
 
 const SummaryPage: React.FC<SummaryPageProps> = () => {
   const location = useLocation();
@@ -39,7 +61,6 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
     if (location.state && location.state.configuration) {
       setConfiguration(location.state.configuration);
     } else {
-      // Redirect back to configurator if no data is available
       navigate('/configurator');
     }
   }, [location, navigate]);
@@ -51,12 +72,48 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
     getMonthlyPaymentFor
   } = useLeasing(configuration?.totalPrice || 0);
 
+  const saveOrderDetails = async (customerId: number): Promise<string> => {
+    if (!configuration) {
+      throw new Error("Configuration is missing");
+    }
+
+    const configId = await saveConfiguration(configuration, customerId);
+
+    const financingDetails = createFinancingDetails(
+      paymentMethod,
+      selectedOption,
+      leasingOptions,
+      getMonthlyPaymentFor,
+      configuration.totalPrice
+    );
+
+    const orderInformation: Order = {
+      id: "", // handled in backend
+      customerId: customerId,
+      configurationId: configId,
+      paymentOption: paymentMethod,
+      financing: financingDetails ? JSON.stringify(financingDetails) : null,
+      orderDate: "" // handled in backend
+    };
+
+    const order = await submitOrder(orderInformation);
+    console.log("Order created successfully:", order);
+    return order.id;
+  };
+
   useEffect(() => {
-    if (isVerified && configuration) {
-      saveConfiguration(configuration, contactInfo.id).then(() => {
-        setIsComplete(true);
-        setAwaitingVerification(false);
-      });
+    if (isVerified && configuration && contactInfo.id) {
+      saveOrderDetails(contactInfo.id)
+        .then((newOrderId) => {
+          setOrderId(newOrderId);
+          setIsComplete(true);
+          setAwaitingVerification(false);
+        })
+        .catch(error => {
+          console.error("Error saving order details:", error);
+          toast.error(error.message || "Failed to save your order. Please try again.");
+          setAwaitingVerification(false);
+        });
     }
   }, [isVerified, configuration, contactInfo.id]);
 
@@ -72,56 +129,29 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
     }));
   };
 
-  // Clean up the financing and order submission code
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    if (configuration) {
-      try {
-        // Get or create customer
-        const customer = await findOrCreateCustomer(contactInfo);
-        setContactInfo(prev => ({ ...prev, id: customer.id }));
+    try {
+      // Get or create customer
+      const customer = await findOrCreateCustomer(contactInfo);
+      setContactInfo(prev => ({ ...prev, id: customer.id }));
 
-        const selectedFinancingOption = paymentMethod === 'financing'
-          ? leasingOptions.find(option => option.months === selectedOption)
-          : null;
-
-        const financingDetails = selectedFinancingOption
-          ? {
-            months: selectedFinancingOption.months,
-            rate: selectedFinancingOption.rate,
-            monthlyPayment: getMonthlyPaymentFor(selectedOption),
-            totalAmount: configuration.totalPrice,
-            label: selectedFinancingOption.label
-          }
-          : null;
-
-        if (!customer.emailVerified) {
-          setAwaitingVerification(true);
-        } else {
-          // Save configuration
-          const configurationId = await saveConfiguration(configuration, customer.id);
-
-          const orderInformation: Order = {
-            id: "", // handled in backend
-            customerId: customer.id,
-            configurationId: configurationId,
-            paymentOption: paymentMethod,
-            financing: financingDetails ? JSON.stringify(financingDetails) : null,
-            orderDate: "" // handled in backend
-          }
-
-          // Submit order
-          const order = await submitOrder(orderInformation);
-          setOrderId(order.id);
-          setIsComplete(true);
-        }
-      } catch (error) {
-        console.error('Error during order process:', error);
-      } finally {
-        setIsSubmitting(false);
+      if (!customer.emailVerified) {
+        // If email needs verification, wait for that process
+        setAwaitingVerification(true);
+      } else {
+        // If already verified, proceed with order
+        const newOrderId = await saveOrderDetails(customer.id);
+        setOrderId(newOrderId);
+        setIsComplete(true);
       }
+    } catch (error) {
+      console.error('Error during order process:', error);
+      // Consider adding error state and displaying to user
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

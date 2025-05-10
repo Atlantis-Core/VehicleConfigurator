@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/server.ts",
-    "build": "tsc",
+    "build": "tsc && npm run copy-templates",
     "prisma:generate": "prisma generate",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "copy-templates": "cp -r src/templates dist/templates"
   },
   "keywords": [],
   "author": "",
