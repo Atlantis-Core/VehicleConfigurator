@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react'; // Added useCallback
+import React, { useState, useEffect, useCallback } from 'react';
 import { IoArrowBack, IoRefreshOutline } from "react-icons/io5";
 import { BsBookmark, BsInfoCircleFill } from "react-icons/bs";
 import LeasingModal from '@components/leasingModal';
 import { Model } from '../../../types/types';
 import styles from './ConfiguratorHeader.module.css';
 import { useSharedLeasing } from '@context/LeasingContext';
-import { deleteConfigurationLocally, saveConfigurationLocally, loadConfigurationsForModel, getAllSavedConfigurations } from '@hooks/useLocalConfiguration';
+import { deleteConfigurationLocally, saveConfigurationLocally } from '@hooks/useLocalConfiguration';
 import { useConfiguration } from '@context/ConfigurationContext';
 import { toast } from 'react-toastify';
+import { formatEuro } from '@utils/formatEuro';
 
 interface ConfiguratorHeaderProps {
   onBack: () => void;
@@ -64,7 +65,7 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
     // Ask for confirmation
     if (window.confirm('Are you sure you want to reset your configuration?')) {
       try {
-        // First, delete the saved configuration if one is loaded
+        // Delete the saved configuration if one is loaded
         if (loadedSavedConfig) {
           deleteConfigurationLocally(loadedSavedConfig);
         }
@@ -96,7 +97,6 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
       url.searchParams.delete('reset');
       window.history.replaceState({}, document.title, url.toString());
       
-      // Show toast
       setTimeout(() => toast.info('Configuration has been reset', {
         toastId: 'config-reset'
       }), 100);
@@ -125,7 +125,7 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
         <div className={styles.priceWrapper}>
           <div className={styles.priceDetail}>
             <div className={styles.priceLabel}>Total Price</div>
-            <div className={styles.priceValue}>{totalPrice.toLocaleString()} €</div>
+            <div className={styles.priceValue}>{ formatEuro(totalPrice) }</div>
           </div>
 
           <div className={styles.priceDivider}></div>
@@ -144,7 +144,7 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
               </button>
             </div>
             <div className={styles.priceValue}>
-              {getMonthlyPaymentFor(selectedLeasingOption)}
+              { formatEuro(getMonthlyPaymentFor(selectedLeasingOption)) }
               <span className={styles.leaseTerms}>/mo.</span>
             </div>
           </div>

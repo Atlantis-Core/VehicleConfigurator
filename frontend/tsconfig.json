@@ -17,6 +17,7 @@
       "@assets/*": ["assets/*"],
       "@globals/*": ["globals/*"],
       "@context/*": ["context/*"],
+      "@utils/*": ["utils/*"],
       "@types/*": ["types/*"]
     },
     "allowJs": true,

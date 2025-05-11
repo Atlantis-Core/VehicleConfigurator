@@ -9,6 +9,7 @@ import { findOrCreateCustomer, saveConfiguration, submitOrder } from '@api/sette
 import { useEmailVerification } from '@hooks/useEmailVerification';
 import { useLeasing } from '@hooks/useLeasing';
 import { toast } from 'react-toastify';
+import { formatEuro } from '@utils/formatEuro';
 
 interface SummaryPageProps { }
 
@@ -134,7 +135,6 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
     setIsSubmitting(true);
 
     try {
-      // Get or create customer
       const customer = await findOrCreateCustomer(contactInfo);
       setContactInfo(prev => ({ ...prev, id: customer.id }));
 
@@ -149,7 +149,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
       }
     } catch (error) {
       console.error('Error during order process:', error);
-      // Consider adding error state and displaying to user
+      toast.error('Order process could not be completed.')
     } finally {
       setIsSubmitting(false);
     }
@@ -274,7 +274,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
                   ></span>
                   <span>{configuration.selectedColor.name}</span>
                 </div>
-                <span className={styles.itemPrice}>+ {configuration.selectedColor.additionalPrice.toLocaleString()} €</span>
+                <span className={styles.itemPrice}>+ {formatEuro(configuration.selectedColor.additionalPrice)}</span>
               </div>
             )}
 
@@ -282,7 +282,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
               <div className={styles.configItem}>
                 <span className={styles.itemLabel}>Rims</span>
                 <span className={styles.itemValue}>{configuration.selectedRim.name}</span>
-                <span className={styles.itemPrice}>+ {configuration.selectedRim.additionalPrice.toLocaleString()} €</span>
+                <span className={styles.itemPrice}>+ {formatEuro(configuration.selectedRim.additionalPrice)}</span>
               </div>
             )}
 
@@ -290,7 +290,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
               <div className={styles.configItem}>
                 <span className={styles.itemLabel}>Upholstery</span>
                 <span className={styles.itemValue}>{configuration.selectedUpholstery.name}</span>
-                <span className={styles.itemPrice}>+ {configuration.selectedUpholstery.additionalPrice.toLocaleString()} €</span>
+                <span className={styles.itemPrice}>+ {formatEuro(configuration.selectedUpholstery.additionalPrice)}</span>
               </div>
             )}
 
@@ -305,7 +305,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
                   </ul>
                 </span>
                 <span className={styles.itemPrice}>
-                  + {configuration.selectedAssistance.reduce((sum, item) => sum + item.additionalPrice, 0).toLocaleString()} €
+                  + {formatEuro(configuration.selectedAssistance.reduce((sum, item) => sum + item.additionalPrice, 0))}
                 </span>
               </div>
             )}
@@ -321,7 +321,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
                   </ul>
                 </span>
                 <span className={styles.itemPrice}>
-                  + {configuration.selectedComfort.reduce((sum, item) => sum + item.additionalPrice, 0).toLocaleString()} €
+                  + {formatEuro(configuration.selectedComfort.reduce((sum, item) => sum + item.additionalPrice, 0))}
                 </span>
               </div>
             )}
@@ -329,7 +329,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
 
           <div className={styles.totalPrice}>
             <span className={styles.totalLabel}>Total Price</span>
-            <span className={styles.totalValue}>{configuration.totalPrice.toLocaleString()} €</span>
+            <span className={styles.totalValue}>{formatEuro(configuration.totalPrice)}</span>
           </div>
         </div>
 
@@ -383,7 +383,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
                       <span className={styles.term}>{option.months} months</span>
                       <span className={styles.rate}>{option.rate}</span>
                       <span className={styles.monthly}>
-                        {getMonthlyPaymentFor(option.months).toLocaleString()} €/month
+                        {formatEuro(getMonthlyPaymentFor(option.months))}/month
                       </span>
                     </label>
                   </div>

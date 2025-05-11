@@ -188,7 +188,7 @@ const SavedConfigurations = () => {
               <h3>No saved configurations</h3>
               <p>Configurations you save will appear here</p>
               <button
-                onClick={() => navigate('/models')}
+                onClick={() => navigate('/configurator')}
                 className={styles.startButton}
               >
                 Start Configuring

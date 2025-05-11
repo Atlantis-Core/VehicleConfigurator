@@ -293,7 +293,7 @@ const Orders = () => {
                 <p>You haven't placed any orders yet</p>
                 <button
                   className={styles.configureButton}
-                  onClick={() => navigate('/models')}
+                  onClick={() => navigate('/configurator')}
                 >
                   Configure a Vehicle
                 </button>
