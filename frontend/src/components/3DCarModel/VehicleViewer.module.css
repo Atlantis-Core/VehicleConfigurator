@@ -1,39 +1,130 @@
 .rotateToggle {
   position: absolute;
-  bottom: 16px;
-  right: 16px;
-  width: 40px;
-  height: 40px;
+  bottom: 15px;
+  right: 15px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border: none;
+  pointer-events: auto;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
   transition: all 0.2s ease;
-  z-index: 100;
 }
 
 .rotateToggle:hover {
-  background-color: white;
   transform: scale(1.05);
+  background-color: white;
 }
 
 .rotateIcon {
-  width: 20px;
-  height: 20px;
-  color: #333;
+  font-size: 22px;
+  color: #2a6ac8;
 }
 
-/* Optional animation for when rotation is active */
-@keyframes pulseRotate {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+.controlsContainer {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
 }
 
-.rotateToggle[aria-label="Pause rotation"] .rotateIcon {
-  animation: pulseRotate 2s infinite ease-in-out;
+.rotationIndicator {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  width: 160px;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.rotationDot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #2a6ac8;
+  border-radius: 50%;
+  top: -2px;
+  left: 0;
+  transform: translateX(-50%);
+  transition: left 0.1s linear;
+}
+
+.rotationTrack {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background-color: #2a6ac8;
+  transition: width 0.2s linear;
+}
+
+.rotationIndicator.active .rotationDot {
+  animation: moveRotationDot 3s linear infinite;
+}
+
+.rotationIndicator.active .rotationTrack {
+  animation: fillRotationTrack 3s linear infinite;
+}
+
+@keyframes moveRotationDot {
+  0% { left: 0%; }
+  100% { left: 100%; }
+}
+
+@keyframes fillRotationTrack {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+.tutorialOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+  z-index: 20;
+  animation: fadeIn 0.5s ease-out, fadeOut 0.5s ease-in 4.5s forwards;
+}
+
+.tutorialBox {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 12px 24px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.tutorialIcon {
+  font-size: 22px;
+  color: #2a6ac8;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }

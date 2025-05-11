@@ -289,10 +289,6 @@ const ConfiguratorLayout = () => {
           <div className={styles.viewerWrapper}>
             <div className={styles.viewer}>
               <VehicleViewer modelPath={model.model3dPath} color={selectedColor} autoRotateSpeed={0.3} />
-              <div className={styles.rotateIndicator}>
-                <IoRefreshOutline />
-                360°
-              </div>
             </div>
 
             {/* Bottom options panel */}
