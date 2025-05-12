@@ -46,7 +46,6 @@ const ModelCard = ({ model, onSelect, isSelected = false }: ModelCardProps) => {
             src={getImageUrl(model.imagePath)} 
             className={styles.modelImage} 
             alt={`${model.name} model`}
-            loading="lazy"
           />
         </div>
         
