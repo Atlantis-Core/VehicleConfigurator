@@ -18,6 +18,14 @@ export interface CarModelHandle {
   changeColor: (color: string, finish?: 'glossy' | 'matte' | 'metallic') => void;
 }
 
+// Add preload function to preload car models
+export const preloadCarModels = (urls: string[]) => {
+  urls.forEach(url => {
+    // Use useGLTF.preload to cache the model
+    useGLTF.preload(url);
+  });
+};
+
 export const CarModel = forwardRef<CarModelHandle, CarModelProps>(({ 
   url, 
   color = '#FFFFFF',
@@ -28,6 +36,11 @@ export const CarModel = forwardRef<CarModelHandle, CarModelProps>(({
 }) => {
   const { scene } = useGLTF(url);
   const modelRef = useRef<Group>(null!);
+
+  // Preload this specific model when component is mounted
+  useEffect(() => {
+    useGLTF.preload(url);
+  }, [url]);
 
   const shouldColorObject = (name: string) => {
     name = name.toLowerCase();

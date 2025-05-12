@@ -10,6 +10,7 @@ import { getModelTypes } from "@lib/getModelTypes";
 import { BsBookmark } from "react-icons/bs";
 import { getAllSavedConfigurations } from "@hooks/useLocalConfiguration";
 import { HiOutlineShoppingCart } from "react-icons/hi2";
+import { preloadCarModels } from "@components/3DCarModel/CarModel";
 
 const ModelPicker = () => {
   const [models, setModels] = useState<Model[]>([]);
@@ -32,6 +33,12 @@ const ModelPicker = () => {
 
         const newModelTypes = await getModelTypes();
         setModelTypes(['All', ...newModelTypes]);
+
+        const carModelUrls = models.map((model) => model.model3dPath);
+
+        // preload 3D-Models
+        preloadCarModels(carModelUrls);
+
       } catch (error) {
         console.error("Failed to fetch models:", error);
       } finally {
