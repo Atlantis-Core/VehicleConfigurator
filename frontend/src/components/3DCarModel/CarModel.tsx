@@ -1,7 +1,7 @@
 import { applyColorToMesh } from '@lib/applyColorToMesh';
 import { useGLTF } from '@react-three/drei';
 import { useEffect, useRef, forwardRef } from 'react';
-import { Group, Mesh, Object3D } from 'three';
+import { Group, Mesh, Object3D, MeshStandardMaterial } from 'three';
 
 interface CarModelProps {
   url: string;
@@ -12,6 +12,7 @@ interface CarModelProps {
   initialRotation?: number;
   position?: [number, number, number];
   scale?: number;
+  headlightsOn?: boolean;
 }
 
 export interface CarModelHandle {
@@ -24,7 +25,8 @@ export const CarModel = forwardRef<CarModelHandle, CarModelProps>(({
   finish = 'glossy',
   initialRotation = -0.03,
   position = [0, 0, 0],
-  scale = 1
+  scale = 1,
+  headlightsOn = true
 }) => {
   const { scene } = useGLTF(url);
   const modelRef = useRef<Group>(null!);
@@ -36,10 +38,17 @@ export const CarModel = forwardRef<CarModelHandle, CarModelProps>(({
     if (name === "car" || name === "car_body") {
       return false;
     }
-    
+
     return (
       name.includes('body')
     );
+  };
+
+  const isHeadlight = (name: string) => {
+    name = name.toLowerCase();
+    return name.includes('light') || 
+           name.includes('lamp') || 
+           name.includes('bulb')
   };
 
   useEffect(() => {
@@ -55,7 +64,6 @@ export const CarModel = forwardRef<CarModelHandle, CarModelProps>(({
       
       // Process the object if it's a mesh, OR process its children if the name matches
       if (shouldColorObject(object.name)) {
-        
         // If it's a mesh, color it directly
         if (object instanceof Mesh) {
           bodyParts.push(object);
@@ -90,7 +98,21 @@ export const CarModel = forwardRef<CarModelHandle, CarModelProps>(({
     
     // Start processing from the scene root
     processObject(scene);
-  }, [scene, initialRotation, position, scale, color, finish]);
+
+    // Handle headlights separately
+    const processHeadlights = (object: Object3D) => {
+      if (isHeadlight(object.name)) {
+        if (object instanceof Mesh) {
+          applyHeadlightMaterial(object, headlightsOn);
+        }
+      }
+      
+      // Always check children regardless of name
+      object.children.forEach(child => processHeadlights(child));
+    };
+    
+    processHeadlights(scene);
+  }, [scene, initialRotation, position, scale, color, finish, headlightsOn]);
 
   // Apply color changes when color or finish props change
   useEffect(() => {
@@ -119,6 +141,34 @@ export const CarModel = forwardRef<CarModelHandle, CarModelProps>(({
     // Start coloring from scene root
     colorObject(scene);
   }, [color, finish, scene]);
+
+  // Function to apply headlight material
+  const applyHeadlightMaterial = (mesh: Mesh, isOn: boolean) => {
+    if (mesh.material instanceof MeshStandardMaterial || Array.isArray(mesh.material)) {
+      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+      
+      materials.forEach(material => {
+        if (material instanceof MeshStandardMaterial) {
+          // Make headlights much brighter with higher intensity
+          if (isOn) {
+            // Preserve original color but make it emissive
+            const baseColor = material.color.clone();
+            material.emissive.copy(baseColor);
+            material.emissiveIntensity = 2.5; // Much higher intensity
+            
+            // Make sure the material is visible
+            material.transparent = true;
+            material.opacity = 1;
+            material.metalness = 0.4; // Less metallic to allow more light emission
+            material.roughness = 0.2; // Smoother surface for better light reflection
+          } else {
+            material.emissive.set(0x000000);
+            material.emissiveIntensity = 0;
+          }
+        }
+      });
+    }
+  };
 
   // Return the entire scene as a primitive
   return <primitive ref={modelRef} object={scene} />;

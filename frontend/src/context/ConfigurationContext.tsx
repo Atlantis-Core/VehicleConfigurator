@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useMemo, ReactNode } from 'react';
 import { getColors, getEngines, getModels, getRims, getTransmissions, getFeatures, getInteriors } from '@api/getter';
 import { Color, Engine, Model, Rim, Transmission, Feature, Interior } from '../types/types';
+import { filterComponentsByBrand } from '@utils/filterComponentsByBrand';
+import { toast } from 'react-toastify';
 
 interface ConfigurationContextType {
   // Model data
@@ -12,7 +14,7 @@ interface ConfigurationContextType {
   upholsteries: Interior[];
   assistances: Feature[];
   comforts: Feature[];
-  
+
   // Selected options
   selectedColor: Color | undefined;
   selectedRim: Rim | undefined;
@@ -21,7 +23,7 @@ interface ConfigurationContextType {
   selectedUpholstery: Interior | undefined;
   selectedAssistance: Feature[];
   selectedComfort: Feature[];
-  
+
   // Actions
   setSelectedColor: (color: Color) => void;
   setSelectedRim: (rim: Rim) => void;
@@ -30,10 +32,10 @@ interface ConfigurationContextType {
   setSelectedUpholstery: (upholstery: Interior) => void;
   toggleAssistance: (assistance: Feature | null) => void;
   toggleComfort: (comfort: Feature | null) => void;
-  
+
   // Computed values
   totalPrice: number;
-  
+
   // Fetch data
   loadModelData: (modelId: string) => Promise<void>;
 }
@@ -128,18 +130,31 @@ export const ConfigurationProvider = ({ children }: { children: ReactNode }) => 
 
       // Set model state if found
       const foundModel = models.find((m) => m.id === parseInt(modelId || ''));
-      if (foundModel) setModel(foundModel);
+      if (foundModel) {
+        setModel(foundModel);
+        // Set collections with brand filtering applied to all component types
+        setRims(filterComponentsByBrand(rims, foundModel.brand));
+        setColors(filterComponentsByBrand(colors, foundModel.brand));
+        setEngines(filterComponentsByBrand(engines, foundModel.brand));
+        setTransmissions(filterComponentsByBrand(transmissions, foundModel.brand));
+        setUpholsteries(filterComponentsByBrand(interiors, foundModel.brand));
 
-      // Set collections
-      setRims(rims);
-      setColors(colors);
-      setEngines(engines);
-      setTransmissions(transmissions);
-      setUpholsteries(interiors);
-
-      // Filter features into assistances and comforts
-      setAssistances(features.filter((feature) => feature.category === 'assistance'));
-      setComforts(features.filter((feature) => feature.category === 'comfort'));
+        // Filter features into assistances and comforts
+        setAssistances(
+          filterComponentsByBrand(
+            features.filter((feature) => feature.category === 'assistance'),
+            foundModel.brand
+          )
+        );
+        setComforts(
+          filterComponentsByBrand(
+            features.filter((feature) => feature.category === 'comfort'),
+            foundModel.brand
+          )
+        );
+      } else {
+        toast.error("Error while trying to load configurations.")
+      }
     } catch (err) {
       console.error('Error loading config data:', err);
     }
@@ -164,7 +179,7 @@ export const ConfigurationProvider = ({ children }: { children: ReactNode }) => 
     setSelectedColor,
     setSelectedRim,
     setSelectedEngine,
-    setSelectedTransmission, 
+    setSelectedTransmission,
     setSelectedUpholstery,
     toggleAssistance,
     toggleComfort,

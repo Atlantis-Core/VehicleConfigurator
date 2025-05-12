@@ -8,22 +8,23 @@ datasource db {
 }
 
 model Customer {
-  id             Int             @id @default(autoincrement())
-  firstName      String
-  lastName       String
-  email          String          @unique
-  phone          String
-  address        String
-  emailVerified    Boolean  @default(false)
-  verificationCode String?  // or use a Date + token combo
-  configurations Configuration[]
-  orders         Order[]
+  id              Int             @id @default(autoincrement())
+  firstName       String
+  lastName        String
+  email           String          @unique
+  phone           String
+  address         String
+  emailVerified   Boolean         @default(false)
+  verificationCode String?
+  configurations  Configuration[]
+  orders          Order[]
 }
 
 model Model {
   id             Int             @id @default(autoincrement())
   name           String
   type           String
+  brand          String
   basePrice      Int
   imagePath      String
   model3dPath    String
@@ -34,6 +35,7 @@ model Engine {
   id              Int             @id @default(autoincrement())
   name            String
   description     String
+  brand           String
   additionalPrice Int
   configurations  Configuration[]
 }
@@ -41,6 +43,7 @@ model Engine {
 model Transmission {
   id             Int             @id @default(autoincrement())
   name           String
+  brand          String
   configurations Configuration[]
 }
 
@@ -48,6 +51,7 @@ model Color {
   id              Int             @id @default(autoincrement())
   name            String
   type            String
+  brand           String
   additionalPrice Int
   hexCode         String?
   materialName    String?
@@ -58,6 +62,7 @@ model Interior {
   id              Int             @id @default(autoincrement())
   name            String
   material        String
+  brand           String
   additionalPrice Int
   imagePath       String
   configurations  Configuration[]
@@ -68,6 +73,7 @@ model Rim {
   name            String
   size            Int
   type            String
+  brand           String
   additionalPrice Int
   imagePath       String
   configurations  Configuration[]
@@ -77,6 +83,7 @@ model Feature {
   id                    Int                    @id @default(autoincrement())
   name                  String
   category              String
+  brand                 String
   additionalPrice       Int
   imagePath             String
   configurationFeatures ConfigurationFeature[]
@@ -91,6 +98,7 @@ model Configuration {
   colorId        Int
   interiorId     Int
   rimId          Int
+  brand          String
   totalPrice     Int
 
   customer     Customer               @relation(fields: [customerId], references: [id])
@@ -120,7 +128,7 @@ model Order {
   configurationId Int
   paymentOption   String
   financing       String?
-  orderDate       DateTime @default(now())
+  orderDate       DateTime    @default(now())
 
   customer      Customer      @relation(fields: [customerId], references: [id])
   configuration Configuration @relation(fields: [configurationId], references: [id])

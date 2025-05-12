@@ -233,8 +233,8 @@ const VehicleViewer = ({
             <CarModel
               url={getImageUrl(modelPath)}
               color={color?.hexCode || '#000000'}
-              finish={color?.type || 'metallic'}
-              position={[0.5, 0, 8.4]}
+              finish={color?.type || 'matte'}
+              position={[0.5, 0.1, 8.4]}
               scale={0.8}
               initialRotation={Math.PI}
             />

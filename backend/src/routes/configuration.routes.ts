@@ -15,21 +15,21 @@ router.post('/save', async (req: Request, res: Response) => {
       transmissionId,
       interiorId,
       totalPrice,
+      brand,
       features
     } = req.body;
 
     const configuration = await prisma.configuration.create({
       data: {
-        customer: {
-          connect: { id: customerId }
-        },
+        customer: { connect: { id: customerId } },
         model: { connect: { id: modelId } },
         color: { connect: { id: colorId } },
         rim: { connect: { id: rimId } },
         engine: { connect: { id: engineId } },
         transmission: { connect: { id: transmissionId } },
         interior: { connect: { id: interiorId } },
-        totalPrice
+        totalPrice,
+        brand
         // TODO: Handle features saving
       }
     });

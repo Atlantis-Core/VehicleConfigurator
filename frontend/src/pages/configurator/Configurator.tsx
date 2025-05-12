@@ -288,9 +288,13 @@ const ConfiguratorLayout = () => {
           {/* Center car viewer area */}
           <div className={styles.viewerWrapper}>
             <div className={styles.viewer}>
-              <VehicleViewer modelPath={model.model3dPath} color={selectedColor} autoRotateSpeed={0.3} />
+              <VehicleViewer 
+                modelPath={model.model3dPath} 
+                color={selectedColor} 
+                autoRotateSpeed={0.3} 
+              />
             </div>
-
+            
             {/* Bottom options panel */}
             <div className={styles.optionsPanel}>
               <ConfiguratorContent
@@ -298,7 +302,6 @@ const ConfiguratorLayout = () => {
                 completeConfiguration={handleCompleteConfiguration}
                 goToSection={goToSection}
               />
-
               {/* Navigation buttons */}
               <div className={styles.configNavigation}>
                 {getNextCategory() && (
