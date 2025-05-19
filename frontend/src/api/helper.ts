@@ -1,4 +1,6 @@
+import { getLocalCustomer } from "@hooks/useLocalCustomer";
 import { Customer } from "../types/types";
+import { getOrdersByCustomer } from "./getter";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -43,4 +45,13 @@ export async function verifyCustomerCode(
     throw new Error("Failed to fetch models");
   }
   return (await response.json()).verified;
+}
+
+export async function countOrdersByLocalCustomer(): Promise<number> {
+  const localCustomer = getLocalCustomer();
+  if (!localCustomer) {
+    return 0;
+  }
+
+  return (await getOrdersByCustomer(localCustomer.id)).orders.length;
 }

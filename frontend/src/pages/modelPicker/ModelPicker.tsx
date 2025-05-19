@@ -11,6 +11,7 @@ import { BsBookmark } from "react-icons/bs";
 import { getAllSavedConfigurations } from "@hooks/useLocalConfiguration";
 import { HiOutlineShoppingCart } from "react-icons/hi2";
 import { preloadCarModels } from "@components/3DCarModel/CarModel";
+import { countOrdersByLocalCustomer } from "@api/helper";
 
 const ModelPicker = () => {
   const [models, setModels] = useState<Model[]>([]);
@@ -47,17 +48,25 @@ const ModelPicker = () => {
     };
 
     fetchData();
-
-    const savedConfigs = getAllSavedConfigurations();
-    setSavedConfigCount(Object.keys(savedConfigs).length);
   }, []);
+
+  useEffect(() => {
+    const fetchCount = async () => {
+      const savedConfigs = getAllSavedConfigurations();
+      setSavedConfigCount(Object.keys(savedConfigs).length);
+
+      setSavedOrdersCount(await countOrdersByLocalCustomer());
+    };
+
+    fetchCount();
+  }, [])
 
   const handleSelectModel = (model: Model) => {
     setSelectedModel(model);
     // Smooth scroll to the continue button
     setTimeout(() => {
-      document.getElementById('selection-summary')?.scrollIntoView({ 
-        behavior: 'smooth' 
+      document.getElementById('selection-summary')?.scrollIntoView({
+        behavior: 'smooth'
       });
     }, 100);
   };
@@ -65,15 +74,15 @@ const ModelPicker = () => {
   const resetSelection = () => {
     setSelectedModel(null);
     setTimeout(() => {
-      document.getElementById('heading-section')?.scrollIntoView({ 
-        behavior: 'smooth' 
+      document.getElementById('heading-section')?.scrollIntoView({
+        behavior: 'smooth'
       });
     }, 100);
   }
 
   return (
     <div className={styles.container}>
-      <motion.header 
+      <motion.header
         className={styles.header}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -81,15 +90,15 @@ const ModelPicker = () => {
       >
         <div className={styles.headerContent}>
           <div className={styles.logoContainer}>
-            <img 
-              src={LogoIcon} 
+            <img
+              src={LogoIcon}
               alt="Vehicle Configurator"
               onClick={() => navigate("/")}
               className={styles.logoImage}
             />
             <span className={styles.logoText}>Vehicle Configurator</span>
           </div>
-          
+
           <div className={styles.headerActionsContainer}>
             <div className={styles.headerActions}>
               <button
@@ -115,11 +124,11 @@ const ModelPicker = () => {
               </button>
             </div>
           </div>
-            
+
         </div>
       </motion.header>
 
-      <motion.div 
+      <motion.div
         className={styles.upperSection}
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -132,7 +141,7 @@ const ModelPicker = () => {
           <span className={styles.sectionLine}></span>
         </div>
         <p className={styles.upperSectionSubTitle}>
-          Explore our selection of premium vehicles and find the perfect model that matches your style and needs. 
+          Explore our selection of premium vehicles and find the perfect model that matches your style and needs.
           Each vehicle can be customized to your exact specifications.
         </p>
       </motion.div>
@@ -155,7 +164,7 @@ const ModelPicker = () => {
           <p>Discovering premium vehicles for you...</p>
         </div>
       ) : (
-        <motion.div 
+        <motion.div
           className={styles.modelCards}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -170,7 +179,7 @@ const ModelPicker = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className={styles.cardWrapper}
               >
-                <ModelCard 
+                <ModelCard
                   model={model}
                   onSelect={handleSelectModel}
                   isSelected={selectedModel?.id === model.id}
@@ -182,7 +191,7 @@ const ModelPicker = () => {
       )}
 
       {selectedModel && (
-        <motion.div 
+        <motion.div
           className={styles.selectionSummary}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -191,7 +200,7 @@ const ModelPicker = () => {
           <div className={styles.summaryContent}>
             <h3>Your Selection</h3>
             <p className={styles.selectedModelName}>{selectedModel.name}</p>
-            <button 
+            <button
               className={styles.continueButton}
               onClick={() => navigate(`/configurator/${selectedModel.id}`)}
             >
@@ -199,8 +208,8 @@ const ModelPicker = () => {
               <span className={styles.buttonArrow}>→</span>
             </button>
           </div>
-          <button 
-            className={styles.clearButton} 
+          <button
+            className={styles.clearButton}
             onClick={resetSelection}
           >
             Change Model
