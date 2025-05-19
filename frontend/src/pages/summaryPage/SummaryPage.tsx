@@ -10,6 +10,7 @@ import { useEmailVerification } from '@hooks/useEmailVerification';
 import { useLeasing } from '@hooks/useLeasing';
 import { toast } from 'react-toastify';
 import { formatEuro } from '@utils/formatEuro';
+import { getLocalCustomer } from '@hooks/useLocalCustomer';
 
 interface SummaryPageProps { }
 
@@ -56,6 +57,21 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
   // email
   const [awaitingVerification, setAwaitingVerification] = useState(false);
   const isVerified = useEmailVerification(contactInfo.email, awaitingVerification);
+
+  useEffect(() => {
+    // Initialize contact info from local storage or default values
+    const storedCustomer = getLocalCustomer();
+
+    if (storedCustomer) {
+      setContactInfo({
+        ...contactInfo,
+        id: storedCustomer.id || 0,
+        firstName: storedCustomer.firstName || '',
+        lastName: storedCustomer.lastName || '',
+        email: storedCustomer.email || '',
+      });
+    }
+  }, []);
 
   useEffect(() => {
     // Get configuration data from location state
@@ -209,7 +225,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
             We've sent a detailed confirmation to <strong>{contactInfo.email}</strong> with all the specifications of your dream car.
           </p>
           <div className={styles.orderInfo}>
-            <p>Order Date: <strong>CFG-{orderId}</strong></p>
+            <p>Order Number: <strong>CFG-{orderId}</strong></p>
           </div>
           <p className={styles.nextSteps}>
             A dealer representative will contact you within 24-48 hours to discuss delivery options and finalize your purchase.
