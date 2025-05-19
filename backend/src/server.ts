@@ -1,7 +1,8 @@
 import dotenv from "dotenv";
-import { app } from "./app";
 
 dotenv.config();
+
+import { app } from "./app";
 
 const PORT = Number(process.env.PORT) || 3000;
 const BACKEND_RUNNING_URL = process.env.BACKEND_RUNNING_URL || "localhost";
