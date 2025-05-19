@@ -51,7 +51,7 @@ export const useConfiguration = () => {
 };
 
 export const ConfigurationProvider = ({ children }: { children: ReactNode }) => {
-  // State variables
+
   const [model, setModel] = useState<Model>();
   const [rims, setRims] = useState<Rim[]>([]);
   const [colors, setColors] = useState<Color[]>([]);
@@ -61,7 +61,6 @@ export const ConfigurationProvider = ({ children }: { children: ReactNode }) => 
   const [assistances, setAssistances] = useState<Feature[]>([]);
   const [comforts, setComforts] = useState<Feature[]>([]);
 
-  // Selected options
   const [selectedColor, setSelectedColor] = useState<Color>();
   const [selectedRim, setSelectedRim] = useState<Rim>();
   const [selectedEngine, setSelectedEngine] = useState<Engine>();
@@ -70,7 +69,6 @@ export const ConfigurationProvider = ({ children }: { children: ReactNode }) => 
   const [selectedAssistance, setSelectedAssistance] = useState<Feature[]>([]);
   const [selectedComfort, setSelectedComfort] = useState<Feature[]>([]);
 
-  // Calculate total price
   const totalPrice = useMemo(() => {
     return (
       (model?.basePrice || 0) +
@@ -117,7 +115,7 @@ export const ConfigurationProvider = ({ children }: { children: ReactNode }) => 
 
   const loadModelData = async (modelId: string) => {
     try {
-      // Fetch data in parallel with proper typing
+      // Fetch data
       const [models, rims, colors, engines, transmissions, interiors, features] = await Promise.all([
         getModels(),
         getRims(),

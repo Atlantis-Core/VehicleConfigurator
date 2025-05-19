@@ -643,7 +643,7 @@
   margin: 20px 0;
   text-align: left;
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -655,6 +655,7 @@
 
 .orderInfo strong {
   color: #0056b3;
+  white-space: nowrap;
 }
 
 .nextSteps {

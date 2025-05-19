@@ -14,6 +14,7 @@ export async function saveConfiguration(config: ConfigurationSummary, customerId
     rimId: config.selectedRim?.id || undefined,
     interiorId: config.selectedUpholstery?.id || undefined,
     totalPrice: config.totalPrice || 0,
+    brand: config.brand,
     features: []
   }
 

@@ -206,6 +206,7 @@ const ConfiguratorLayout = () => {
           selectedUpholstery,
           selectedAssistance,
           selectedComfort,
+          brand: model?.brand,
           totalPrice
         }
       }
