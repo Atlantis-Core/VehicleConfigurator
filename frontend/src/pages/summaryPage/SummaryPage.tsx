@@ -181,7 +181,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
         <div className={styles.verificationNotice}>
           <h2>Almost done!</h2>
           <p>Please verify your email to complete your order.</p>
-          <p>We've sent a confirmation link to <strong>{contactInfo.email}</strong>.</p>
+          <p>We've sent a confirmation link to <br /><br /><strong>{contactInfo.email}</strong>.</p>
 
           <div className={styles.verificationProgress}>
             <div className={styles.progressBar}>
