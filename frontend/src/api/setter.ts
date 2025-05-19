@@ -15,7 +15,7 @@ export async function saveConfiguration(config: ConfigurationSummary, customerId
     interiorId: config.selectedUpholstery?.id || undefined,
     totalPrice: config.totalPrice || 0,
     brand: config.brand,
-    features: []
+    features: [...config.selectedAssistance, ...config.selectedComfort]
   }
 
   console.log("Save Configuration: ", configPayload)

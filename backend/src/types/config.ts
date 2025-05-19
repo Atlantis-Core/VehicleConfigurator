@@ -32,3 +32,12 @@ export interface Configuration {
   //features: ConfigurationFeature[];
   //orders: Order[]
 }
+
+export interface Feature {
+  id: number;
+  name: string;
+  category: string;
+  brand: string;
+  additionalPrice: number;
+  imagePath: string;
+}

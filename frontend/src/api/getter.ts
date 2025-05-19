@@ -48,7 +48,6 @@ export async function getOrdersByCustomer(
     totalPrice: number;
   }
 
-  // Interface for the transformed order
   interface TransformedOrder {
     configuration: TransformedConfiguration;
   }

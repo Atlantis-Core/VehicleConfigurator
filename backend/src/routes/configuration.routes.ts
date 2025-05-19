@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { Feature } from '../types/config';
 
 const prisma = new PrismaClient();
 const router = Router();
@@ -30,9 +31,19 @@ router.post('/save', async (req: Request, res: Response) => {
         interior: { connect: { id: interiorId } },
         totalPrice,
         brand
-        // TODO: Handle features saving
       }
     });
+
+    await Promise.all(features.map(async (feature: Feature) => {
+      const configurationFeature = await prisma.configurationFeature.create({
+      data: {
+        configurationId: configuration.id,
+        featureId: feature.id
+      }
+      });
+      return configurationFeature;
+    }));
+
 
     res.status(201).json({
       message: 'Configuration saved successfully',
