@@ -88,7 +88,6 @@ const SavedConfigurations = () => {
             {formatSavedDate(config.savedAt)}
           </div>
 
-          {/* Configuration specs section */}
           <div className={styles.configSpecs}>
             <div className={styles.specRow}>
               <span className={styles.specLabel}>Color:</span>

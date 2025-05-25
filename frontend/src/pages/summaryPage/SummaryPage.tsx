@@ -357,7 +357,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
               onClick={() => setPaymentMethod('financing')}
             >
               <FaFileContract className={styles.paymentIcon} />
-              <span>Financing</span>
+              <span>Leasing</span>
             </div>
             <div
               className={`${styles.paymentOption} ${paymentMethod === 'bank' ? styles.selected : ''}`}
@@ -384,7 +384,7 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
 
           {paymentMethod === 'financing' && (
             <div className={styles.paymentDetails}>
-              <h3>Financing Options</h3>
+              <h3>Leasing Options</h3>
               <div className={styles.financingOptions}>
                 {leasingOptions.map(option => (
                   <div key={option.months} className={styles.financingOption}>

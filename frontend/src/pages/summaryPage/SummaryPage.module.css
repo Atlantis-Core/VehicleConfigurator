@@ -348,7 +348,6 @@
   cursor: not-allowed;
 }
 
-/* Feature List */
 .featureList {
   list-style: none;
   padding: 0;
@@ -363,7 +362,6 @@
   border-bottom: 1px dotted #f0f0f0;
 }
 
-/* Success page styles */
 .successContainer {
   text-align: center;
   padding: 60px 40px;
@@ -483,7 +481,6 @@
   color: #666;
 }
 
-/* Email verification notice styling */
 .verificationNotice {
   background: white;
   border-radius: 12px;
@@ -549,7 +546,6 @@
   font-weight: 600;
 }
 
-/* Animation for the email icon */
 @keyframes bounce {
   0%, 100% {
     transform: translateX(-50%) translateY(0);
@@ -570,7 +566,6 @@
   }
 }
 
-/* Add a refresh button to allow users to check verification status */
 .refreshButton {
   background-color: #f0f0f0;
   color: #333;
@@ -590,7 +585,6 @@
   background-color: #e0e0e0;
 }
 
-/* Progress indicator for verification status */
 .verificationProgress {
   margin-top: 30px;
   padding: 15px;

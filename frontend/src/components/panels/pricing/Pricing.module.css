@@ -101,7 +101,6 @@ h3 {
   z-index: 10;
 }
 
-/* Arrow for the tooltip */
 .infoIcon:hover::before {
   content: '';
   position: absolute;

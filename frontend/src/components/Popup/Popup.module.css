@@ -65,7 +65,6 @@
   padding: 1.5rem;
 }
 
-/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;

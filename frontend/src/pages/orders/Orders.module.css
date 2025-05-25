@@ -84,7 +84,6 @@
   overflow-x: hidden;
 }
 
-/* Auth Section Styles */
 .authSection {
   max-width: 500px;
   margin: 2rem auto;
@@ -160,7 +159,6 @@
   cursor: not-allowed;
 }
 
-/* Empty and Loading States */
 .emptyState {
   text-align: center;
   padding: 3rem 1rem;

@@ -92,7 +92,6 @@ const ConfiguratorSidebar: React.FC<ConfiguratorSidebarProps> = ({
         ))}
       </nav>
 
-      {/* Progress indicator */}
       <div className={styles.configProgress}>
         <div className={styles.progressHeader}>
           <span className={styles.progressTitle}>Configuration Progress</span>
@@ -106,7 +105,6 @@ const ConfiguratorSidebar: React.FC<ConfiguratorSidebarProps> = ({
         </div>
       </div>
 
-      {/* Sidebar footer */}
       <div className={styles.sidebarFooter}>
         <div className={styles.brandLogo}>
           <img src={Logo} alt="Logo" />

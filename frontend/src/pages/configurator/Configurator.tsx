@@ -274,7 +274,6 @@ const ConfiguratorLayout = () => {
           loadedSavedConfig={loadedSavedConfig}
         />
 
-        {/* Main content with sidebar and viewer */}
         <div className={styles.mainContent}>
           <ConfiguratorSidebar
             categories={categories}
@@ -286,7 +285,6 @@ const ConfiguratorLayout = () => {
             onSubcategoryClick={setActiveSubcategory}
           />
 
-          {/* Center car viewer area */}
           <div className={styles.viewerWrapper}>
             <div className={styles.viewer}>
               <VehicleViewer 
@@ -296,14 +294,12 @@ const ConfiguratorLayout = () => {
               />
             </div>
             
-            {/* Bottom options panel */}
             <div className={styles.optionsPanel}>
               <ConfiguratorContent
                 activeSubcategory={activeSubcategory}
                 completeConfiguration={handleCompleteConfiguration}
                 goToSection={goToSection}
               />
-              {/* Navigation buttons */}
               <div className={styles.configNavigation}>
                 {getNextCategory() && (
                   <button
