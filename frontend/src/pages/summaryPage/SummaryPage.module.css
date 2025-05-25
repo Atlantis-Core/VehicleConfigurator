@@ -279,14 +279,6 @@
   white-space: nowrap;
 }
 
-.disclaimer {
-  font-size: 0.85rem;
-  color: #666;
-  font-style: italic;
-  margin-top: 16px;
-  line-height: 1.4;
-}
-
 .contactForm {
   margin-top: 30px;
 }

@@ -405,9 +405,6 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
                   </div>
                 ))}
               </div>
-              <p className={styles.disclaimer}>
-                Financing subject to credit approval. Rates may vary based on creditworthiness.
-              </p>
             </div>
           )}
 
