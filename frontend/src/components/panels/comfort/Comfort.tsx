@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './Comfort.module.css';
 import { Feature } from '../../../types/types';
+import { getImageUrl } from '@lib/getImageUrl';
 
 interface ComfortProps {
   comforts: Feature[];
@@ -32,7 +33,7 @@ const Comfort: React.FC<ComfortProps> = ({ comforts, selectedComfort, handleSele
             onClick={() => handleSelectComfort(comfort)}
           >
             <img
-              src={comfort.imagePath}
+              src={getImageUrl(comfort.imagePath)}
               alt={comfort.name}
               className={styles.comfortImage}
             />

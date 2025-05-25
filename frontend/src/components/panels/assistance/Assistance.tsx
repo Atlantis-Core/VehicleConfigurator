@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './Assistance.module.css';
 import { Feature } from '../../../types/types';
+import { getImageUrl } from '@lib/getImageUrl';
 
 interface AssistanceProps {
   assistances: Feature[];
@@ -30,7 +31,7 @@ const Assistance: React.FC<AssistanceProps> = ({ assistances, selectedAssistance
             onClick={() => handleSelectAssistance(assistance)}
           >
             <img
-              src={assistance.imagePath}
+              src={getImageUrl(assistance.imagePath)}
               alt={assistance.name}
               className={styles.assistanceImage}
             />

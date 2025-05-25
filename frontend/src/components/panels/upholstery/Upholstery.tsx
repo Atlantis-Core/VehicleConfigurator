@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './Upholstery.module.css';
 import { Interior } from '../../../types/types';
+import { getImageUrl } from '@lib/getImageUrl';
 
 interface UpholsteryProps {
   upholsteries: Interior[];
@@ -22,7 +23,7 @@ const Upholstery: React.FC<UpholsteryProps> = ({ upholsteries, selectedUpholster
             onClick={() => handleSelectUpholstery(upholstery)}
           >
             <img
-              src={upholstery.imagePath}
+              src={getImageUrl(upholstery.imagePath)}
               alt={upholstery.name}
               className={styles.upholsteryImage}
             />
