@@ -1,0 +1,50 @@
+.orderActions {
+  padding: 16px 24px 20px;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  justify-content: flex-end;
+  background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+}
+
+.invoiceButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #0a66c2;
+  border: 1px solid #0a5cb8;
+  color: white;
+  box-shadow: 0 2px 6px rgba(10, 102, 194, 0.25);
+  min-width: 220px;
+}
+
+.invoiceButton:hover {
+  background-color: #0c59a9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(10, 102, 194, 0.3);
+}
+
+.invoiceButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(10, 102, 194, 0.25);
+}
+
+.invoiceIcon {
+  font-size: 1.1rem;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.invoiceButton:hover .invoiceIcon {
+  animation: pulse 1s infinite ease-in-out;
+}

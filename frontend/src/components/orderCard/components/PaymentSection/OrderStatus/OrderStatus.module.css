@@ -1,0 +1,218 @@
+.orderStatusCard {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-top: 16px;
+  transition: all 0.3s ease;
+}
+
+.statusHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.statusIconContainer {
+  margin-right: 16px;
+}
+
+.statusIcon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f0f7ff, #e6f2ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0056b3;
+  font-size: 18px;
+  box-shadow: 0 3px 6px rgba(0, 86, 179, 0.1);
+}
+
+.statusIcon.completed {
+  background: linear-gradient(135deg, #e6f9e6, #d6f5d6);
+  color: #2e7d32;
+}
+
+.statusInfo {
+  flex: 1;
+  margin-right: 7.5px;
+}
+
+.statusInfo h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.statusDescription {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.detailsToggle {
+  display: flex;
+  align-items: center;
+  background: #f0f7ff;
+  border: 1px solid #d0e6ff;
+  color: #0056b3;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.detailsToggle:hover {
+  background: #e0f0ff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.detailsToggle.active {
+  background: #0056b3;
+  color: white;
+  border-color: #0056b3;
+}
+
+.toggleText {
+  margin-right: 6px;
+}
+
+.toggleIcon {
+  transition: transform 0.2s ease;
+}
+
+.detailsToggle.active .toggleIcon {
+  transform: rotate(180deg);
+}
+
+.statusDetailsContainer {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+  animation: fadeIn 0.3s ease;
+}
+
+.deliveryEstimate {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.estimatedDelivery {
+  font-weight: 600;
+  color: #0056b3;
+}
+
+.statusProgress {
+  margin-bottom: 20px;
+}
+
+.progressBar {
+  height: 6px;
+  background: #eee;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #0056b3, #00ADEF);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.statusSteps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.statusStep {
+  display: flex;
+  align-items: flex-start;
+}
+
+.stepIconContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 12px;
+}
+
+.statusDot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.statusStep.completed .statusDot {
+  background: #0056b3;
+  border-color: #0056b3;
+  color: white;
+}
+
+.statusStep.current .statusDot {
+  border-color: #0056b3;
+  border-width: 3px;
+}
+
+.completedIcon {
+  font-size: 10px;
+}
+
+.stepConnector {
+  width: 2px;
+  height: 26px;
+  background: #ccc;
+  margin: 4px 0;
+}
+
+.statusStep:last-child .stepConnector {
+  display: none;
+}
+
+.statusStep.completed .stepConnector {
+  background: #0056b3;
+}
+
+.stepInfo {
+  flex: 1;
+  margin-top: 4px;
+  padding-top: 1px;
+}
+
+.stepLabel {
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+}
+
+.statusStep.completed .stepLabel {
+  color: #333;
+}
+
+.statusStep.current .stepLabel {
+  color: #0056b3;
+  font-weight: 600;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

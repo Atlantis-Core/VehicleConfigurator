@@ -1,0 +1,33 @@
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #eaeaea;
+  border-radius: 12px 12px 0 0;
+}
+
+.orderInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.orderInfo h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333333;
+}
+
+.orderDate {
+  font-size: 0.85rem;
+  color: #888888;
+}
+
+.orderAmount {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #0a66c2;
+}

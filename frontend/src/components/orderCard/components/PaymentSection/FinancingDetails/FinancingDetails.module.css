@@ -1,0 +1,58 @@
+.financingGrid {
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 16px;
+}
+
+.financingItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.financeItemIcon {
+  color: #6c757d;
+}
+
+.financeItemLabel {
+  display: block;
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin-bottom: 2px;
+}
+
+.financeItemValue {
+  display: block;
+  font-weight: 500;
+  color: #212529;
+}
+
+.monthlyPayment {
+  grid-column: 1 / -1;
+  background-color: rgba(73, 80, 87, 0.05);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.monthlyLabel {
+  display: block;
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 4px;
+}
+
+.monthlyAmount {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+.totalFinanceAmount {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #6c757d;
+}

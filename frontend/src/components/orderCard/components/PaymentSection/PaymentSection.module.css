@@ -1,0 +1,35 @@
+.paymentSection {
+  padding: 24px;
+  background-color: #f8fbff;
+  border-left: 1px solid #e9ecef;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.priceTag {
+  background: linear-gradient(135deg, #1971c2, #4dabf7);
+  border-radius: 12px;
+  padding: 16px 20px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 6px 16px rgba(25, 113, 194, 0.2);
+}
+
+.priceLabel {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.priceValue {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.paymentDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}

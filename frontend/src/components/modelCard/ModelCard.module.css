@@ -2,21 +2,30 @@
 
 .card {
   position: relative;
-  background: linear-gradient(145deg, #FFFFFF 0%, #F8F8F8 100%);
-  border-radius: 4px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.09);
-  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  background: #fff;
   width: 100%;
-  max-width: 340px;
-  margin: 0 auto;
-  height: 450px;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  font-family: 'Roboto', 'Corporate A', Arial, sans-serif;
-  position: relative;
-  z-index: 1;
+}
+
+.modelName {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  color: #333;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  padding: 0 8px;
+  line-height: 1.3;
+  height: 2.6rem;
 }
 
 .card::before {
@@ -73,32 +82,11 @@
 }
 
 .content {
-  padding: 28px 24px;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  height: 100%;
-}
-
-.modelName {
-  margin: 0 0 8px 0;
-  font-size: 22px;
-  font-weight: 500;
-  color: #111111;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  position: relative;
-  padding-bottom: 12px;
-  max-width: 80%;
-}
-
-.modelName::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 40px;
-  height: 2px;
-  background: #00ADEF;
+  flex: 1;
+  justify-content: space-between;
 }
 
 .imageContainer {
@@ -106,10 +94,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
   overflow: hidden;
-  background: linear-gradient(to bottom, rgba(240,240,240,0.4) 0%, rgba(255,255,255,0) 100%);
-  position: relative;
+  margin: 0.5rem 0 1rem;
+  min-height: 140px;
 }
 
 .imageContainer::after {
@@ -124,10 +111,10 @@
 }
 
 .modelImage {
-  width: 95%;
-  height: auto;
+  max-width: 100%;
+  max-height: 150px;
   object-fit: contain;
-  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: transform 0.3s ease;
   filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
 }
 
@@ -218,19 +205,12 @@
 }
 
 @media (max-width: 768px) {
-  .card {
-    height: 400px;
-  }
-  
   .modelName {
-    font-size: 20px;
+    font-size: 1.2rem;
+    height: 2.3rem;
   }
   
-  .basePrice {
-    font-size: 24px;
-  }
-  
-  .selectButton {
-    padding: 12px;
+  .imageContainer {
+    min-height: 120px;
   }
 }

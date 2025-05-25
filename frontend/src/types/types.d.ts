@@ -7,6 +7,14 @@ export interface Order {
   orderDate: string;
 }
 
+export interface FinancingObject {
+  months: number;
+  rate: string;
+  monthlyPayment: number;
+  totalAmount: number;
+  label: string;
+}
+
 export interface OrderWithDetails extends Order {
   configuration: ConfigurationSummary;
 }
