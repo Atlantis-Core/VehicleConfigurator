@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './SummaryPage.module.css';
 import { ConfigurationSummary, Customer, Order } from '../../types/types';
-import { IoArrowBack, IoCheckmarkCircle } from "react-icons/io5";
-import { FaCreditCard, FaUniversity, FaHandHoldingUsd, FaFileContract } from 'react-icons/fa';
+import { IoArrowBack } from "react-icons/io5";
 import Logo from "@assets/logo.svg";
 import { findOrCreateCustomer, saveConfiguration, submitOrder } from '@api/setter';
 import { useEmailVerification } from '@hooks/useEmailVerification';
 import { useLeasing } from '@hooks/useLeasing';
 import { toast } from 'react-toastify';
-import { formatEuro } from '@utils/formatEuro';
 import { getLocalCustomer } from '@hooks/useLocalCustomer';
 import VerificationScreen from '@components/verificationScreen';
 import SuccessScreen from '@components/successScreen';
@@ -141,14 +139,6 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
 
   const handleBack = () => {
     navigate(-1);
-  };
-
-  const handleContactInfoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setContactInfo(prev => ({
-      ...prev,
-      [name]: value
-    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
