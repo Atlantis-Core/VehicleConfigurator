@@ -1,0 +1,99 @@
+.summaryCard {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  padding: 24px;
+}
+
+.summaryCard h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.modelInfo {
+  margin-bottom: 24px;
+}
+
+.modelInfo h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.modelType {
+  color: #666;
+  margin-top: 4px;
+}
+
+.configItems {
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  padding: 20px 0;
+}
+
+.configItem {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  padding: 12px 0;
+  align-items: center;
+}
+
+.configItem:not(:last-child) {
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.itemLabel {
+  color: #666;
+}
+
+.colorValue {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.colorSwatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid #ddd;
+}
+
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.featureList li {
+  padding: 2px 0;
+}
+
+.featureList li:not(:last-child) {
+  border-bottom: 1px dotted #f0f0f0;
+}
+
+.itemPrice {
+  text-align: right;
+  font-weight: 500;
+}
+
+.totalPrice {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  padding: 16px 0;
+  font-weight: 600;
+}
+
+.totalLabel {
+  font-size: 1.2rem;
+}
+
+.totalValue {
+  font-size: 1.5rem;
+  color: #0056b3;
+}

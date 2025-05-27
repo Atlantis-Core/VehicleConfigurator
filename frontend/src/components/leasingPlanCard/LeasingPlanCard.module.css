@@ -1,0 +1,241 @@
+.leasingPlan {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.leasingPlan::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #0077cc;
+  transform: scaleX(0);
+  transition: transform 0.2s ease-out;
+}
+
+.leasingPlan:hover {
+  border-color: #0077cc;
+  box-shadow: 0 6px 12px rgba(0, 119, 204, 0.15);
+  transform: translateY(-1px);
+}
+
+.leasingPlan:hover::before {
+  transform: scaleX(1);
+}
+
+.leasingPlan:active {
+  transform: translateY(0);
+  transition-duration: 0.1s;
+}
+
+.activePlan {
+  border-color: #0077cc;
+  background: #f0f8ff;
+  box-shadow: 0 3px 8px rgba(0, 119, 204, 0.1);
+  transform: translateY(-1px);
+}
+
+.activePlan::before {
+  transform: scaleX(1);
+}
+
+.planHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.planHeader h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  color: #333;
+  letter-spacing: -0.01em;
+}
+
+.checkIcon {
+  color: #0077cc;
+  font-size: 20px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.activePlan .checkIcon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.planPrice {
+  text-align: center;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.amount {
+  display: block;
+  font-size: 36px;
+  font-weight: 600;
+  color: #222;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 2px;
+}
+
+.period {
+  font-size: 15px;
+  color: #777;
+  font-weight: 400;
+}
+
+.planRate {
+  text-align: center;
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 20px;
+  padding: 6px 10px;
+  background: #f2f2f2;
+  border-radius: 20px;
+  display: inline-block;
+  font-weight: 500;
+}
+
+.planFeatures {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.planFeatures li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  font-size: 15px;
+  color: #555;
+  line-height: 1.4;
+  padding-left: 4px;
+  transition: color 0.2s ease;
+}
+
+.planFeatures li:last-child {
+  margin-bottom: 0;
+}
+
+.planFeatures li:hover {
+  color: #333;
+}
+
+.featureBullet {
+  color: #0077cc;
+  margin-right: 10px;
+  font-size: 14px;
+  margin-top: 4px;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+.popularBadge {
+  position: absolute;
+  top: -1px;
+  right: 12px;
+  background: #ff9900;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 0 0 6px 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(255, 153, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .leasingPlan {
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .amount {
+    font-size: 30px;
+  }
+  
+  .planHeader h3 {
+    font-size: 18px;
+  }
+  
+  .planFeatures li {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .leasingPlan {
+    padding: 12px;
+  }
+  
+  .amount {
+    font-size: 26px;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.leasingPlan {
+  animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.leasingPlan:focus {
+  outline: none;
+  border-color: #0077cc;
+  box-shadow: 0 0 0 2px rgba(0, 119, 204, 0.1);
+}
+
+.leasingPlan.loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.leasingPlan.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}

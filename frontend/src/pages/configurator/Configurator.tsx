@@ -1,6 +1,5 @@
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { IoRefreshOutline } from "react-icons/io5";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import VehicleViewer from '@components/3DCarModel/VehicleViewer';
 import styles from './Configurator.module.css';
@@ -11,7 +10,7 @@ import { LeasingProvider } from '@context/LeasingContext';
 import { ConfigurationProvider as ConfiguratorProvider, useConfiguration } from '@context/ConfigurationContext';
 import { ConfiguratorHeader, ConfiguratorContent, ConfiguratorSidebar } from '@components/configurator';
 import { loadConfigurationById, saveConfigurationLocally, loadConfigurationsForModel } from '@hooks/useLocalConfiguration';
-import Popup from '@components/Popup';
+import Popup from '@components/popup';
 import { Feature } from '../../types/types';
 import SaveConfigurationPopup from '@components/configurator/saveConfigurationPopup';
 

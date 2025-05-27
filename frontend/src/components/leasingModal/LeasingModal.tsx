@@ -2,8 +2,9 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import styles from './LeasingModal.module.css';
 import { IoMdClose } from 'react-icons/io';
-import { FaCar, FaCheck, FaInfoCircle } from 'react-icons/fa';
+import { FaCar, FaInfoCircle } from 'react-icons/fa';
 import { useSharedLeasing } from '@context/LeasingContext';
+import LeasingPlanCard from '../leasingPlanCard';
 
 interface LeasingModalProps {
   isOpen: boolean;
@@ -11,7 +12,6 @@ interface LeasingModalProps {
 }
 
 const LeasingModal: React.FC<LeasingModalProps> = ({ isOpen, onClose }) => {
-  
   const {
     leasingOptions,
     selectedOption,
@@ -46,38 +46,20 @@ const LeasingModal: React.FC<LeasingModalProps> = ({ isOpen, onClose }) => {
           const payment = getMonthlyPaymentFor(option.months);
           
           return (
-            <div 
+            <LeasingPlanCard
               key={option.months}
-              className={`${styles.leasingPlan} ${selectedOption === option.months ? styles.activePlan : ''}`}
-              onClick={() => selectLeasingOption(option.months)}
-            >
-              <div className={styles.planHeader}>
-                <h3>{option.label}</h3>
-                {selectedOption === option.months && <FaCheck className={styles.checkIcon} />}
-              </div>
-              <div className={styles.planPrice}>
-                <span className={styles.amount}>
-                  {payment.toLocaleString()} €
-                </span>
-                <span className={styles.period}>/month</span>
-              </div>
-              <div className={styles.planRate}>Interest rate: {option.rate}</div>
-              <ul className={styles.planFeatures}>
-                {option.features.map((feature, index) => (
-                  <li key={index}>
-                    <span className={styles.featureBullet}>•</span>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </div>
+              option={option}
+              payment={payment}
+              isSelected={selectedOption === option.months}
+              onSelect={selectLeasingOption}
+            />
           );
         })}
       </div>
 
       <div className={styles.infoNote}>
         <FaInfoCircle className={styles.infoIcon} />
-        <p>Prices are based on the base model without additional features. Final monthly payment may vary based on your configuration.</p>
+        <p>Final monthly payment may vary based on your configuration.</p>
       </div>
 
       <div className={styles.modalActions}>

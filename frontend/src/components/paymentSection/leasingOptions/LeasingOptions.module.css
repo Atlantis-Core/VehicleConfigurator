@@ -1,0 +1,158 @@
+.leasingOptions {
+  margin-top: 24px;
+  padding: 24px;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.titleIcon {
+  margin-right: 8px;
+  color: #0a66c2;
+}
+
+.optionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.leasingOption {
+  position: relative;
+  padding: 20px;
+  background: #ffffff;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.leasingOption:hover {
+  border-color: #0a66c2;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(10, 102, 194, 0.1);
+}
+
+.leasingOption.selected {
+  border-color: #0a66c2;
+  background: #f0f7ff;
+  box-shadow: 0 6px 24px rgba(10, 102, 194, 0.15);
+}
+
+.leasingOption.popular {
+  border-color: #28a745;
+}
+
+.leasingOption.popular.selected {
+  border-color: #0a66c2;
+}
+
+.popularBadge {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #28a745;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.termHeader {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.termDuration {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+}
+
+.termMonths {
+  display: block;
+  font-size: 14px;
+  color: #6c757d;
+  margin-top: 4px;
+}
+
+.paymentAmount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.euroIcon {
+  color: #0a66c2;
+  margin-right: 4px;
+}
+
+.amount {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+}
+
+.perMonth {
+  font-size: 14px;
+  color: #6c757d;
+  margin-left: 4px;
+}
+
+.termDetails {
+  border-top: 1px solid #e9ecef;
+  padding-top: 12px;
+}
+
+.detail {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.detail span:last-child {
+  font-weight: 600;
+  color: #333;
+}
+
+.checkmark {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #28a745;
+  color: white;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.leasingOption.selected .checkmark {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .optionsGrid {
+    grid-template-columns: 1fr;
+  }
+}

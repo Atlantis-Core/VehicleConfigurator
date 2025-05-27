@@ -1,0 +1,150 @@
+.container {
+  margin: 0 auto;
+  max-height: 95vh;
+  overflow-y: scroll;
+  padding: 20px;
+  font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+}
+
+.verificationNotice {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  padding: 40px;
+  text-align: center;
+  max-width: 600px;
+  margin: 100px auto;
+  position: relative;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.verificationNotice::before {
+  content: "";
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 100px;
+  background-color: #f8f9fa;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: -1;
+}
+
+.verificationNotice::after {
+  content: "✉️";
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 50px;
+  animation: bounce 2s infinite;
+}
+
+.verificationNotice h2 {
+  color: #333;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.verificationNotice p {
+  color: #555;
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.verificationNotice p:last-child {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 24px;
+  font-style: italic;
+}
+
+.verificationNotice strong {
+  color: #0056b3;
+  font-weight: 600;
+}
+
+.refreshButton {
+  background-color: #f0f0f0;
+  color: #333;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 20px auto 0;
+  transition: all 0.2s;
+}
+
+.refreshButton:hover {
+  background-color: #e0e0e0;
+}
+
+.verificationProgress {
+  margin-top: 30px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.progressBar {
+  height: 8px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.progressBarFill {
+  position: absolute;
+  height: 100%;
+  width: 25%;
+  background-color: #0056b3;
+  border-radius: 4px;
+  animation: indeterminateProgress 1.5s infinite linear;
+  transform-origin: 0% 50%;
+}
+
+@keyframes indeterminateProgress {
+  0% {
+    transform: translateX(0) scaleX(0);
+  }
+  40% {
+    transform: translateX(0) scaleX(0.4);
+  }
+  100% {
+    transform: translateX(100%) scaleX(0.5);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+}
