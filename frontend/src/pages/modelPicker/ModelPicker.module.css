@@ -32,6 +32,8 @@
   align-items: center;
   gap: 0.75rem;
   cursor: pointer;
+  min-width: 0;
+  flex-shrink: 0;
 }
 
 .logoImage {
@@ -39,6 +41,7 @@
   height: auto;
   filter: invert(1);
   transition: transform 0.3s ease;
+  flex-shrink: 0;
 }
 
 .logoContainer:hover .logoImage {
@@ -50,13 +53,16 @@
   font-size: 1.25rem;
   font-weight: 300;
   letter-spacing: 1px;
-  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .headerActionsContainer {
   display: flex;
   gap: 1.5rem;
   flex-direction: row;
+  flex-shrink: 0;
 }
 
 .headerActions {
@@ -83,6 +89,7 @@
   justify-content: center;
   margin-bottom: 1rem;
   width: 100%;
+  max-width: 800px;
 }
 
 .sectionLine {
@@ -90,23 +97,28 @@
   width: 60px;
   background: linear-gradient(90deg, transparent, #000, transparent);
   margin: 0 20px;
+  flex-shrink: 0;
 }
 
 .upperSectionTitle {
-  font-size: 48px;
+  font-size: clamp(28px, 5vw, 48px);
   font-weight: 300;
   letter-spacing: 2px;
   text-transform: uppercase;
   margin: 0;
   color: #111;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .upperSectionSubTitle {
-  font-size: 16px;
-  max-width: 50%;
-  line-height: 24px;
+  font-size: clamp(14px, 2vw, 16px);
+  max-width: min(50%, 600px);
+  line-height: 1.5;
   font-weight: 300;
   color: #555;
+  text-align: center;
 }
 
 .filterControls {
@@ -130,6 +142,7 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   font-weight: 400;
+  white-space: nowrap;
 }
 
 .filterButton:hover {
@@ -151,6 +164,7 @@
   height: 300px;
   gap: 1.5rem;
   color: #555;
+  padding: 2rem;
 }
 
 .loadingSpinner {
@@ -171,6 +185,7 @@
 .cardWrapper {
   animation: fadeIn 0.5s ease forwards;
   opacity: 0;
+  width: 100%;
 }
 
 @keyframes fadeIn {
@@ -186,13 +201,14 @@
 
 .modelCards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 4rem;
-  max-width: 90%;
-  margin: 5rem auto;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 400px));
+  gap: 2rem;
+  max-width: min(90%, 1400px);
+  margin: 3rem auto;
   position: relative;
   padding: 2rem;
   background: linear-gradient(180deg, rgba(248, 248, 248, 0) 0%, rgba(240, 240, 240, 0.5) 100%);
+  justify-content: center;
 }
 
 .modelCards::before {
@@ -226,7 +242,7 @@
   background: linear-gradient(to right, #f8f8f8, #ffffff);
   padding: 2rem;
   margin: 3rem auto;
-  max-width: 800px;
+  max-width: min(800px, 90%);
   border-radius: 4px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   text-align: center;
@@ -252,7 +268,7 @@
 }
 
 .summaryContent h3 {
-  font-size: 24px;
+  font-size: clamp(20px, 3vw, 24px);
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -261,10 +277,12 @@
 }
 
 .selectedModelName {
-  font-size: 32px;
+  font-size: clamp(24px, 4vw, 32px);
   font-weight: 500;
   color: #000;
   margin: 0.5rem 0 1.5rem;
+  text-align: center;
+  word-break: break-word;
 }
 
 .continueButton {
@@ -272,14 +290,17 @@
   color: white;
   border: none;
   padding: 14px 30px;
-  font-size: 16px;
+  font-size: clamp(14px, 2vw, 16px);
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   text-transform: uppercase;
   letter-spacing: 1px;
+  width: 100%;
+  max-width: 300px;
 }
 
 .continueButton:hover {
@@ -306,6 +327,7 @@
   cursor: pointer;
   text-decoration: underline;
   transition: color 0.3s ease;
+  padding: 0.5rem;
 }
 
 .clearButton:hover {
@@ -327,6 +349,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
+  white-space: nowrap;
 }
 
 .savedConfigsButton:hover {
@@ -340,6 +363,12 @@
 
 .savedConfigsButton svg {
   font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.buttonText {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .configCount {
@@ -354,54 +383,54 @@
   font-size: 0.75rem;
   font-weight: 500;
   padding: 0 4px;
+  flex-shrink: 0;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1024px) {
   .modelCards {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 350px));
+    gap: 1.5rem;
+    padding: 1.5rem;
   }
 
-  .upperSectionTitle {
-    font-size: 42px;
+  .headerContent {
+    padding: 0.75rem 1.5rem;
   }
-  
+
   .upperSectionSubTitle {
     max-width: 70%;
+  }
+
+  .headerActionsContainer {
+    gap: 1rem;
   }
 }
 
 @media (max-width: 768px) {
   .modelCards {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+    margin: 2rem auto;
   }
   
   .sectionLine {
     width: 40px;
-  }
-  
-  .upperSectionTitle {
-    font-size: 36px;
+    margin: 0 15px;
   }
   
   .upperSectionSubTitle {
-    max-width: 90%;
-    font-size: 14px;
+    max-width: 85%;
   }
   
   .filterButton {
-    padding: 6px 15px;
+    padding: 8px 16px;
     font-size: 13px;
   }
   
-  .selectedModelName {
-    font-size: 26px;
-  }
-  
-  .continueButton {
-    padding: 12px 24px;
-    font-size: 14px;
+  .selectionSummary {
+    margin: 2rem auto;
+    padding: 1.5rem;
   }
 
   .headerContent {
@@ -411,9 +440,43 @@
   .logoText {
     font-size: 1rem;
   }
+
+  .headerActionsContainer {
+    gap: 0.75rem;
+  }
+
+  .savedConfigsButton {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
 }
 
 @media (max-width: 640px) {
+  .modelCards {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem 0.5rem;
+  }
+
+  .filterControls {
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .filterButton {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .upperSection {
+    margin-top: 1.5rem;
+    gap: 1rem;
+  }
+
+  .sectionHeader {
+    margin-bottom: 0.5rem;
+  }
+
   .savedConfigsButton {
     padding: 0.6rem;
   }
@@ -433,5 +496,9 @@
   
   .buttonText {
     display: none;
+  }
+
+  .headerActionsContainer {
+    gap: 0.5rem;
   }
 }
