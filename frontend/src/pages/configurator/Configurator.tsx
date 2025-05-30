@@ -1,6 +1,6 @@
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { MdKeyboardArrowRight } from "react-icons/md";
+import { MdKeyboardArrowRight, MdMenu, MdClose, MdSettings, MdVisibility } from "react-icons/md";
 import VehicleViewer from '@components/3DCarModel/VehicleViewer';
 import styles from './Configurator.module.css';
 import { getCategories } from '@lib/getCategories';
@@ -38,6 +38,10 @@ const ConfiguratorLayout = () => {
 
   // Flag to prevent auto-loading after saving
   const [preventAutoLoad, setPreventAutoLoad] = useState(false);
+
+  // Enhanced mobile-specific state
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [activeView, setActiveView] = useState<'viewer' | 'options'>('viewer');
 
   useEffect(() => {
     const loadAndApplySavedConfig = async () => {
@@ -233,6 +237,9 @@ const ConfiguratorLayout = () => {
         setCompletedSteps(prev => ({ ...prev, [subcategoryId]: true }));
       }
     }
+
+    // Close mobile sidebar after selection
+    setIsMobileSidebarOpen(false);
   };
 
   // Mark selections as completed
@@ -256,6 +263,16 @@ const ConfiguratorLayout = () => {
     }
   }, [activeSubcategory]);
 
+  // Get current step info for mobile header
+  const getCurrentStepInfo = () => {
+    const currentCategory = categories.find(c => c.id === activeCategory);
+    const currentSubcategory = currentCategory?.subcategories.find(s => s.id === activeSubcategory);
+    return {
+      categoryLabel: currentCategory?.label || '',
+      subcategoryLabel: currentSubcategory?.label || ''
+    };
+  };
+
   if (!model) return (
     <div className={styles.loadingContainer}>
       <div className={styles.loader}></div>
@@ -273,32 +290,138 @@ const ConfiguratorLayout = () => {
           loadedSavedConfig={loadedSavedConfig}
         />
 
-        <div className={styles.mainContent}>
-          <ConfiguratorSidebar
-            categories={categories}
-            activeCategory={activeCategory}
-            activeSubcategory={activeSubcategory}
-            completedSteps={completedSteps}
-            calculateProgress={calculateProgress}
-            onCategoryClick={handleCategoryClick}
-            onSubcategoryClick={setActiveSubcategory}
-          />
+        <div className={styles.mobileHeader}>
+          <div className={styles.mobileHeaderTop}>
+            <button
+              className={styles.mobileMenuButton}
+              onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+              aria-label="Toggle navigation menu"
+            >
+              {isMobileSidebarOpen ? <MdClose size={24} /> : <MdMenu size={24} />}
+            </button>
 
-          <div className={styles.viewerWrapper}>
-            <div className={styles.viewer}>
-              <VehicleViewer 
-                modelPath={model.model3dPath} 
-                color={selectedColor} 
-                autoRotateSpeed={0.3} 
+            <div className={styles.mobileStepInfo}>
+              <div className={styles.mobileStepTitle}>
+                {getCurrentStepInfo().subcategoryLabel}
+              </div>
+              <div className={styles.mobileStepSubtitle}>
+                {getCurrentStepInfo().categoryLabel}
+              </div>
+            </div>
+
+            <button
+              className={styles.mobileProgressButton}
+              aria-label="Toggle progress view"
+            >
+              <MdSettings size={20} />
+              <span className={styles.progressBadge}>{calculateProgress()}%</span>
+            </button>
+          </div>
+
+          <div className={styles.mobileProgressContainer}>
+            <div className={styles.mobileProgressBar}>
+              <div
+                className={styles.mobileProgressFill}
+                style={{ width: `${calculateProgress()}%` }}
               />
             </div>
-            
-            <div className={styles.optionsPanel}>
+          </div>
+
+          <div className={styles.mobileViewToggle}>
+            <button
+              className={`${styles.viewToggleButton} ${activeView === 'viewer' ? styles.active : ''}`}
+              onClick={() => setActiveView('viewer')}
+            >
+              <MdVisibility size={18} />
+              <span>3D View</span>
+            </button>
+            <button
+              className={`${styles.viewToggleButton} ${activeView === 'options' ? styles.active : ''}`}
+              onClick={() => setActiveView('options')}
+            >
+              <MdSettings size={18} />
+              <span>Configure</span>
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.mainContent}>
+          <div className={styles.desktopSidebar}>
+            <ConfiguratorSidebar
+              categories={categories}
+              activeCategory={activeCategory}
+              activeSubcategory={activeSubcategory}
+              completedSteps={completedSteps}
+              calculateProgress={calculateProgress}
+              onCategoryClick={handleCategoryClick}
+              onSubcategoryClick={setActiveSubcategory}
+            />
+          </div>
+
+          {isMobileSidebarOpen && (
+            <div className={styles.mobileOverlay}>
+              <div className={styles.mobileSidebar}>
+                <div className={styles.mobileSidebarHeader}>
+                  <h3>Configuration Steps</h3>
+                  <button
+                    className={styles.mobileSidebarClose}
+                    onClick={() => setIsMobileSidebarOpen(false)}
+                  >
+                    <MdClose size={24} />
+                  </button>
+                </div>
+                <ConfiguratorSidebar
+                  categories={categories}
+                  activeCategory={activeCategory}
+                  activeSubcategory={activeSubcategory}
+                  completedSteps={completedSteps}
+                  calculateProgress={calculateProgress}
+                  onCategoryClick={handleCategoryClick}
+                  onSubcategoryClick={(subcategoryId) => {
+                    setActiveSubcategory(subcategoryId);
+                    setIsMobileSidebarOpen(false);
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
+          <div className={styles.viewerWrapper}>
+            <div className={`${styles.viewer} ${activeView === 'options' ? styles.hiddenOnMobile : ''}`}>
+              <VehicleViewer
+                modelPath={model.model3dPath}
+                color={selectedColor}
+                autoRotateSpeed={0.3}
+              />
+            </div>
+
+            <div className={`${styles.optionsPanel} ${activeView === 'viewer' ? styles.hiddenOnMobile : ''}`}>
               <ConfiguratorContent
                 activeSubcategory={activeSubcategory}
                 completeConfiguration={handleCompleteConfiguration}
                 goToSection={goToSection}
               />
+
+              <div className={styles.mobileNavigationFooter}>
+                {getNextCategory() && (
+                  <button
+                    className={styles.mobileNextButton}
+                    onClick={handleNextClick}
+                  >
+                    <div className={styles.nextButtonContent}>
+                      <span>Next Step</span>
+                      <div className={styles.nextStepInfo}>
+                        {getNextCategory()?.categoryId === activeCategory
+                          ? categories.find(c => c.id === activeCategory)?.subcategories.find(s => s.id === getNextCategory()?.subcategoryId)?.label
+                          : categories.find(c => c.id === getNextCategory()?.categoryId)?.label
+                        }
+                      </div>
+                    </div>
+                    <MdKeyboardArrowRight size={24} />
+                  </button>
+                )}
+              </div>
+
               <div className={styles.configNavigation}>
                 {getNextCategory() && (
                   <button
@@ -316,12 +439,14 @@ const ConfiguratorLayout = () => {
             </div>
           </div>
         </div>
+
         <ToastContainer
           position="bottom-right"
           autoClose={4000}
           stacked={true}
           newestOnTop={true}
           style={{ marginRight: "1.5rem", marginBottom: "0.75rem" }}
+          className={styles.toastContainer}
         />
 
         <Popup isOpen={isSavePopupOpen} onClose={() => setIsSavePopupOpen(false)} title="Save Configuration">

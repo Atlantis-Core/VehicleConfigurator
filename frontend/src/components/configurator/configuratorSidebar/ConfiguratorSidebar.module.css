@@ -10,6 +10,7 @@
     linear-gradient(to bottom, #ffffff, #fafcff);
   box-shadow: inset -5px 0 15px -15px rgba(0, 0, 0, 0.05);
   position: relative;
+  padding-bottom: 1rem;
 }
 
 .categoryNav {
@@ -242,8 +243,7 @@
 @media (max-width: 768px) {
   .sidebar {
     width: 100%;
-    height: auto;
-    max-height: 40vh;
+    height: fit-content;
     border-right: none;
     border-bottom: 1px solid #e5e5e5;
   }

@@ -65,19 +65,17 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
     // Ask for confirmation
     if (window.confirm('Are you sure you want to reset your configuration?')) {
       try {
-        // Delete the saved configuration if one is loaded
         if (loadedSavedConfig) {
           deleteConfigurationLocally(loadedSavedConfig);
         }
         
-        // Use navigation instead of direct page reload
         const url = new URL(window.location.href);
         url.searchParams.set('reset', 'true');
         
         // Add a unique timestamp to ensure the browser doesn't use cached content
         url.searchParams.set('t', Date.now().toString());
         
-        // Force a full page refresh to completely reset the React state tree
+        // Force a full page refresh
         window.location.href = url.toString();
       } catch (error) {
         console.error('Error during reset:', error);
