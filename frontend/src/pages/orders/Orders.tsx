@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaUser, FaFileAlt } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from './Orders.module.css';
@@ -8,7 +7,10 @@ import { findCustomerByEmail, verifyCustomer, verifyCustomerCode } from '@api/he
 import { Customer, OrderWithDetails } from '../../types/types';
 import { getLocalCustomer, removeLocalCustomer, saveLocalCustomer } from '@hooks/useLocalCustomer';
 import { getOrdersByCustomer } from '@api/getter';
-import OrderCard from '@components/features/orders/orderCard';
+import OrdersHeader from '@components/features/orders/ordersHeader';
+import LoginForm from '@components/features/forms/loginForm';
+import VerificationForm from '@components/features/forms/verificationForm';
+import OrdersList from '@components/features/orders/ordersList';
 
 const Orders = () => {
   const navigate = useNavigate();
@@ -55,7 +57,6 @@ const Orders = () => {
     setIsLoading(true);
     try {
       const result = await getOrdersByCustomer(customerId);
-      // TODO: Unhandled pagination
       setOrders(result.orders);
     } catch (error) {
       console.error('Error fetching orders:', error);
@@ -75,16 +76,14 @@ const Orders = () => {
   };
 
   // Handle login form submission
-  const handleLoginSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLoginSubmit = async (loginData: { firstName: string; lastName: string; email: string }) => {
     setIsLoading(true);
-
     try {
-      const { firstName, lastName, email } = formData;
+      const { firstName, lastName, email } = loginData;
       const customer: Customer = await findCustomerByEmail(email);
 
-      if (customer.firstName.trim().toLowerCase() === firstName.trim().toLowerCase() && 
-          customer.lastName.trim().toLowerCase() === lastName.trim().toLowerCase()) {
+      if (customer.firstName.trim().toLowerCase() === firstName.trim().toLowerCase() &&
+        customer.lastName.trim().toLowerCase() === lastName.trim().toLowerCase()) {
         saveLocalCustomer({
           id: customer.id,
           firstName,
@@ -93,7 +92,6 @@ const Orders = () => {
           verified: false
         })
 
-        // Send verification code
         if (await verifyCustomer(email)) {
           toast.success('Verification code sent to your email');
           setLoginStep('verify');
@@ -110,26 +108,17 @@ const Orders = () => {
   };
 
   // Handle verification code submission
-  const handleVerifySubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleVerifySubmit = async (verificationCode: string) => {
     setIsLoading(true);
-
     try {
-      const { email, verificationCode } = formData;
-
+      const { email } = formData;
       const isVerified = await verifyCustomerCode(email, verificationCode);
 
       if (isVerified) {
-        // Update customer session in localStorage
-
         const customerSession = getLocalCustomer();
         if (customerSession) {
           customerSession.verified = true;
-
-          // update local customer
           saveLocalCustomer(customerSession);
-
-          // Fetch orders
           fetchOrders(customerSession.id);
           setLoginStep('verified');
           toast.success('Email verified successfully!');
@@ -158,159 +147,61 @@ const Orders = () => {
     setOrders([]);
   };
 
+  const handleBackClick = () => navigate('/configurator');
+  const handleConfigureClick = () => navigate('/configurator');
+
+  const renderContent = () => {
+    switch (loginStep) {
+      case 'login':
+        return (
+          <LoginForm
+            formData={formData}
+            isLoading={isLoading}
+            onSubmit={handleLoginSubmit}
+            onChange={handleChange}
+          />
+        );
+      case 'verify':
+        return (
+          <VerificationForm
+            email={formData.email}
+            verificationCode={formData.verificationCode}
+            isLoading={isLoading}
+            onSubmit={handleVerifySubmit}
+            onChange={handleChange}
+          />
+        );
+      case 'verified':
+        return (
+          <div className={styles.ordersSection}>
+            <OrdersList
+              orders={orders}
+              isLoading={isLoading}
+              onConfigureClick={handleConfigureClick}
+            />
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <button
-            className={styles.backButton}
-            onClick={() => navigate('/configurator')}
-          >
-            <FaArrowLeft />
-            <span>Back</span>
-          </button>
-          <h1 className={styles.title}>My Orders</h1>
-
-          {loginStep === 'verified' && (
-            <div className={styles.userInfo}>
-              <FaUser />
-              <span>{formData.firstName} {formData.lastName}</span>
-              <button
-                className={styles.logoutButton}
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
-            </div>
-          )}
-        </div>
-      </header>
+      <OrdersHeader
+        isAuthenticated={loginStep === 'verified'}
+        firstName={formData.firstName}
+        lastName={formData.lastName}
+        onBackClick={handleBackClick}
+        onLogout={handleLogout}
+      />
 
       <main className={styles.content}>
-        {loginStep === 'login' && (
-          <div className={styles.authSection}>
-            <div className={styles.authCard}>
-              <h2>Access Your Orders</h2>
-              <p>Please enter your information to view your orders</p>
-
-              <form onSubmit={handleLoginSubmit}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="firstName">First Name</label>
-                  <input
-                    id="firstName"
-                    type="text"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    required
-                    placeholder="Enter your first name"
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label htmlFor="lastName">Last Name</label>
-                  <input
-                    id="lastName"
-                    type="text"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    required
-                    placeholder="Enter your last name"
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label htmlFor="email">Email Address</label>
-                  <input
-                    id="email"
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    placeholder="Enter your email"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className={styles.submitButton}
-                  disabled={isLoading}
-                >
-                  {isLoading ? 'Verifying...' : 'Continue'}
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
-
-        {loginStep === 'verify' && (
-          <div className={styles.authSection}>
-            <div className={styles.authCard}>
-              <h2>Verify Your Email</h2>
-              <p>We've sent a verification code to <strong>{formData.email}</strong></p>
-
-              <form onSubmit={handleVerifySubmit}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="verificationCode">Verification Code</label>
-                  <input
-                    id="verificationCode"
-                    type="text"
-                    name="verificationCode"
-                    value={formData.verificationCode}
-                    onChange={handleChange}
-                    required
-                    placeholder="Enter verification code"
-                    autoComplete="off"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className={styles.submitButton}
-                  disabled={isLoading}
-                >
-                  {isLoading ? 'Verifying...' : 'Verify'}
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
-
-        {loginStep === 'verified' && (
-          <div className={styles.ordersSection}>
-            {isLoading ? (
-              <div className={styles.loadingState}>
-                <div className={styles.loader}></div>
-                <p>Loading your orders...</p>
-              </div>
-            ) : orders.length === 0 ? (
-              <div className={styles.emptyState}>
-                <FaFileAlt size={48} />
-                <h2>No Orders Found</h2>
-                <p>You haven't placed any orders yet</p>
-                <button
-                  className={styles.configureButton}
-                  onClick={() => navigate('/configurator')}
-                >
-                  Configure a Vehicle
-                </button>
-              </div>
-            ) : (
-              <div className={styles.ordersList}>
-                {orders.map(order => (
-                  <OrderCard order={order} />
-                ))}
-              </div>
-            )}
-          </div>
-        )
-        }
-      </main >
+        {renderContent()}
+      </main>
 
       <ToastContainer position="bottom-right" />
-    </div >
+    </div>
   );
 };
 

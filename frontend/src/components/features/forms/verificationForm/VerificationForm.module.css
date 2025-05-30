@@ -1,0 +1,135 @@
+.authSection {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.authCard {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  text-align: center;
+}
+
+.authCard h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.authCard p {
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.authCard p strong {
+  color: #333;
+  font-weight: 600;
+}
+
+.formGroup {
+  margin-bottom: 1.25rem;
+  text-align: left;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #444;
+  font-size: 0.9rem;
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  text-align: center;
+  letter-spacing: 0.1em;
+  font-family: 'Courier New', monospace;
+}
+
+.formGroup input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.formGroup input::placeholder {
+  color: #999;
+  letter-spacing: normal;
+  font-family: inherit;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 0.85rem;
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 0.5rem;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: #222;
+  transform: translateY(-1px);
+}
+
+.submitButton:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.resendSection {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.resendText {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.resendButton {
+  background: none;
+  border: none;
+  color: #2563eb;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+
+.resendButton:hover {
+  color: #1d4ed8;
+}
+
+@media (max-width: 768px) {
+  .authSection {
+    margin: 1rem auto;
+    padding: 0 0.5rem;
+  }
+  
+  .authCard {
+    padding: 1.5rem;
+  }
+  
+  .authCard h2 {
+    font-size: 1.25rem;
+  }
+}
