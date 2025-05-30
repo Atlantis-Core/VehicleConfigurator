@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { IoArrowBack, IoRefreshOutline } from "react-icons/io5";
 import { BsBookmark, BsInfoCircleFill } from "react-icons/bs";
-import LeasingModal from '@components/leasingModal';
-import { Model } from '../../../types/types';
+import LeasingModal from '@components/features/leasing/leasingModal';
+import { Model } from '../../../../types/types';
 import styles from './ConfiguratorHeader.module.css';
 import { useSharedLeasing } from '@context/LeasingContext';
 import { deleteConfigurationLocally, saveConfigurationLocally } from '@hooks/useLocalConfiguration';

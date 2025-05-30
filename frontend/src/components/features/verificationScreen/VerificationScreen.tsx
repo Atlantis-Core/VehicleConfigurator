@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./VerificationScreen.module.css";
-import { Customer } from "../../types/types";
+import { Customer } from "../../../types/types";
 import { HiRefresh } from 'react-icons/hi';
 
 interface VerificationScreenProps {

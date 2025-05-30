@@ -9,11 +9,11 @@ import { useEmailVerification } from '@hooks/useEmailVerification';
 import { useLeasing } from '@hooks/useLeasing';
 import { toast } from 'react-toastify';
 import { getLocalCustomer } from '@hooks/useLocalCustomer';
-import VerificationScreen from '@components/verificationScreen';
-import SuccessScreen from '@components/successScreen';
-import ConfigurationSummaryCard from '@components/configurationSummaryCard';
-import PaymentSection from '@components/paymentSection';
-import ContactForm from '@components/contactForm';
+import VerificationScreen from '@components/features/verificationScreen';
+import SuccessScreen from '@components/features/successScreen';
+import ConfigurationSummaryCard from '@components/features/configurator/configurationSummaryCard';
+import PaymentSection from '@components/features/paymentSection';
+import ContactForm from '@components/features/forms/contactForm';
 
 interface SummaryPageProps { }
 

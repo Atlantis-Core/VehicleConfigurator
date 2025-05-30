@@ -1,5 +1,5 @@
 import { useConfiguration } from "@context/ConfigurationContext";
-import { Model } from "../../../types/types";
+import { Model } from "../../../../types/types";
 import styles from "./SaveConfigurationPopup.module.css";
 
 interface SaveConfigurationPopupProps {

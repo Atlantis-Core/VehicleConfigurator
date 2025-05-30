@@ -5,11 +5,10 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from './Orders.module.css';
 import { findCustomerByEmail, verifyCustomer, verifyCustomerCode } from '@api/helper';
-import { formatDistanceToNow } from 'date-fns';
 import { Customer, OrderWithDetails } from '../../types/types';
 import { getLocalCustomer, removeLocalCustomer, saveLocalCustomer } from '@hooks/useLocalCustomer';
 import { getOrdersByCustomer } from '@api/getter';
-import OrderCard from '@components/orderCard';
+import OrderCard from '@components/features/orders/orderCard';
 
 const Orders = () => {
   const navigate = useNavigate();

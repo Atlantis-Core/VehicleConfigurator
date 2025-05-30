@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaCalendarAlt } from 'react-icons/fa';
 import styles from './LeasingOptions.module.css';
-import LeasingPlanCard from '../../leasingPlanCard/LeasingPlanCard';
+import LeasingPlanCard from '../../leasing/leasingPlanCard/LeasingPlanCard';
 
 interface LeasingOptionsProps {
   leasingOptions: any[];

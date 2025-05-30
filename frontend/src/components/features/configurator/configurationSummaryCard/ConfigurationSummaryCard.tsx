@@ -1,5 +1,5 @@
 import styles from "./ConfigurationSummaryCard.module.css";
-import { ConfigurationSummary } from "../../types/types";
+import { ConfigurationSummary } from "../../../../types/types";
 import { formatEuro } from "@utils/formatEuro";
 
 interface ConfigurationSummaryCardProps {

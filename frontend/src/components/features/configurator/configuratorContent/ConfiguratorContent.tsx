@@ -2,7 +2,7 @@ import { useConfiguration } from '@context/ConfigurationContext';
 import {
   EngineSelection, TransmissionsSelection, ExteriorColorSelection, RimsSelection,
   UpholsterySelection, AssistanceSelection, ComfortSelection, PricingPanel, ConfigurationReview
-} from '../../panels';
+} from '../panels';
 
 interface ConfiguratorContentProps {
   activeSubcategory: string;

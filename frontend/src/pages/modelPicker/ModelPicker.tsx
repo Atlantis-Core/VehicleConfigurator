@@ -4,13 +4,13 @@ import { Model } from "../../types/types";
 import { getModels } from "@api/getter";
 import LogoIcon from "@assets/logo.svg";
 import { useNavigate } from "react-router-dom";
-import ModelCard from "@components/modelCard";
+import ModelCard from "@components/features/model/modelCard";
 import { motion } from "framer-motion";
 import { getModelTypes } from "@lib/getModelTypes";
 import { BsBookmark } from "react-icons/bs";
 import { getAllSavedConfigurations } from "@hooks/useLocalConfiguration";
 import { HiOutlineShoppingCart } from "react-icons/hi2";
-import { preloadCarModels } from "@components/3DCarModel/CarModel";
+import { preloadCarModels } from "@components/features/model/3DCarModel/CarModel";
 import { countOrdersByLocalCustomer } from "@api/helper";
 
 const ModelPicker = () => {

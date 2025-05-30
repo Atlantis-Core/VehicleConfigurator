@@ -1,18 +1,18 @@
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { MdKeyboardArrowRight, MdMenu, MdClose, MdSettings, MdVisibility } from "react-icons/md";
-import VehicleViewer from '@components/3DCarModel/VehicleViewer';
+import VehicleViewer from '@components/features/model/3DCarModel/VehicleViewer';
 import styles from './Configurator.module.css';
 import { getCategories } from '@lib/getCategories';
 import { getNextSubcategory } from '@lib/getNextSubcategory';
 import { toast, ToastContainer } from 'react-toastify';
 import { LeasingProvider } from '@context/LeasingContext';
 import { ConfigurationProvider as ConfiguratorProvider, useConfiguration } from '@context/ConfigurationContext';
-import { ConfiguratorHeader, ConfiguratorContent, ConfiguratorSidebar } from '@components/configurator';
+import { ConfiguratorHeader, ConfiguratorContent, ConfiguratorSidebar } from '@components/features/configurator';
 import { loadConfigurationById, saveConfigurationLocally, loadConfigurationsForModel } from '@hooks/useLocalConfiguration';
-import Popup from '@components/popup';
+import Popup from '@components/ui/popup';
 import { Feature } from '../../types/types';
-import SaveConfigurationPopup from '@components/configurator/saveConfigurationPopup';
+import SaveConfigurationPopup from '@components/features/configurator/saveConfigurationPopup';
 
 const ConfiguratorLayout = () => {
   const { modelId } = useParams();
