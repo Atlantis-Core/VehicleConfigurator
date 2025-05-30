@@ -15,11 +15,18 @@
   transition: all 0.3s ease;
   background: #ffffff;
   position: relative;
+  min-height: 80px;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .paymentOption:hover {
   border-color: #0a66c2;
   box-shadow: 0 4px 12px rgba(10, 102, 194, 0.1);
+}
+
+.paymentOption:active {
+  transform: scale(0.98);
 }
 
 .paymentOption.selected {
@@ -40,6 +47,7 @@
   font-size: 20px;
   color: #6c757d;
   transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .paymentOption.selected .paymentIcon {
@@ -51,6 +59,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .paymentLabel {
@@ -58,12 +67,14 @@
   font-weight: 600;
   color: #333;
   margin-bottom: 4px;
+  line-height: 1.3;
 }
 
 .paymentDescription {
   font-size: 14px;
   color: #6c757d;
   line-height: 1.4;
+  word-wrap: break-word;
 }
 
 .checkmark {
@@ -79,8 +90,118 @@
   font-weight: bold;
   opacity: 0;
   transition: opacity 0.3s ease;
+  flex-shrink: 0;
+  margin-left: 8px;
 }
 
 .paymentOption.selected .checkmark {
   opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .paymentOptions {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .paymentOption {
+    padding: 14px;
+    min-height: 70px;
+    border-radius: 10px;
+  }
+
+  .paymentIcon {
+    width: 44px;
+    height: 44px;
+    margin-right: 14px;
+    font-size: 18px;
+    border-radius: 10px;
+  }
+
+  .paymentLabel {
+    font-size: 15px;
+    margin-bottom: 3px;
+  }
+
+  .paymentDescription {
+    font-size: 13px;
+    line-height: 1.3;
+  }
+
+  .checkmark {
+    width: 22px;
+    height: 22px;
+    font-size: 12px;
+    margin-left: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .paymentOptions {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .paymentOption {
+    padding: 12px;
+    min-height: 64px;
+    border-radius: 8px;
+    border-width: 1.5px;
+  }
+
+  .paymentOption:hover {
+    box-shadow: 0 2px 8px rgba(10, 102, 194, 0.1);
+  }
+
+  .paymentOption.selected {
+    box-shadow: 0 2px 12px rgba(10, 102, 194, 0.15);
+  }
+
+  .paymentIcon {
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+
+  .paymentLabel {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .paymentDescription {
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  .checkmark {
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+    margin-left: 4px;
+  }
+}
+
+.paymentOption:focus-visible {
+  outline: 2px solid #0a66c2;
+  outline-offset: 2px;
+}
+
+@keyframes selectPayment {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.paymentOption.selected {
+  animation: selectPayment 0.2s ease-out;
 }

@@ -37,6 +37,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
             required
             value={contactInfo.firstName}
             onChange={handleFieldChange}
+            placeholder="Max"
           />
         </div>
 
@@ -49,6 +50,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
             required
             value={contactInfo.lastName}
             onChange={handleFieldChange}
+            placeholder="Mustermann"
           />
         </div>
       </div>
@@ -62,6 +64,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
           required
           value={contactInfo.email}
           onChange={handleFieldChange}
+          placeholder="max.mustermann@email.com"
         />
       </div>
 
@@ -74,6 +77,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
           required
           value={contactInfo.phone}
           onChange={handleFieldChange}
+          placeholder="+49 30 12345678"
         />
       </div>
 
@@ -86,6 +90,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
           value={contactInfo.address}
           onChange={handleFieldChange}
           rows={3}
+          placeholder="Musterstraße 123, 10115 Berlin, Deutschland"
         />
       </div>
 

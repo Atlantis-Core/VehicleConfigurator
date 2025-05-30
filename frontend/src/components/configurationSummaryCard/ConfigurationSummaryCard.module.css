@@ -4,12 +4,16 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-bottom: 30px;
   padding: 24px;
+  transition: box-shadow 0.3s ease;
 }
 
 .summaryCard h2 {
   margin-top: 0;
   margin-bottom: 20px;
   color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
 .modelInfo {
@@ -19,11 +23,16 @@
 .modelInfo h3 {
   margin: 0;
   font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.3;
 }
 
 .modelType {
   color: #666;
   margin-top: 4px;
+  font-size: 1rem;
+  line-height: 1.4;
 }
 
 .configItems {
@@ -37,6 +46,7 @@
   grid-template-columns: 1fr 2fr 1fr;
   padding: 12px 0;
   align-items: center;
+  gap: 16px;
 }
 
 .configItem:not(:last-child) {
@@ -45,12 +55,15 @@
 
 .itemLabel {
   color: #666;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
 .colorValue {
   display: flex;
   align-items: center;
   gap: 10px;
+  font-size: 0.95rem;
 }
 
 .colorSwatch {
@@ -59,6 +72,8 @@
   border-radius: 50%;
   display: inline-block;
   border: 1px solid #ddd;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
 }
 
 .featureList {
@@ -69,6 +84,9 @@
 
 .featureList li {
   padding: 2px 0;
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.4;
 }
 
 .featureList li:not(:last-child) {
@@ -78,6 +96,8 @@
 .itemPrice {
   text-align: right;
   font-weight: 500;
+  color: #333;
+  font-size: 0.95rem;
 }
 
 .totalPrice {
@@ -87,13 +107,195 @@
   margin-top: 24px;
   padding: 16px 0;
   font-weight: 600;
+  border-top: 2px solid #0056b3;
 }
 
 .totalLabel {
   font-size: 1.2rem;
+  color: #333;
 }
 
 .totalValue {
   font-size: 1.5rem;
   color: #0056b3;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .summaryCard {
+    padding: 20px;
+    margin-bottom: 24px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .summaryCard h2 {
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+  }
+
+  .modelInfo {
+    margin-bottom: 20px;
+  }
+
+  .modelInfo h3 {
+    font-size: 1.3rem;
+  }
+
+  .modelType {
+    font-size: 0.9rem;
+    margin-top: 3px;
+  }
+
+  .configItems {
+    padding: 16px 0;
+  }
+
+  .configItem {
+    grid-template-columns: 1fr 1.5fr auto;
+    gap: 12px;
+    padding: 10px 0;
+  }
+
+  .itemLabel {
+    font-size: 0.9rem;
+  }
+
+  .colorValue {
+    font-size: 0.9rem;
+    gap: 8px;
+  }
+
+  .colorSwatch {
+    width: 18px;
+    height: 18px;
+  }
+
+  .featureList li {
+    font-size: 0.85rem;
+  }
+
+  .itemPrice {
+    font-size: 0.9rem;
+  }
+
+  .totalPrice {
+    margin-top: 20px;
+    padding: 14px 0;
+  }
+
+  .totalLabel {
+    font-size: 1.1rem;
+  }
+
+  .totalValue {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .summaryCard {
+    padding: 16px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+  }
+
+  .summaryCard h2 {
+    font-size: 1.2rem;
+    margin-bottom: 14px;
+    line-height: 1.2;
+  }
+
+  .modelInfo {
+    margin-bottom: 16px;
+  }
+
+  .modelInfo h3 {
+    font-size: 1.2rem;
+    line-height: 1.2;
+  }
+
+  .modelType {
+    font-size: 0.85rem;
+    margin-top: 2px;
+  }
+
+  .configItems {
+    padding: 14px 0;
+  }
+
+  .configItem {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 12px 0;
+    text-align: left;
+  }
+
+  .configItem:not(:last-child) {
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 16px;
+    margin-bottom: 4px;
+  }
+
+  .itemLabel {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 6px;
+  }
+
+  .colorValue {
+    font-size: 0.85rem;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+
+  .colorSwatch {
+    width: 16px;
+    height: 16px;
+  }
+
+  .featureList li {
+    font-size: 0.8rem;
+    padding: 1px 0;
+  }
+
+  .itemPrice {
+    font-size: 0.9rem;
+    text-align: left;
+    font-weight: 600;
+    color: #0056b3;
+    margin-top: 4px;
+  }
+
+  .totalPrice {
+    margin-top: 16px;
+    padding: 12px 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .totalLabel {
+    font-size: 1rem;
+  }
+
+  .totalValue {
+    font-size: 1.4rem;
+    align-self: flex-end;
+  }
+}
+
+.summaryCard:focus-within {
+  box-shadow: 0 4px 16px rgba(0, 86, 179, 0.15);
+}
+
+.itemLabel,
+.colorValue,
+.itemPrice {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }

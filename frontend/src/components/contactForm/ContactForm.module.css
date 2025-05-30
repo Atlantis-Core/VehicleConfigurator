@@ -10,14 +10,23 @@
   display: block;
   margin-bottom: 8px;
   color: #333;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
 .formGroup input {
-  width: 97.5%;
+  width: 100%;
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.formGroup input:focus {
+  outline: none;
+  border-color: #0056b3;
 }
 
 .formRow {
@@ -34,6 +43,14 @@
   font-size: 16px;
   font-family: inherit;
   resize: vertical;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  min-height: 120px;
+}
+
+.formGroup textarea:focus {
+  outline: none;
+  border-color: #0056b3;
 }
 
 .submitButton {
@@ -47,14 +64,151 @@
   cursor: pointer;
   width: 100%;
   margin-top: 20px;
-  transition: background-color 0.2s;
+  user-select: none;
 }
 
 .submitButton:hover {
   background-color: #003f85;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 86, 179, 0.2);
+}
+
+.submitButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 86, 179, 0.2);
 }
 
 .submitButton:disabled {
   background-color: #999;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.submitButton:focus-visible {
+  outline: 2px solid #0056b3;
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  .contactForm {
+    margin-top: 24px;
+  }
+
+  .formGroup {
+    margin-bottom: 18px;
+  }
+
+  .formGroup label {
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+  }
+
+  .formGroup input,
+  .formGroup textarea {
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 6px;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .formRow .formGroup {
+    margin-bottom: 18px;
+  }
+
+  .formGroup textarea {
+    min-height: 100px;
+  }
+
+  .submitButton {
+    padding: 16px 24px;
+    font-size: 1rem;
+    margin-top: 16px;
+    border-radius: 6px;
+  }
+
+  .submitButton:hover {
+    transform: none;
+    box-shadow: 0 2px 6px rgba(0, 86, 179, 0.15);
+  }
+}
+
+@media (max-width: 480px) {
+  .contactForm {
+    margin-top: 20px;
+  }
+
+  .formGroup {
+    margin-bottom: 16px;
+  }
+
+  .formGroup label {
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .formGroup input,
+  .formGroup textarea {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 4px;
+    border-width: 1.5px;
+  }
+
+  .formGroup textarea {
+    min-height: 90px;
+  }
+
+  .submitButton {
+    padding: 14px 20px;
+    font-size: 0.95rem;
+    margin-top: 14px;
+    border-radius: 4px;
+  }
+
+  .errorMessage {
+    font-size: 0.8rem;
+    margin-top: 3px;
+  }
+}
+
+.submitButton.loading {
+  position: relative;
+  color: transparent;
+}
+
+.submitButton.loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.submitButton.success {
+  background-color: #28a745;
+}
+
+.submitButton.success:hover {
+  background-color: #218838;
 }

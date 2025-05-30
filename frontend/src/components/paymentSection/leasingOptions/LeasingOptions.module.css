@@ -33,12 +33,19 @@
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  min-height: 120px;
 }
 
 .leasingOption:hover {
   border-color: #0a66c2;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(10, 102, 194, 0.1);
+}
+
+.leasingOption:active {
+  transform: scale(0.98);
 }
 
 .leasingOption.selected {
@@ -67,6 +74,7 @@
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .termHeader {
@@ -79,6 +87,7 @@
   font-size: 18px;
   font-weight: 700;
   color: #333;
+  line-height: 1.2;
 }
 
 .termMonths {
@@ -86,6 +95,7 @@
   font-size: 14px;
   color: #6c757d;
   margin-top: 4px;
+  line-height: 1.3;
 }
 
 .paymentAmount {
@@ -93,23 +103,27 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
 .euroIcon {
   color: #0a66c2;
   margin-right: 4px;
+  flex-shrink: 0;
 }
 
 .amount {
   font-size: 24px;
   font-weight: 700;
   color: #333;
+  line-height: 1.1;
 }
 
 .perMonth {
   font-size: 14px;
   color: #6c757d;
   margin-left: 4px;
+  flex-shrink: 0;
 }
 
 .termDetails {
@@ -122,11 +136,19 @@
   justify-content: space-between;
   font-size: 14px;
   color: #6c757d;
+  margin-bottom: 4px;
+  word-wrap: break-word;
+}
+
+.detail:last-child {
+  margin-bottom: 0;
 }
 
 .detail span:last-child {
   font-weight: 600;
   color: #333;
+  text-align: right;
+  margin-left: 8px;
 }
 
 .checkmark {
@@ -145,6 +167,7 @@
   font-weight: bold;
   opacity: 0;
   transition: opacity 0.3s ease;
+  flex-shrink: 0;
 }
 
 .leasingOption.selected .checkmark {
@@ -152,7 +175,178 @@
 }
 
 @media (max-width: 768px) {
+  .leasingOptions {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  .sectionTitle {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .titleIcon {
+    margin-right: 6px;
+  }
+
   .optionsGrid {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
+
+  .leasingOption {
+    padding: 16px;
+    min-height: 100px;
+    border-radius: 10px;
+  }
+
+  .termDuration {
+    font-size: 16px;
+  }
+
+  .termMonths {
+    font-size: 13px;
+  }
+
+  .amount {
+    font-size: 20px;
+  }
+
+  .perMonth {
+    font-size: 13px;
+  }
+
+  .detail {
+    font-size: 13px;
+  }
+
+  .checkmark {
+    width: 22px;
+    height: 22px;
+    font-size: 12px;
+    top: 10px;
+    right: 10px;
+  }
+
+  .popularBadge {
+    padding: 3px 10px;
+    font-size: 11px;
+    top: -8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .leasingOptions {
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 8px;
+  }
+
+  .sectionTitle {
+    font-size: 15px;
+    margin-bottom: 14px;
+  }
+
+  .optionsGrid {
+    gap: 10px;
+  }
+
+  .leasingOption {
+    padding: 14px;
+    min-height: 90px;
+    border-radius: 8px;
+    border-width: 1.5px;
+  }
+
+  .leasingOption:hover {
+    transform: none;
+    box-shadow: 0 2px 12px rgba(10, 102, 194, 0.1);
+  }
+
+  .leasingOption.selected {
+    box-shadow: 0 2px 16px rgba(10, 102, 194, 0.15);
+  }
+
+  .termHeader {
+    margin-bottom: 12px;
+  }
+
+  .termDuration {
+    font-size: 15px;
+  }
+
+  .termMonths {
+    font-size: 12px;
+    margin-top: 2px;
+  }
+
+  .paymentAmount {
+    margin-bottom: 12px;
+  }
+
+  .amount {
+    font-size: 18px;
+  }
+
+  .perMonth {
+    font-size: 12px;
+  }
+
+  .termDetails {
+    padding-top: 10px;
+  }
+
+  .detail {
+    font-size: 12px;
+    margin-bottom: 3px;
+  }
+
+  .checkmark {
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+    top: 8px;
+    right: 8px;
+  }
+
+  .popularBadge {
+    padding: 2px 8px;
+    font-size: 10px;
+    top: -6px;
+  }
+}
+
+.leasingOption:focus-visible {
+  outline: 2px solid #0a66c2;
+  outline-offset: 2px;
+}
+
+@keyframes selectLeasing {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.leasingOption.selected {
+  animation: selectLeasing 0.2s ease-out;
+}
+
+.termHeader,
+.paymentAmount,
+.termDetails {
+  overflow: hidden;
+}
+
+.detail span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
