@@ -5,7 +5,7 @@ import LeasingModal from '@components/features/leasing/leasingModal';
 import { Model } from '../../../../types/types';
 import styles from './ConfiguratorHeader.module.css';
 import { useSharedLeasing } from '@context/LeasingContext';
-import { deleteConfigurationLocally, saveConfigurationLocally } from '@hooks/useLocalConfiguration';
+import { loadConfigurationsForModel, deleteConfigurationLocally, saveConfigurationLocally } from '@hooks/useLocalConfiguration';
 import { useConfiguration } from '@context/ConfigurationContext';
 import { toast } from 'react-toastify';
 import { formatEuro } from '@utils/formatEuro';
@@ -63,11 +63,13 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
 
   const resetConfiguration = useCallback(() => {
     // Ask for confirmation
-    if (window.confirm('Are you sure you want to reset your configuration?')) {
+    if (window.confirm('Are you sure you want to reset ALL your configurations?')) {
       try {
-        if (loadedSavedConfig) {
-          deleteConfigurationLocally(loadedSavedConfig);
-        }
+        // Clear ALL saved configurations for this model
+        const savedConfigs = loadConfigurationsForModel(model.id);
+        savedConfigs.forEach(config => {
+          deleteConfigurationLocally(config.id);
+        });
         
         const url = new URL(window.location.href);
         url.searchParams.set('reset', 'true');
@@ -85,7 +87,7 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
         window.location.reload();
       }
     }
-  }, [loadedSavedConfig, model]);
+  }, [model.id]);
   
   // Check for reset parameter
   useEffect(() => {
