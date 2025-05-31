@@ -81,3 +81,75 @@ details[open] .toggleIcon {
   margin-right: 10px;
   flex-shrink: 0;
 }
+
+@media (max-width: 768px) {
+  .featuresAccordion {
+    margin-top: 12px;
+  }
+
+  .featuresToggle {
+    padding: 10px 12px;
+    gap: 8px;
+    border-radius: 6px;
+  }
+
+  .featureIcon {
+    font-size: 1rem;
+  }
+
+  .featureColumns {
+    padding: 12px;
+    gap: 12px;
+    margin-top: 8px;
+    border-radius: 6px;
+  }
+
+  .featureColumn h6 {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    gap: 6px;
+  }
+
+  .featureList li {
+    padding: 4px 0;
+    font-size: 0.85rem;
+  }
+
+  .featureBullet {
+    width: 6px;
+    height: 6px;
+    margin-right: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .featuresToggle {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+
+  .featureIcon {
+    font-size: 0.9rem;
+  }
+
+  .featureColumns {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .featureColumn h6 {
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+  }
+
+  .featureList li {
+    padding: 3px 0;
+    font-size: 0.8rem;
+  }
+
+  .featureBullet {
+    width: 5px;
+    height: 5px;
+    margin-right: 6px;
+  }
+}

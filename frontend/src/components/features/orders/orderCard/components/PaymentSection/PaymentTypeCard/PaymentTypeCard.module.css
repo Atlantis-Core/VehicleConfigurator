@@ -38,4 +38,62 @@
 .paymentAmount {
   display: block;
   color: #495057;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .paymentTypeCard {
+    border-radius: 8px;
+  }
+
+  .paymentHeader {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .paymentIconCircle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .paymentIcon {
+    font-size: 1.2rem;
+  }
+
+  .paymentType {
+    font-size: 1rem;
+    margin-bottom: 2px;
+  }
+
+  .paymentAmount {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .paymentTypeCard {
+    border-radius: 6px;
+  }
+
+  .paymentHeader {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .paymentIconCircle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .paymentIcon {
+    font-size: 1.1rem;
+  }
+
+  .paymentType {
+    font-size: 0.95rem;
+  }
+
+  .paymentAmount {
+    font-size: 0.85rem;
+  }
 }

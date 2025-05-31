@@ -33,3 +33,53 @@
   flex-direction: column;
   gap: 24px;
 }
+
+@media (max-width: 768px) {
+  .paymentSection {
+    padding: 16px 20px;
+    border-left: none;
+    border-top: 1px solid #e9ecef;
+    gap: 16px;
+  }
+
+  .priceTag {
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+
+  .priceLabel {
+    font-size: 0.9rem;
+  }
+
+  .priceValue {
+    font-size: 1.5rem;
+  }
+
+  .paymentDetails {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .paymentSection {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .priceTag {
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+
+  .priceLabel {
+    font-size: 0.85rem;
+  }
+
+  .priceValue {
+    font-size: 1.3rem;
+  }
+
+  .paymentDetails {
+    gap: 12px;
+  }
+}

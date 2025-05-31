@@ -53,3 +53,67 @@
   font-size: 54px;
   margin-bottom: 12px;
 }
+
+@media (max-width: 768px) {
+  .modelImage {
+    height: 140px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+
+  .vehicleImage {
+    max-height: 120px;
+    border-radius: 12px;
+  }
+
+  .modelImage:hover .vehicleImage {
+    transform: scale(1.01);
+  }
+
+  .modelBadge {
+    width: 120px;
+    height: 120px;
+    padding: 16px;
+  }
+
+  .vehicleIconLarge {
+    font-size: 40px;
+    margin-bottom: 8px;
+  }
+
+  .modelName {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .vehicleVisual {
+    margin-bottom: 12px;
+  }
+
+  .modelImage {
+    height: 120px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+
+  .vehicleImage {
+    max-height: 100px;
+    border-radius: 8px;
+  }
+
+  .modelBadge {
+    width: 100px;
+    height: 100px;
+    padding: 12px;
+  }
+
+  .vehicleIconLarge {
+    font-size: 32px;
+    margin-bottom: 6px;
+  }
+
+  .modelName {
+    font-size: 0.9rem;
+  }
+}

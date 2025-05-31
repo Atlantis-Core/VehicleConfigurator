@@ -30,3 +30,41 @@
 .orderDetails {
   padding: 0;
 }
+
+.missingConfig {
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .orderCard {
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .orderContent {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .ordersList {
+    gap: 1rem;
+  }
+
+  .missingConfig {
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .orderCard {
+    border-radius: 8px;
+    margin-bottom: 16px;
+  }
+
+  .ordersList {
+    gap: 0.75rem;
+  }
+}

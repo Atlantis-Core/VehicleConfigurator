@@ -216,3 +216,143 @@
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+@media (max-width: 768px) {
+  .orderStatusCard {
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 12px;
+  }
+
+  .statusHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .statusIconContainer {
+    margin-right: 0;
+    align-self: center;
+  }
+
+  .statusIcon {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  .statusInfo {
+    margin-right: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .statusInfo h4 {
+    font-size: 14px;
+  }
+
+  .statusDescription {
+    font-size: 12px;
+  }
+
+  .detailsToggle {
+    padding: 8px 12px;
+    font-size: 11px;
+    align-self: center;
+  }
+
+  .deliveryEstimate {
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+
+  .statusProgress {
+    margin-bottom: 16px;
+  }
+
+  .progressBar {
+    height: 4px;
+  }
+
+  .statusSteps {
+    gap: 10px;
+  }
+
+  .stepIconContainer {
+    margin-right: 8px;
+  }
+
+  .statusDot {
+    width: 16px;
+    height: 16px;
+  }
+
+  .completedIcon {
+    font-size: 8px;
+  }
+
+  .stepConnector {
+    height: 20px;
+    margin: 2px 0;
+  }
+
+  .stepLabel {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .orderStatusCard {
+    border-radius: 6px;
+    padding: 10px;
+  }
+
+  .statusIcon {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .statusInfo h4 {
+    font-size: 13px;
+  }
+
+  .statusDescription {
+    font-size: 11px;
+  }
+
+  .detailsToggle {
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+
+  .deliveryEstimate {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+
+  .statusSteps {
+    gap: 8px;
+  }
+
+  .stepIconContainer {
+    margin-right: 6px;
+  }
+
+  .statusDot {
+    width: 14px;
+    height: 14px;
+  }
+
+  .stepConnector {
+    height: 16px;
+  }
+
+  .stepLabel {
+    font-size: 11px;
+  }
+}

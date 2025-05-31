@@ -115,3 +115,137 @@
   border-radius: 50%;
   border: 2px solid #fff;
 }
+
+@media (max-width: 768px) {
+  .vehicleDetails {
+    padding: 16px;
+    border-radius: 8px;
+  }
+
+  .vehicleTitle {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+
+  .modelType {
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+  }
+
+  .specsTabs {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .specsTab {
+    min-height: auto;
+    border-radius: 8px;
+  }
+
+  .specHeader {
+    padding: 10px 12px;
+  }
+
+  .specIconWrapper {
+    width: 28px;
+    height: 28px;
+    margin-right: 8px;
+  }
+
+  .specIcon {
+    font-size: 14px;
+  }
+
+  .specHeader h5 {
+    font-size: 0.9rem;
+  }
+
+  .tabContent {
+    padding: 8px 12px;
+  }
+
+  .specItem {
+    grid-template-columns: 80px 1fr;
+    gap: 8px;
+    padding: 8px 0;
+  }
+
+  .specName {
+    font-size: 0.8rem;
+  }
+
+  .specValue {
+    font-size: 0.85rem;
+  }
+
+  .specValueWithSwatch {
+    font-size: 0.85rem;
+    gap: 6px;
+  }
+
+  .colorSwatch {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .vehicleDetails {
+    padding: 12px;
+  }
+
+  .vehicleTitle {
+    font-size: 1.1rem;
+  }
+
+  .modelType {
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+  }
+
+  .specsTabs {
+    gap: 12px;
+  }
+
+  .specHeader {
+    padding: 8px 10px;
+  }
+
+  .specIconWrapper {
+    width: 24px;
+    height: 24px;
+    margin-right: 6px;
+  }
+
+  .specIcon {
+    font-size: 12px;
+  }
+
+  .specHeader h5 {
+    font-size: 0.85rem;
+  }
+
+  .tabContent {
+    padding: 6px 10px;
+  }
+
+  .specItem {
+    grid-template-columns: 70px 1fr;
+    gap: 6px;
+    padding: 6px 0;
+  }
+
+  .specName {
+    font-size: 0.75rem;
+  }
+
+  .specValue {
+    font-size: 0.8rem;
+  }
+
+  .colorSwatch {
+    width: 14px;
+    height: 14px;
+  }
+}
