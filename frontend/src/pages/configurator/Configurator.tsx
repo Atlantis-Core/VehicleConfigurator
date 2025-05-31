@@ -77,8 +77,6 @@ const ConfiguratorLayout = () => {
       return;
     }
 
-    preventNextAutoLoad();
-
     const savedId = saveConfigurationLocally({
       model,
       selectedColor,

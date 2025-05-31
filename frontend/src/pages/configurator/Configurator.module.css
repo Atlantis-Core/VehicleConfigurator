@@ -5,7 +5,7 @@
   height: 100dvh;
   background-color: #f5f5f7;
   color: #333;
-  font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+  font-family: "Inter", "Segoe UI", "Arial", sans-serif;
   position: relative;
   padding-top: env(safe-area-inset-top);
   padding-left: env(safe-area-inset-left);
@@ -25,7 +25,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 1.5rem;
-  border-top: 1px solid #E5E5EA;
+  border-top: 1px solid #e5e5ea;
   margin-top: auto;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -38,7 +38,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: #007AFF;
+  background: #007aff;
   color: white;
   border: none;
   border-radius: 12px;
@@ -58,7 +58,7 @@
 }
 
 .nextButton:hover {
-  background: #0056CC;
+  background: #0056cc;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
 }
@@ -69,13 +69,13 @@
 }
 
 .nextButton:focus-visible {
-  outline: 2px solid #007AFF;
+  outline: 2px solid #007aff;
   outline-offset: 2px;
 }
 
 .nextButton:disabled {
-  background: #E5E5EA;
-  color: #8E8E93;
+  background: #e5e5ea;
+  color: #8e8e93;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
@@ -103,7 +103,7 @@
   width: 90%;
   padding: 1rem;
   margin: 0 auto;
-  background: #007AFF;
+  background: #007aff;
   color: white;
   border: none;
   border-radius: 16px;
@@ -120,7 +120,7 @@
 }
 
 .mobileNextButton:hover {
-  background: #0056CC;
+  background: #0056cc;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 122, 255, 0.3);
 }
@@ -131,13 +131,13 @@
 }
 
 .mobileNextButton:focus-visible {
-  outline: 2px solid #007AFF;
+  outline: 2px solid #007aff;
   outline-offset: 2px;
 }
 
 .mobileNextButton:disabled {
-  background: #E5E5EA;
-  color: #8E8E93;
+  background: #e5e5ea;
+  color: #8e8e93;
   cursor: not-allowed;
   transform: none;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
@@ -264,7 +264,7 @@
 
 .loader {
   border: 3px solid #f3f3f3;
-  border-top: 3px solid #1A73E8;
+  border-top: 3px solid #1a73e8;
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -273,8 +273,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .mobileOverlay {
@@ -342,7 +346,7 @@
   bottom: 0;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border-top: 1px solid #E5E5EA;
+  border-top: 1px solid #e5e5ea;
   padding: 1rem 2rem calc(1rem + env(safe-area-inset-bottom)) 2rem;
   margin-top: auto;
   flex-shrink: 0;
@@ -356,7 +360,7 @@
 
 .nextButton.loading::after,
 .mobileNextButton.loading::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -370,13 +374,21 @@
 }
 
 @keyframes buttonSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideInLeft {
@@ -408,7 +420,9 @@
 
   .mainContent {
     flex-direction: column;
-    height: calc(100dvh - 160px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    height: calc(
+      100dvh - 160px - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+    );
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
@@ -486,7 +500,9 @@
   }
 
   .mainContent {
-    height: calc(100dvh - 140px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    height: calc(
+      100dvh - 140px - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+    );
   }
 }
 
