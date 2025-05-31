@@ -1,0 +1,265 @@
+.configCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.configCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+}
+
+.configImageContainer {
+  height: 200px;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  position: relative;
+  overflow: hidden;
+}
+
+.configImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.configCard:hover .configImage {
+  transform: scale(1.05);
+}
+
+.configImagePlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #e9ecef, #f8f9fa);
+  color: #adb5bd;
+}
+
+.configImagePlaceholder span {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.configImagePlaceholder .placeholderText {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.configDetails {
+  padding: 1.5rem;
+}
+
+.configDetails h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.3;
+}
+
+.configDate {
+  color: #6c757d;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.configPrice {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #00adef;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.orderStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.orderStatus.pending {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+
+.orderStatus.completed {
+  background-color: #d1edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.orderStatus.cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.configSpecs {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.specRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.specRow:last-child {
+  border-bottom: none;
+}
+
+.specLabel {
+  color: #6c757d;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.specValue {
+  color: #212529;
+  font-weight: 600;
+  text-align: right;
+  font-size: 0.9rem;
+}
+
+.colorDisplay {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.colorSwatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.featuresSection {
+  margin-top: 1rem;
+}
+
+.featuresSectionTitle {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #495057;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.configFeatures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.feature {
+  background: linear-gradient(135deg, #e9ecef, #f8f9fa);
+  padding: 0.4rem 0.8rem;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  color: #495057;
+  font-weight: 500;
+  border: 1px solid #dee2e6;
+}
+
+.moreFeatures {
+  font-size: 0.8rem;
+  color: #6c757d;
+  padding: 0.5rem 0;
+  font-style: italic;
+}
+
+.configActions {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.continueButton,
+.startButton,
+.viewDetailsButton {
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  text-align: center;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.continueButton {
+  background: linear-gradient(135deg, #00adef, #0088cc);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 173, 239, 0.3);
+}
+
+.continueButton:hover {
+  background: linear-gradient(135deg, #0088cc, #006699);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 173, 239, 0.4);
+}
+
+.deleteButton {
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background-color: transparent;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  text-align: center;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.deleteButton:hover {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+  transform: translateY(-1px);
+}

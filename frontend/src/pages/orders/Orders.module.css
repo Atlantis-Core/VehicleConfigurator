@@ -20,7 +20,6 @@
   width: 100%;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
   .headerContent {
     padding: 0 1rem;
@@ -51,7 +50,6 @@
   }
 }
 
-/* Scrollbar styling for webkit browsers */
 .content::-webkit-scrollbar {
   width: 6px;
 }
@@ -68,23 +66,4 @@
 
 .content::-webkit-scrollbar-thumb:hover {
   background: #999;
-}
-
-/* Toast container positioning adjustment */
-:global(.Toastify__toast-container) {
-  z-index: 9999;
-}
-
-:global(.Toastify__toast-container--bottom-right) {
-  bottom: 1rem;
-  right: 1rem;
-}
-
-@media (max-width: 768px) {
-  :global(.Toastify__toast-container--bottom-right) {
-    bottom: 0.5rem;
-    right: 0.5rem;
-    left: 0.5rem;
-    width: auto;
-  }
 }
