@@ -1,4 +1,5 @@
 import { applyColorToMesh } from '@lib/applyColorToMesh';
+import { getImageUrl } from '@lib/getImageUrl';
 import { useGLTF } from '@react-three/drei';
 import { useEffect, useRef, forwardRef } from 'react';
 import { Group, Mesh, Object3D } from 'three';
@@ -18,11 +19,9 @@ export interface CarModelHandle {
   changeColor: (color: string, finish?: 'glossy' | 'matte' | 'metallic') => void;
 }
 
-// Add preload function to preload car models
 export const preloadCarModels = (urls: string[]) => {
   urls.forEach(url => {
-    // Use useGLTF.preload to cache the model
-    useGLTF.preload(url);
+    useGLTF.preload(getImageUrl(url));
   });
 };
 
