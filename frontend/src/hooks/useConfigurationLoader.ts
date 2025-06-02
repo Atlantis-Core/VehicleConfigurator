@@ -3,6 +3,7 @@ import { useConfiguration } from "@context/ConfigurationContext";
 import {
   loadConfigurationById,
   loadConfigurationsForModel,
+  SavedConfiguration,
 } from "@hooks/useLocalConfiguration";
 import { toast } from "react-toastify";
 import { Feature } from "../types/types";
@@ -31,7 +32,7 @@ export const useConfigurationLoader = (
     justSaved.current = true;
   };
 
-  const applyConfiguration = (config: any) => {
+  const applyConfiguration = (config: SavedConfiguration) => {
     if (config.selectedColor) setSelectedColor(config.selectedColor);
     if (config.selectedRim) setSelectedRim(config.selectedRim);
     if (config.selectedEngine) setSelectedEngine(config.selectedEngine);
@@ -40,14 +41,14 @@ export const useConfigurationLoader = (
     if (config.selectedUpholstery)
       setSelectedUpholstery(config.selectedUpholstery);
 
-    if (config.selectedAssistance?.length > 0) {
+    if (config.selectedAssistance && config.selectedAssistance.length > 0) {
       toggleAssistance(null);
       config.selectedAssistance.forEach((item: Feature) =>
         toggleAssistance(item)
       );
     }
 
-    if (config.selectedComfort?.length > 0) {
+    if (config.selectedComfort && config.selectedComfort.length > 0) {
       toggleComfort(null);
       config.selectedComfort.forEach((item: Feature) => toggleComfort(item));
     }
