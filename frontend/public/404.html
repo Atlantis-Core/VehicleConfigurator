@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found - Vehicle Configurator</title>
+  <style>
+    @font-face {
+      font-family: 'Corporate';
+      src: url('./assets/fonts/corporate_regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Corporate', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1f2937;
+    }
+
+    .container {
+      text-align: center;
+      max-width: 400px;
+      padding: 2rem;
+    }
+
+    .error-code {
+      font-size: 6rem;
+      font-weight: 600;
+      color: #00ADEF;
+      margin-bottom: 1rem;
+    }
+
+    .error-message {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .error-description {
+      font-size: 1rem;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .error-code {
+        font-size: 4rem;
+      }
+
+      .error-message {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="error-code">404</div>
+    <h1 class="error-message">Page Not Found</h1>
+    <p class="error-description">
+      The page you're looking for doesn't exist.
+    </p>
+  </div>
+</body>
+
+</html>
