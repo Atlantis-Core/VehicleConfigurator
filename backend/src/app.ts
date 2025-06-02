@@ -42,12 +42,4 @@ app.use("/api/configurations", configRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api", verifyEmailRoutes);
 
-const staticPath = path.join(__dirname, '../frontend/dist');
-
-app.use(express.static(staticPath));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(staticPath, "index.html"));
-});
-
 export { app, prisma };
