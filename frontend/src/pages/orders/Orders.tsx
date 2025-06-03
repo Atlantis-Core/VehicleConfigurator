@@ -75,7 +75,6 @@ const Orders = () => {
     }));
   };
 
-  // Handle login form submission
   const handleLoginSubmit = async (loginData: { firstName: string; lastName: string; email: string }) => {
     setIsLoading(true);
     try {

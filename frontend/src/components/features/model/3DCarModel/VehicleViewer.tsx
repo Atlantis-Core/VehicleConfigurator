@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { IoRefreshOutline, IoPauseOutline, IoHandRightOutline } from "react-icons/io5";
 import styles from './VehicleViewer.module.css';
-import { Color } from '../../types/types';
+import { Color } from '../../../../types/types';
 import { generateRadialGradient } from './helpers/generateRadialGradient';
 
 // Types

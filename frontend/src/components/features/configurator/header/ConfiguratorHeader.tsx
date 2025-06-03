@@ -31,7 +31,6 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
   } = useConfiguration();
 
   const saveConfiguration = useCallback(() => {
-    // Create an ID and save it
     const configId = saveConfigurationLocally({
       model,
       selectedColor,
@@ -103,9 +102,9 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
     }
   }, []);
 
-  const handleSaveClick = useCallback(() => {
+  const handleSaveClick = () => {
     saveConfiguration();
-  }, [saveConfiguration]);
+  };
 
   return (
     <div className={styles.topHeader}>

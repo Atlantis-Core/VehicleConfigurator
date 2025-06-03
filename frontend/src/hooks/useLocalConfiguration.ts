@@ -36,7 +36,6 @@ export function loadConfigurationById(id: string): SavedConfiguration | null {
   return configs[id] || null;
 }
 
-// Load configurations for a specific model
 export function loadConfigurationsForModel(modelId: number): SavedConfiguration[] {
   const configs = getAllSavedConfigurations();
   return Object.values(configs).filter(config => 
@@ -58,7 +57,6 @@ export function getAllSavedConfigurations(): SavedConfigurations {
   return raw ? JSON.parse(raw) : {};
 }
 
-// Get the count of saved configurations
 export function getSavedConfigurationsCount(): number {
   const configs = getAllSavedConfigurations();
   return Object.keys(configs).length;

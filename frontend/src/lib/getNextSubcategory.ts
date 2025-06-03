@@ -1,11 +1,9 @@
 import { Category } from "./getCategories";
 
 export const getNextSubcategory = ( categories: Category[], activeCategory: string, activeSubcategory: string) => {
-  // First find the current category
   const currentCategory = categories.find(c => c.id === activeCategory);
   if (!currentCategory) return null;
   
-  // Find the index of the current subcategory in this category
   const currentSubIndex = currentCategory.subcategories.findIndex(s => s.id === activeSubcategory);
   
   // If there's another subcategory in the current category, return it
@@ -27,6 +25,5 @@ export const getNextSubcategory = ( categories: Category[], activeCategory: stri
     };
   }
   
-  // If we're at the last subcategory of the last category, return null
   return null;
 };

@@ -15,7 +15,6 @@ export const useLeasing = (basePrice: number) => {
     return stored ? parseInt(stored) : null;
   };
   
-  // Initialize with the stored option or default to 36 months
   const [selectedOption, setSelectedOption] = useState<number>(getStoredOption() || 36);
   const leasingOptions = LEASING_OPTIONS;
   const [monthlyPayment, setMonthlyPayment] = useState<number>(0);
@@ -39,23 +38,19 @@ export const useLeasing = (basePrice: number) => {
     return Math.round(payment);
   };
 
-  // Get monthly payment for any option
   const getMonthlyPaymentFor = (months: number): number => {
     return calculateMonthlyPayment(months);
   };
 
-  // Calculate and set monthly payment for selected option
   useEffect(() => {
     const payment = calculateMonthlyPayment(selectedOption);
     setMonthlyPayment(payment);
   }, [selectedOption, basePrice]);
 
-  // Save to localStorage when option changes
   useEffect(() => {
     localStorage.setItem('selectedLeasingOption', selectedOption.toString());
   }, [selectedOption]);
 
-  // Select a new leasing option
   const selectLeasingOption = (months: number) => {
     if (leasingOptions.some(opt => opt.months === months)) {
       setSelectedOption(months);

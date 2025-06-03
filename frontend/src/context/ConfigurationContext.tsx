@@ -33,10 +33,8 @@ interface ConfigurationContextType {
   toggleAssistance: (assistance: Feature | null) => void;
   toggleComfort: (comfort: Feature | null) => void;
 
-  // Computed values
   totalPrice: number;
 
-  // Fetch data
   loadModelData: (modelId: string) => Promise<void>;
 }
 
@@ -126,11 +124,10 @@ export const ConfigurationProvider = ({ children }: { children: ReactNode }) => 
         getFeatures()
       ]);
 
-      // Set model state if found
       const foundModel = models.find((m) => m.id === parseInt(modelId || ''));
       if (foundModel) {
         setModel(foundModel);
-        // Set collections with brand filtering applied to all component types
+
         setRims(filterComponentsByBrand(rims, foundModel.brand));
         setColors(filterComponentsByBrand(colors, foundModel.brand));
         setEngines(filterComponentsByBrand(engines, foundModel.brand));

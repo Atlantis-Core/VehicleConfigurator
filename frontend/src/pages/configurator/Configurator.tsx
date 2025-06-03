@@ -40,7 +40,6 @@ const ConfiguratorLayout = () => {
     setLoadedSavedConfig
   );
 
-  // UI state
   const [activeCategory, setActiveCategory] = useState<string>('motorization');
   const [activeSubcategory, setActiveSubcategory] = useState<string>('engine');
   const [completedSteps, setCompletedSteps] = useState<Record<string, boolean>>({});
@@ -130,14 +129,8 @@ const ConfiguratorLayout = () => {
     if (category && category.subcategories.length > 0) {
       const subcategoryId = category.subcategories[0].id;
       setActiveSubcategory(subcategoryId);
-
-      // Mark subcategory as completed when viewed
-      if (['assistance', 'comfort', 'pricing', 'review'].includes(subcategoryId)) {
-        setCompletedSteps(prev => ({ ...prev, [subcategoryId]: true }));
-      }
     }
 
-    // Close mobile sidebar after selection
     setIsMobileSidebarOpen(false);
   };
 
@@ -162,7 +155,6 @@ const ConfiguratorLayout = () => {
     }
   }, [activeSubcategory]);
 
-  // Get current step info for mobile header
   const getCurrentStepInfo = () => {
     const currentCategory = categories.find(c => c.id === activeCategory);
     const currentSubcategory = currentCategory?.subcategories.find(s => s.id === activeSubcategory);

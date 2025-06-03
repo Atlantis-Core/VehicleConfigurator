@@ -8,19 +8,16 @@ interface LeasingProviderProps {
   totalPrice: number;
 }
 
-// Provider component that makes leasing available for every component
 export const LeasingProvider = ({ children, totalPrice }: LeasingProviderProps) => {
-  // Create single instance of leasing
   const leasingData = useLeasing(totalPrice);
   
-  return React.createElement(
-    LeasingContext.Provider,
-    { value: leasingData },
-    children
+  return (
+    <LeasingContext.Provider value={leasingData}>
+      {children}
+    </LeasingContext.Provider>
   );
 };
 
-// Custom hook that lets components access the leasing context
 export const useSharedLeasing = () => {
   const context = useContext(LeasingContext);
   if (context === undefined) {

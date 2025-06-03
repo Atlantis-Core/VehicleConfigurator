@@ -11,7 +11,7 @@ const StartPage = () => {
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 300);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -37,14 +37,14 @@ const StartPage = () => {
           <span className={styles.buttonIcon}>→</span>
         </button>
       </div>
-      
+
       <footer className={styles.footer}>
         <div className={styles.footerContent}>
           <div className={styles.copyright}>
             © {new Date().getFullYear()} Softwarequalität & React
           </div>
           <div className={styles.brandIcon}>
-            <img src={LogoIcon} alt="Logo Icon" className={styles.logoIcon}/>
+            <img src={LogoIcon} alt="Logo Icon" className={styles.logoIcon} />
           </div>
           <div className={styles.createdBy}>
             Created by David Pospisil (AIN 6 SE)
