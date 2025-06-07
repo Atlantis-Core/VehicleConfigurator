@@ -1,4 +1,19 @@
-export const calculateLeasingPrice = (months: number, basePrice: number): string => {
+export const calculateLeasingPrice = (
+  months: number,
+  basePrice: number
+): string => {
+
+  if (basePrice <= 0) {
+    return "0.00"; 
+  }
+
+  if (months <= 0) {
+    return basePrice.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  }
+
   // Dynamic interest rate calculation based on term length
   const baseRate = 0.025; // 2.5% base rate
   const termAdjustment = (48 - months) * 0.0005; // Shorter terms have higher rates
