@@ -1,36 +1,42 @@
-import React from 'react';
 import styles from './Comfort.module.css';
-import { Feature } from '../../../types/types';
+import { useAppDispatch, useAppSelector } from '@store/hooks';
+import { toggleComfort } from '@store/configurationSlice';
+import { selectConfiguration, selectSelectedOptions } from '@store/selectors';
+import { Feature } from '../../../../../types/types';
 import { getImageUrl } from '@lib/getImageUrl';
 
-interface ComfortProps {
-  comforts: Feature[];
-  selectedComfort: Feature[];
-  handleSelectComfort: (comfort: Feature | null) => void;
-}
+const ComfortSelection = () => {
+  const dispatch = useAppDispatch();
+  const { comforts } = useAppSelector(selectConfiguration);
+  const { selectedComfort } = useAppSelector(selectSelectedOptions);
 
-const Comfort: React.FC<ComfortProps> = ({ comforts, selectedComfort, handleSelectComfort }) => {
+  const handleComfortToggle = (comfort: Feature | null) => {
+    dispatch(toggleComfort(comfort));
+  };
+
+  const isSelected = (comfortId: number) => {
+    return selectedComfort.some(item => item.id === comfortId);
+  };
+
   return (
     <div className={styles.categoryContent}>
       <h3>Comfort Features</h3>
       <div className={styles.comfortOptions}>
         <div
-          className={`${styles.comfortOption} ${
-            selectedComfort.length === 0 ? styles.selected : ''
-          }`}
-          onClick={() => handleSelectComfort(null)} // Deselect any selected comfort
+          className={`${styles.comfortOption} ${selectedComfort.length === 0 ? styles.selected : ''
+            }`}
+          onClick={() => handleComfortToggle(null)}
         >
           <div className={styles.comfortDetails}>
             <span className={styles.comfortName}>No additional comfort</span>
           </div>
         </div>
-        {comforts.map((comfort) => (
+        {comforts.map((comfort: Feature) => (
           <div
             key={comfort.id}
-            className={`${styles.comfortOption} ${
-              selectedComfort.some(item => item.id === comfort.id) ? styles.selected : ''
-            }`}
-            onClick={() => handleSelectComfort(comfort)}
+            className={`${styles.comfortOption} ${isSelected(comfort.id) ? styles.selected : ''
+              }`}
+            onClick={() => handleComfortToggle(comfort)}
           >
             <img
               src={getImageUrl(comfort.imagePath)}
@@ -54,4 +60,4 @@ const Comfort: React.FC<ComfortProps> = ({ comforts, selectedComfort, handleSele
   );
 };
 
-export default Comfort;
+export default ComfortSelection;

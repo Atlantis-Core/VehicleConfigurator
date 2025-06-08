@@ -7,18 +7,22 @@ import { getCategories } from '@lib/getCategories';
 import { getNextSubcategory } from '@lib/getNextSubcategory';
 import { toast, ToastContainer } from 'react-toastify';
 import { LeasingProvider } from '@context/LeasingContext';
-import { ConfigurationProvider as ConfiguratorProvider, useConfiguration } from '@context/ConfigurationContext';
 import { ConfiguratorHeader, ConfiguratorContent, ConfiguratorSidebar, ConfiguratorMobileHeader } from '@components/features/configurator';
 import { saveConfigurationLocally } from '@hooks/useLocalConfiguration';
 import Popup from '@components/ui/popup';
 import SaveConfigurationPopup from '@components/features/configurator/saveConfigurationPopup';
 import { MobileSidebarHeader } from '@components/features/configurator/sidebar';
-import { useConfigurationLoader } from '@hooks/useConfigurationLoader';
+import { useAppDispatch, useAppSelector } from '@store/hooks';
+import { loadModelData } from '@store/configurationSlice';
+import { selectConfiguration, selectTotalPrice, selectSelectedOptions } from '@store/selectors';
+import { Provider } from 'react-redux';
+import { store } from '@store/store';
 
 const ConfiguratorLayout = () => {
   const { modelId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useAppDispatch();
 
   const [loadedSavedConfig, setLoadedSavedConfig] = useState<string | null>(null);
   const configurationId = location.state?.configurationId;
@@ -26,19 +30,23 @@ const ConfiguratorLayout = () => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [activeView, setActiveView] = useState<'viewer' | 'options'>('viewer');
 
+  const { model, loading, error } = useAppSelector(selectConfiguration);
+  const totalPrice = useAppSelector(selectTotalPrice);
   const {
-    model, selectedColor, selectedRim, selectedEngine,
-    selectedTransmission, selectedUpholstery, selectedAssistance,
-    selectedComfort, totalPrice
-  } = useConfiguration();
+    selectedColor,
+    selectedRim,
+    selectedEngine,
+    selectedTransmission,
+    selectedUpholstery,
+    selectedAssistance,
+    selectedComfort
+  } = useAppSelector(selectSelectedOptions);
 
-
-  const { preventNextAutoLoad } = useConfigurationLoader(
-    modelId,
-    configurationId,
-    loadedSavedConfig,
-    setLoadedSavedConfig
-  );
+  useEffect(() => {
+    if (modelId) {
+      dispatch(loadModelData(modelId));
+    }
+  }, [dispatch, modelId]);
 
   const [activeCategory, setActiveCategory] = useState<string>('motorization');
   const [activeSubcategory, setActiveSubcategory] = useState<string>('engine');
@@ -62,7 +70,6 @@ const ConfiguratorLayout = () => {
 
   const handleCompleteConfiguration = () => {
     if (calculateProgress() === 100) {
-
       // first ask if the configuration should be saved
       setIsSavePopupOpen(true);
     } else {
@@ -75,8 +82,6 @@ const ConfiguratorLayout = () => {
       toast.error('Could not complete configuration!');
       return;
     }
-
-    preventNextAutoLoad();
 
     const savedId = saveConfigurationLocally({
       model,
@@ -163,6 +168,21 @@ const ConfiguratorLayout = () => {
       subcategoryLabel: currentSubcategory?.label || ''
     };
   };
+
+  // Handle loading and error states
+  if (loading) return (
+    <div className={styles.loadingContainer}>
+      <div className={styles.loader}></div>
+      <p>Loading your configuration...</p>
+    </div>
+  );
+
+  if (error) return (
+    <div className={styles.loadingContainer}>
+      <p>Error loading configuration: {error}</p>
+      <button onClick={() => navigate('/configurator')}>Go Back</button>
+    </div>
+  );
 
   if (!model) return (
     <div className={styles.loadingContainer}>
@@ -302,11 +322,12 @@ const ConfiguratorLayout = () => {
   );
 }
 
+// No longer need the ConfiguratorProvider wrapper - Redux is provided at app level
 const Configurator = () => {
   return (
-    <ConfiguratorProvider>
+    <Provider store={store}>
       <ConfiguratorLayout />
-    </ConfiguratorProvider>
+    </Provider>
   );
 }
 

@@ -1,39 +1,45 @@
 import React from "react";
-import { Rim } from "../../../types/types";
+import { Rim } from "../../../../../types/types";
 import styles from "./Rims.module.css"
 import { getImageUrl } from "@lib/getImageUrl";
-import { IoCheckmarkCircle } from "react-icons/io5";
+import { useAppDispatch, useAppSelector } from '@store/hooks';
+import { setSelectedRim } from '@store/configurationSlice';
+import { selectConfiguration, selectSelectedOptions } from '@store/selectors';
 
-interface RimsProps {
-  rims: Rim[],
-  selectedRim?: Rim,
-  handleRimSelect: (rim: Rim) => void
-}
+const RimsSelection = () => {
+  const dispatch = useAppDispatch();
+  const { rims: availableRims } = useAppSelector(selectConfiguration);
+  const { selectedRim: selectedOption } = useAppSelector(selectSelectedOptions);
 
-const Rims: React.FC<RimsProps> = ({ rims, selectedRim, handleRimSelect }) => {
+  const onRimSelect = (rim: Rim) => {
+    dispatch(setSelectedRim(rim));
+  };
 
   return (
     <div className={styles.categoryContent}>
       <h3>Wheels & Rims</h3>
       <div className={styles.rimOptions}>
-        {rims.map((rim) => (
+        {availableRims.map((rim, index) => (
           <div
             key={rim.id}
-            className={`${styles.rimOption} ${selectedRim?.id === rim.id ? styles.selected : ''}`}
-            onClick={() => handleRimSelect(rim)}
+            className={`${styles.rimOption} ${selectedOption?.id === rim.id ? styles.selected : ''}`}
+            onClick={() => onRimSelect(rim)}
+            style={{ '--animation-order': index } as React.CSSProperties}
           >
             <div className={styles.rimImage}>
               <img src={getImageUrl(rim.imagePath)} alt={rim.name} />
             </div>
-            <div className={styles.rimInfo}>
-              <span className={styles.rimName}>{rim.name}</span>
-              <span className={styles.rimPrice}>+{rim.additionalPrice?.toLocaleString()} €</span>
+            <div className={styles.rimDetails}>
+              <div className={styles.rimName}>{rim.name}</div>
+              <div className={styles.rimSize}>{rim.size}"</div>
+              {rim.additionalPrice && rim.additionalPrice > 0 ? (
+                <div className={styles.rimPrice}>
+                  +€{rim.additionalPrice.toLocaleString()}
+                </div>
+              ) : (
+                <div className={styles.rimIncluded}>Included</div>
+              )}
             </div>
-            {selectedRim?.id === rim.id && (
-              <div className={styles.selectedIndicator}>
-                <IoCheckmarkCircle size={24} />
-              </div>
-            )}
           </div>
         ))}
       </div>
@@ -41,4 +47,4 @@ const Rims: React.FC<RimsProps> = ({ rims, selectedRim, handleRimSelect }) => {
   );
 }
 
-export default Rims;
+export default RimsSelection;

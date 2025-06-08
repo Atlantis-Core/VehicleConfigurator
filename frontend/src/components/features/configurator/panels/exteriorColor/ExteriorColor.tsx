@@ -1,14 +1,19 @@
 import React from 'react';
 import styles from './ExteriorColor.module.css';
-import { Color } from '../../../types/types';
+import { useAppDispatch, useAppSelector } from '@store/hooks';
+import { setSelectedColor } from '@store/configurationSlice';
+import { selectConfiguration, selectSelectedOptions } from '@store/selectors';
+import { Color } from '../../../../../types/types';
 
-interface ExteriorColorProps {
-  colors: Color[];
-  selectedColor?: Color;
-  onSelectColor: (color: Color) => void;
-}
+const ExteriorColor: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { colors } = useAppSelector(selectConfiguration);
+  const { selectedColor } = useAppSelector(selectSelectedOptions);
 
-const ExteriorColor: React.FC<ExteriorColorProps> = ({ colors, selectedColor, onSelectColor }) => {
+  const onSelectColor = (color: Color) => {
+    dispatch(setSelectedColor(color));
+  };
+
   const colorTypes = ['glossy', 'metallic', 'matte'];
 
   return (
@@ -28,10 +33,15 @@ const ExteriorColor: React.FC<ExteriorColorProps> = ({ colors, selectedColor, on
                   className={`${styles.colorOption} ${selectedColor?.id === color.id ? styles.selected : ''}`}
                   onClick={() => onSelectColor(color)}
                 >
-                  <div
-                    className={`${styles.colorSwatch} ${styles[color.type.toLowerCase()]}`}
-                    style={{ backgroundColor: color.hexCode || color.name }}
-                  ></div>
+                  <div className={styles.colorSwatchContainer}>
+                    <div
+                      className={`${styles.colorSwatch} ${styles[color.type.toLowerCase()]}`}
+                      style={{ backgroundColor: color.hexCode || color.name }}
+                    ></div>
+                    {selectedColor?.id === color.id && (
+                      <div className={styles.selectedCheck}>✓</div>
+                    )}
+                  </div>
                   <span className={styles.colorName}>{color.name}</span>
                   <div className={styles.colorDetails}>
                     <span className={styles.colorType}>{color.type}</span>

@@ -6,7 +6,9 @@ import { Model } from '../../../../types/types';
 import styles from './ConfiguratorHeader.module.css';
 import { useSharedLeasing } from '@context/LeasingContext';
 import { loadConfigurationsForModel, deleteConfigurationLocally, saveConfigurationLocally } from '@hooks/useLocalConfiguration';
-import { useConfiguration } from '@context/ConfigurationContext';
+import { useAppDispatch, useAppSelector } from '@store/hooks';
+import { resetConfiguration as resetReduxConfiguration } from '@store/configurationSlice';
+import { selectSelectedOptions } from '@store/selectors';
 import { toast } from 'react-toastify';
 import { formatEuro } from '@utils/formatEuro';
 
@@ -19,16 +21,21 @@ interface ConfiguratorHeaderProps {
 
 const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, totalPrice, loadedSavedConfig }) => {
   const [isLeasingModalOpen, setIsLeasingModalOpen] = useState(false);
+  const dispatch = useAppDispatch();
   const { selectedOption: selectedLeasingOption, getMonthlyPaymentFor } = useSharedLeasing();
 
   const openLeasingModal = () => setIsLeasingModalOpen(true);
   const closeLeasingModal = () => setIsLeasingModalOpen(false);
 
   const {
-    selectedColor, selectedRim, selectedEngine,
-    selectedTransmission, selectedUpholstery, 
-    selectedAssistance, selectedComfort
-  } = useConfiguration();
+    selectedColor,
+    selectedRim,
+    selectedEngine,
+    selectedTransmission,
+    selectedUpholstery,
+    selectedAssistance,
+    selectedComfort
+  } = useAppSelector(selectSelectedOptions);
 
   const saveConfiguration = useCallback(() => {
     const configId = saveConfigurationLocally({
@@ -69,6 +76,9 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
         savedConfigs.forEach(config => {
           deleteConfigurationLocally(config.id);
         });
+
+        // Reset Redux state
+        dispatch(resetReduxConfiguration());
         
         const url = new URL(window.location.href);
         url.searchParams.set('reset', 'true');
@@ -86,7 +96,7 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
         window.location.reload();
       }
     }
-  }, [model.id]);
+  }, [model.id, dispatch]);
   
   // Check for reset parameter
   useEffect(() => {

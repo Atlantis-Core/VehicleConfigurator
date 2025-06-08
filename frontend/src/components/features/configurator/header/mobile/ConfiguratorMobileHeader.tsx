@@ -1,26 +1,25 @@
-import styles from "./ConfiguratorMobileHeader.module.css";
-import { MdClose, MdMenu, MdSettings, MdVisibility } from 'react-icons/md';
+import React from 'react';
+import { MdMenu, MdSettings, MdVisibility } from 'react-icons/md';
+import styles from './ConfiguratorMobileHeader.module.css';
 
 interface ConfiguratorMobileHeaderProps {
   isMobileSidebarOpen: boolean;
   setIsMobileSidebarOpen: (open: boolean) => void;
-  getCurrentStepInfo: () => {
-    categoryLabel: string;
-    subcategoryLabel: string;
-  };
+  getCurrentStepInfo: () => { categoryLabel: string; subcategoryLabel: string };
   calculateProgress: () => number;
   activeView: 'viewer' | 'options';
   setActiveView: (view: 'viewer' | 'options') => void;
 }
 
-const ConfiguratorMobileHeader = ({
+const ConfiguratorMobileHeader: React.FC<ConfiguratorMobileHeaderProps> = ({
   isMobileSidebarOpen,
   setIsMobileSidebarOpen,
   getCurrentStepInfo,
   calculateProgress,
   activeView,
   setActiveView
-}: ConfiguratorMobileHeaderProps) => {
+}) => {
+  const stepInfo = getCurrentStepInfo();
 
   return (
     <div className={styles.mobileHeader}>
@@ -28,17 +27,17 @@ const ConfiguratorMobileHeader = ({
         <button
           className={styles.mobileMenuButton}
           onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-          aria-label="Toggle navigation menu"
+          aria-label="Toggle configuration menu"
         >
-          {isMobileSidebarOpen ? <MdClose size={24} /> : <MdMenu size={24} />}
+          <MdMenu size={24} />
         </button>
 
         <div className={styles.mobileStepInfo}>
           <div className={styles.mobileStepTitle}>
-            {getCurrentStepInfo().subcategoryLabel}
+            {stepInfo.categoryLabel}
           </div>
           <div className={styles.mobileStepSubtitle}>
-            {getCurrentStepInfo().categoryLabel}
+            {stepInfo.subcategoryLabel}
           </div>
         </div>
 
@@ -73,7 +72,7 @@ const ConfiguratorMobileHeader = ({
           onClick={() => setActiveView('options')}
         >
           <MdSettings size={18} />
-          <span>Configure</span>
+          <span>Options</span>
         </button>
       </div>
     </div>

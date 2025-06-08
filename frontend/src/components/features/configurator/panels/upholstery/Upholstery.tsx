@@ -1,26 +1,29 @@
-import React from 'react';
 import styles from './Upholstery.module.css';
-import { Interior } from '../../../types/types';
+import { useAppDispatch, useAppSelector } from '@store/hooks';
+import { setSelectedUpholstery } from '@store/configurationSlice';
+import { selectConfiguration, selectSelectedOptions } from '@store/selectors';
+import { Interior } from '../../../../../types/types';
 import { getImageUrl } from '@lib/getImageUrl';
 
-interface UpholsteryProps {
-  upholsteries: Interior[];
-  selectedUpholstery?: Interior;
-  handleSelectUpholstery: (upholstery: Interior) => void;
-}
+const UpholsterySelection = () => {
+  const dispatch = useAppDispatch();
+  const { upholsteries } = useAppSelector(selectConfiguration);
+  const { selectedUpholstery } = useAppSelector(selectSelectedOptions);
 
-const Upholstery: React.FC<UpholsteryProps> = ({ upholsteries, selectedUpholstery, handleSelectUpholstery }) => {
+  const handleUpholsterySelect = (upholstery: Interior) => {
+    dispatch(setSelectedUpholstery(upholstery));
+  };
+
   return (
     <div className={styles.categoryContent}>
-      <h3>Upholstery</h3>
+      <h3>Select Interior</h3>
       <div className={styles.upholsteryOptions}>
-        {upholsteries.map((upholstery) => (
+        {upholsteries.map((upholstery, index) => (
           <div
             key={upholstery.id}
-            className={`${styles.upholsteryOption} ${
-              selectedUpholstery?.id === upholstery.id ? styles.selected : ''
-            }`}
-            onClick={() => handleSelectUpholstery(upholstery)}
+            className={`${styles.upholsteryOption} ${selectedUpholstery?.id === upholstery.id ? styles.selected : ''
+              }`}
+            onClick={() => handleUpholsterySelect(upholstery)}
           >
             <img
               src={getImageUrl(upholstery.imagePath)}
@@ -45,4 +48,4 @@ const Upholstery: React.FC<UpholsteryProps> = ({ upholsteries, selectedUpholster
   );
 };
 
-export default Upholstery;
+export default UpholsterySelection;

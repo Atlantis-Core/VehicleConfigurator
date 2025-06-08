@@ -1,31 +1,38 @@
-import { Transmission } from "../../../types/types";
+import { Transmission } from "../../../../../types/types";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { setSelectedTransmission } from "@store/configurationSlice";
+import { selectConfiguration, selectSelectedOptions } from "@store/selectors";
 import styles from "./Transmissions.module.css";
 
-interface TransmissionsProp {
-  transmissions: Transmission[];
-  selectedTransmission?: Transmission;
-  handleSelectTransmission: (transmission: Transmission) => void;
-}
+const TransmissionsSelection = () => {
+  const dispatch = useAppDispatch();
+  const { transmissions } = useAppSelector(selectConfiguration);
+  const { selectedTransmission } = useAppSelector(selectSelectedOptions);
 
-const Transmissions: React.FC<TransmissionsProp> = ({ transmissions, selectedTransmission, handleSelectTransmission }) => {
+  const handleTransmissionSelect = (transmission: Transmission) => {
+    dispatch(setSelectedTransmission(transmission));
+  };
+
   return (
     <div className={styles.categoryContent}>
-      <h3>Transmission</h3>
-      <ul className={styles.transmissionList}>
-        {transmissions.map((transmission) => (
-          <li
+      <h3>Select Transmission</h3>
+      <div className={styles.transmissionOptions}>
+        {transmissions.map((transmission, index) => (
+          <div
             key={transmission.id}
             className={`${styles.transmissionItem} ${
               selectedTransmission?.id === transmission.id ? styles.selected : ""
             }`}
-            onClick={() => handleSelectTransmission(transmission)}
+            onClick={() => handleTransmissionSelect(transmission)}
+            style={{ "--animation-order": index } as React.CSSProperties}
           >
             <div className={styles.transmissionName}>{transmission.name}</div>
-          </li>
+            <div className={styles.transmissionIncluded}>Included</div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
 
-export default Transmissions;
+export default TransmissionsSelection;

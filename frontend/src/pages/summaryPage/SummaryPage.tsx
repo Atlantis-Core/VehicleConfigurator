@@ -57,12 +57,10 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
   const [isComplete, setIsComplete] = useState(false);
   const [orderId, setOrderId] = useState("-");
 
-  // email
   const [awaitingVerification, setAwaitingVerification] = useState(false);
   const isVerified = useEmailVerification(contactInfo.email, awaitingVerification);
 
   useEffect(() => {
-    // Initialize contact info from local storage or default values
     const storedCustomer = getLocalCustomer();
 
     if (storedCustomer) {

@@ -18,7 +18,8 @@
       "@globals/*": ["globals/*"],
       "@context/*": ["context/*"],
       "@utils/*": ["utils/*"],
-      "@types/*": ["types/*"]
+      "@types/*": ["types/*"],
+      "@store/*": ["store/*"]
     },
     "allowJs": true,
     "skipLibCheck": true,

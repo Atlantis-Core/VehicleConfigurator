@@ -1,17 +1,67 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styles from './Pricing.module.css';
 import { BsInfoCircleFill } from 'react-icons/bs';
 import { useSharedLeasing } from '@context/LeasingContext';
 import { formatEuro } from '@utils/formatEuro';
+import { useAppSelector } from '@store/hooks';
+import { selectConfiguration, selectSelectedOptions, selectTotalPrice } from '@store/selectors';
 
-interface PricingProps {
-  totalPrice: number;
-}
-
-const Pricing: React.FC<PricingProps> = ({ totalPrice }) => {
+const PricingPanel = () => {
   const [selectedOption, setSelectedOption] = useState<'cash' | 'leasing'>('cash');
 
   const { selectedOption: leasingSelectedOption, leasingOptions, getMonthlyPaymentFor } = useSharedLeasing();
+  const totalPrice = useAppSelector(selectTotalPrice);
+  const { model } = useAppSelector(selectConfiguration);
+  const {
+    selectedColor,
+    selectedRim,
+    selectedEngine,
+    selectedTransmission,
+    selectedUpholstery,
+    selectedAssistance,
+    selectedComfort
+  } = useAppSelector(selectSelectedOptions);
+
+  const priceBreakdown = [
+    {
+      label: 'Base Price',
+      price: model?.basePrice || 0,
+      included: true
+    },
+    {
+      label: 'Engine',
+      price: selectedEngine?.additionalPrice || 0,
+      included: (selectedEngine?.additionalPrice || 0) === 0,
+      name: selectedEngine?.name
+    },
+    {
+      label: 'Transmission',
+      price: 0,
+      included: true,
+      name: selectedTransmission?.name
+    },
+    {
+      label: 'Exterior Color',
+      price: selectedColor?.additionalPrice || 0,
+      included: (selectedColor?.additionalPrice || 0) === 0,
+      name: selectedColor?.name
+    },
+    {
+      label: 'Rims',
+      price: selectedRim?.additionalPrice || 0,
+      included: (selectedRim?.additionalPrice || 0) === 0,
+      name: selectedRim?.name
+    },
+    {
+      label: 'Interior',
+      price: selectedUpholstery?.additionalPrice || 0,
+      included: (selectedUpholstery?.additionalPrice || 0) === 0,
+      name: selectedUpholstery?.name
+    }
+  ];
+
+  const assistanceTotal = selectedAssistance.reduce((sum, item) => sum + (item?.additionalPrice || 0), 0);
+  const comfortTotal = selectedComfort.reduce((sum, item) => sum + (item?.additionalPrice || 0), 0);
 
   const renderPricingDetails = () => {
     switch (selectedOption) {
@@ -71,4 +121,4 @@ const Pricing: React.FC<PricingProps> = ({ totalPrice }) => {
   );
 };
 
-export default Pricing;
+export default PricingPanel;

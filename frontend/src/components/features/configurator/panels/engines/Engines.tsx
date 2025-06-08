@@ -1,13 +1,18 @@
-import { Engine } from "../../../types/types";
+import { Engine } from "../../../../../types/types";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { setSelectedEngine } from "@store/configurationSlice";
+import { selectConfiguration, selectSelectedOptions } from "@store/selectors";
 import styles from "./Engines.module.css";
 
-interface EnginesProp {
-  engines: Engine[];
-  selectedEngine?: Engine;
-  handleSelectEngine: (engine: Engine) => void;
-}
+const EngineSelection = () => {
+  const dispatch = useAppDispatch();
+  const { engines } = useAppSelector(selectConfiguration);
+  const { selectedEngine } = useAppSelector(selectSelectedOptions);
 
-const Engines: React.FC<EnginesProp> = ({ engines, selectedEngine, handleSelectEngine }) => {
+  const handleEngineSelect = (engine: Engine) => {
+    dispatch(setSelectedEngine(engine));
+  };
+
   return (
     <div className={styles.categoryContent}>
       <h3>Engine</h3>
@@ -18,7 +23,7 @@ const Engines: React.FC<EnginesProp> = ({ engines, selectedEngine, handleSelectE
             className={`${styles.engineItem} ${
               selectedEngine?.id === engine.id ? styles.selected : ""
             }`}
-            onClick={() => handleSelectEngine(engine)}
+            onClick={() => handleEngineSelect(engine)}
           >
             <div className={styles.engineName}>{engine.name}</div>
             <div className={styles.engineDescription}>{engine.description}</div>
@@ -32,4 +37,4 @@ const Engines: React.FC<EnginesProp> = ({ engines, selectedEngine, handleSelectE
   );
 };
 
-export default Engines;
+export default EngineSelection;

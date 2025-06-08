@@ -1,87 +1,123 @@
-import { useConfiguration } from "@context/ConfigurationContext";
+import { useAppSelector } from "@store/hooks";
+import { selectSelectedOptions, selectTotalPrice } from "@store/selectors";
 import { Model } from "../../../../types/types";
 import styles from "./SaveConfigurationPopup.module.css";
 
 interface SaveConfigurationPopupProps {
   model: Model;
-  onContinue: () => void
-  onSaveAndContinue: () => void
+  onContinue: () => void;
+  onSaveAndContinue: () => void;
 }
 
-const SaveConfigurationPopup: React.FC<SaveConfigurationPopupProps> = ({ 
+const SaveConfigurationPopup = ({ 
   model, 
   onContinue, 
-  onSaveAndContinue,
-}) => {
-
+  onSaveAndContinue 
+}: SaveConfigurationPopupProps) => {
   const {
-      selectedColor, selectedRim, selectedEngine, totalPrice,
-    } = useConfiguration();
+    selectedColor,
+    selectedRim,
+    selectedEngine,
+    selectedTransmission,
+    selectedUpholstery,
+    selectedAssistance,
+    selectedComfort
+  } = useAppSelector(selectSelectedOptions);
+  const totalPrice = useAppSelector(selectTotalPrice);
 
   return (
     <div className={styles.savePopupContent}>
-      <p>Would you like to save your configuration before proceeding to summary?</p>
-
-      {model && (
-        <div className={styles.configSummary}>
-          <h3 className={styles.configModelName}>{model.name}</h3>
-
-          <div className={styles.configSpecs}>
-            {selectedColor && (
-              <div className={styles.configSpec}>
-                <span className={styles.specLabel}>Color:</span>
-                <div className={styles.specValue}>
-                  <div
-                    className={styles.colorSwatch}
-                    style={{ backgroundColor: selectedColor.hexCode || '#333' }}
-                  />
-                  <span>{selectedColor.name}</span>
-                </div>
-              </div>
-            )}
-
-            {selectedEngine && (
-              <div className={styles.configSpec}>
-                <span className={styles.specLabel}>Engine:</span>
-                <span className={styles.specValue}>{selectedEngine.name}</span>
-              </div>
-            )}
-
-            {selectedRim && (
-              <div className={styles.configSpec}>
-                <span className={styles.specLabel}>Wheels:</span>
-                <span className={styles.specValue}>{selectedRim.size}" {selectedRim.name}</span>
-              </div>
-            )}
-          </div>
-
-          <div className={styles.configTotalPrice}>
-            <span>Total Price:</span>
-            <span className={styles.priceValue}>${totalPrice.toLocaleString()}</span>
-          </div>
+      <p>
+        Would you like to save this configuration before proceeding to checkout?
+        You can load it later to continue where you left off.
+      </p>
+      
+      <div className={styles.configSummary}>
+        <h4 className={styles.configModelName}>{model.name}</h4>
+        
+        <div className={styles.configSpecs}>
+          {selectedEngine && (
+            <div className={styles.configSpec}>
+              <span className={styles.specLabel}>Engine:</span>
+              <span className={styles.specValue}>{selectedEngine.name}</span>
+            </div>
+          )}
+          
+          {selectedTransmission && (
+            <div className={styles.configSpec}>
+              <span className={styles.specLabel}>Transmission:</span>
+              <span className={styles.specValue}>{selectedTransmission.name}</span>
+            </div>
+          )}
+          
+          {selectedColor && (
+            <div className={styles.configSpec}>
+              <span className={styles.specLabel}>Color:</span>
+              <span className={styles.specValue}>
+                <div
+                  className={styles.colorSwatch}
+                  style={{ backgroundColor: selectedColor.hexCode }}
+                />
+                {selectedColor.name}
+              </span>
+            </div>
+          )}
+          
+          {selectedRim && (
+            <div className={styles.configSpec}>
+              <span className={styles.specLabel}>Rims:</span>
+              <span className={styles.specValue}>{selectedRim.name}</span>
+            </div>
+          )}
+          
+          {selectedUpholstery && (
+            <div className={styles.configSpec}>
+              <span className={styles.specLabel}>Interior:</span>
+              <span className={styles.specValue}>{selectedUpholstery.name}</span>
+            </div>
+          )}
+          
+          {selectedAssistance.length > 0 && (
+            <div className={styles.configSpec}>
+              <span className={styles.specLabel}>Assistance:</span>
+              <span className={styles.specValue}>
+                {selectedAssistance.length} feature{selectedAssistance.length > 1 ? 's' : ''}
+              </span>
+            </div>
+          )}
+          
+          {selectedComfort.length > 0 && (
+            <div className={styles.configSpec}>
+              <span className={styles.specLabel}>Comfort:</span>
+              <span className={styles.specValue}>
+                {selectedComfort.length} feature{selectedComfort.length > 1 ? 's' : ''}
+              </span>
+            </div>
+          )}
         </div>
-      )}
-
+        
+        <div className={styles.configTotalPrice}>
+          <span>Total Price:</span>
+          <span className={styles.priceValue}>€{totalPrice.toLocaleString()}</span>
+        </div>
+      </div>
+      
       <div className={styles.popupActions}>
         <button
-          onClick={() => {
-            onContinue();
-          }}
           className={styles.secondaryButton}
+          onClick={onContinue}
         >
           Continue Without Saving
         </button>
         <button
-          onClick={() => {
-            onSaveAndContinue();
-          }}
           className={styles.primaryButton}
+          onClick={onSaveAndContinue}
         >
           Save & Continue
         </button>
       </div>
     </div>
   );
-}
+};
 
 export default SaveConfigurationPopup;

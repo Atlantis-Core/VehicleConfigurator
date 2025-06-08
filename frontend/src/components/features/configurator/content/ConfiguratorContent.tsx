@@ -1,7 +1,15 @@
-import { useConfiguration } from '@context/ConfigurationContext';
+import { useAppSelector } from '@store/hooks';
+import { selectConfiguration } from '@store/selectors';
 import {
-  EngineSelection, TransmissionsSelection, ExteriorColorSelection, RimsSelection,
-  UpholsterySelection, AssistanceSelection, ComfortSelection, PricingPanel, ConfigurationReview
+  EngineSelection,
+  AssistanceSelection,
+  ComfortSelection,
+  ExteriorColorSelection,
+  RimsSelection,
+  TransmissionsSelection,
+  UpholsterySelection,
+  PricingPanel,
+  ConfigurationReview,
 } from '../panels';
 
 interface ConfiguratorContentProps {
@@ -10,92 +18,53 @@ interface ConfiguratorContentProps {
   goToSection: (category: string, subcategory: string) => void;
 }
 
-const ConfiguratorContent = ({ activeSubcategory, completeConfiguration, goToSection }: ConfiguratorContentProps) => {
-  
-  const {
-    engines, selectedEngine, setSelectedEngine,
-    transmissions, selectedTransmission, setSelectedTransmission,
-    colors, selectedColor, setSelectedColor,
-    rims, selectedRim, setSelectedRim,
-    upholsteries, selectedUpholstery, setSelectedUpholstery,
-    assistances, selectedAssistance, toggleAssistance,
-    comforts, selectedComfort, toggleComfort,
-    totalPrice
-  } = useConfiguration();
+const ConfiguratorContent = ({ 
+  activeSubcategory, 
+  completeConfiguration, 
+  goToSection 
+}: ConfiguratorContentProps) => {
+  const { loading } = useAppSelector(selectConfiguration);
 
-  switch (activeSubcategory) {
-    case 'engine':
-      return (
-        <EngineSelection
-          engines={engines}
-          selectedEngine={selectedEngine}
-          handleSelectEngine={setSelectedEngine}
-        />
-      );
-    case 'transmission':
-      return (
-        <TransmissionsSelection
-          transmissions={transmissions}
-          selectedTransmission={selectedTransmission}
-          handleSelectTransmission={setSelectedTransmission}
-        />
-      );
-    case 'exterior-color':
-      return (
-        <ExteriorColorSelection
-          colors={colors}
-          selectedColor={selectedColor}
-          onSelectColor={setSelectedColor}
-        />
-      );
-    case 'rims':
-      return (
-        <RimsSelection
-          rims={rims}
-          selectedRim={selectedRim}
-          handleRimSelect={setSelectedRim}
-        />
-      );
-    case 'upholstery':
-      return (
-        <UpholsterySelection
-          upholsteries={upholsteries}
-          selectedUpholstery={selectedUpholstery}
-          handleSelectUpholstery={setSelectedUpholstery}
-        />
-      );
-    case 'assistance':
-      return (
-        <AssistanceSelection
-          assistances={assistances}
-          selectedAssistance={selectedAssistance}
-          handleSelectAssistance={toggleAssistance}
-        />
-      );
-    case 'comfort':
-      return (
-        <ComfortSelection
-          comforts={comforts}
-          selectedComfort={selectedComfort}
-          handleSelectComfort={toggleComfort}
-        />
-      );
-    case 'pricing':
-      return (
-        <PricingPanel
-          totalPrice={totalPrice}
-        />
-      );
-    case 'review':
-      return (
-        <ConfigurationReview
-          onComplete={completeConfiguration}
-          onEditSection={goToSection}
-        />
-      );
-    default:
-      return null;
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loader"></div>
+        <p>Loading configuration options...</p>
+      </div>
+    );
   }
-}
+
+  const renderContent = () => {
+    switch (activeSubcategory) {
+      case 'engine':
+        return <EngineSelection />;
+      case 'transmission':
+        return <TransmissionsSelection />;
+      case 'exterior-color':
+        return <ExteriorColorSelection />;
+      case 'rims':
+        return <RimsSelection />;
+      case 'upholstery':
+        return <UpholsterySelection />;
+      case 'assistance':
+        return <AssistanceSelection />;
+      case 'comfort':
+        return <ComfortSelection />;
+      case 'pricing':
+        return <PricingPanel />;
+      case 'review':
+        return (
+          <ConfigurationReview
+            completeConfiguration={completeConfiguration}
+            goToSection={goToSection}
+          />
+        );
+      default:
+        return <div>Select a configuration option from the sidebar</div>;
+    }
+  };
+
+  return <div>{renderContent()}</div>;
+};
 
 export default ConfiguratorContent;
