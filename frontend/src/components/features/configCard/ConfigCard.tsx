@@ -2,7 +2,6 @@ import { getImageUrl } from "@lib/getImageUrl";
 import styles from "./ConfigCard.module.css";
 import { SavedConfiguration } from "@hooks/useLocalConfiguration";
 import { formatDistanceToNow } from "date-fns";
-import { useNavigate } from "react-router-dom";
 
 interface ConfigCardProps {
   config: SavedConfiguration;
@@ -11,8 +10,6 @@ interface ConfigCardProps {
 }
 
 const ConfigCard: React.FC<ConfigCardProps> = ({ config, deleteAction, continueAction }) => {
-
-  const navigate = useNavigate();
 
   const features = [
     ...(config.selectedAssistance?.map(f => f.name) || []),

@@ -1,13 +1,9 @@
-import { ConfigurationSummary } from "../../../../../types/types";
-import FeaturesAccordion from "../FeaturesAccordion/FeaturesAccordion";
-import styles from "./VehicleDetails.module.css"
+import { ConfigurationSummary } from '../../../../../../../types/types';
+import FeaturesAccordion from '../FeaturesAccordion/FeaturesAccordion';
+import styles from './VehicleDetails.module.css';
 import {
   FaTachometerAlt,
-  FaPaintBrush,
-  FaCogs,
-  FaChevronDown,
-  FaShieldAlt,
-  FaCouch
+  FaPaintBrush
 } from 'react-icons/fa';
 
 interface VehicleDetailsProps {
@@ -67,7 +63,7 @@ const VehicleDetails: React.FC<VehicleDetailsProps> = ({ configuration }) => {
             {configuration.selectedRim && (
               <div className={styles.specItem}>
                 <span className={styles.specName}>Wheels</span>
-                <span className={styles.specValue}>{configuration.selectedRim.name} ({configuration.selectedRim.size}")</span>
+                <span className={styles.specValue}>{configuration.selectedRim.name} ({configuration.selectedRim.size}')</span>
               </div>
             )}
             {configuration.selectedUpholstery && (
