@@ -1,7 +1,7 @@
 import styles from './ConfigurationReview.module.css';
 import { MdEdit, MdArrowForward } from 'react-icons/md';
-import { useAppSelector } from '@store/hooks';
-import { selectConfiguration, selectSelectedOptions, selectTotalPrice } from '@store/selectors';
+import { useAppSelector } from '@state/hooks';
+import { selectConfiguration, selectSelectedOptions, selectTotalPrice } from '@state/configuration/selectors';
 
 interface ConfigurationReviewProps {
   completeConfiguration: () => void;

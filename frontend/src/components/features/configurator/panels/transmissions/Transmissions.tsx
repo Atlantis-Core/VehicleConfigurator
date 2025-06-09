@@ -1,8 +1,8 @@
-import { Transmission } from "../../../../../types/types";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
-import { setSelectedTransmission } from "@store/configurationSlice";
-import { selectConfiguration, selectSelectedOptions } from "@store/selectors";
-import styles from "./Transmissions.module.css";
+import { Transmission } from '../../../../../types/types';
+import { useAppDispatch, useAppSelector } from '@state/hooks';
+import { setSelectedTransmission } from '@state/configuration/configurationSlice';
+import { selectConfiguration, selectSelectedOptions } from '@state/configuration/selectors';
+import styles from './Transmissions.module.css';
 
 const TransmissionsSelection = () => {
   const dispatch = useAppDispatch();
@@ -20,11 +20,9 @@ const TransmissionsSelection = () => {
         {transmissions.map((transmission, index) => (
           <div
             key={transmission.id}
-            className={`${styles.transmissionItem} ${
-              selectedTransmission?.id === transmission.id ? styles.selected : ""
-            }`}
+            className={`${styles.transmissionItem} ${selectedTransmission?.id === transmission.id ? styles.selected : ''
+              }`}
             onClick={() => handleTransmissionSelect(transmission)}
-            style={{ "--animation-order": index } as React.CSSProperties}
           >
             <div className={styles.transmissionName}>{transmission.name}</div>
             <div className={styles.transmissionIncluded}>Included</div>

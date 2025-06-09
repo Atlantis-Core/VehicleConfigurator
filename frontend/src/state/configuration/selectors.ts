@@ -1,10 +1,10 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { RootState } from "./store";
+import { RootState } from "../store";
 
 export const selectConfiguration = (state: RootState) => state.configuration;
 
 export const selectTotalPrice = createSelector(
-  [selectConfiguration],
+  selectConfiguration,
   (config) => {
     return (
       (config.model?.basePrice || 0) +
@@ -25,7 +25,7 @@ export const selectTotalPrice = createSelector(
 );
 
 export const selectModelData = createSelector(
-  [selectConfiguration],
+  selectConfiguration,
   (config) => ({
     model: config.model,
     rims: config.rims,
@@ -39,7 +39,7 @@ export const selectModelData = createSelector(
 );
 
 export const selectSelectedOptions = createSelector(
-  [selectConfiguration],
+  selectConfiguration,
   (config) => ({
     selectedColor: config.selectedColor,
     selectedRim: config.selectedRim,

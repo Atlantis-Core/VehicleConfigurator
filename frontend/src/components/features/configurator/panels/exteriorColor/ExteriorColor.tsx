@@ -1,8 +1,8 @@
 import React from 'react';
 import styles from './ExteriorColor.module.css';
-import { useAppDispatch, useAppSelector } from '@store/hooks';
-import { setSelectedColor } from '@store/configurationSlice';
-import { selectConfiguration, selectSelectedOptions } from '@store/selectors';
+import { useAppDispatch, useAppSelector } from '@state/hooks';
+import { setSelectedColor } from '@state/configuration/configurationSlice';
+import { selectConfiguration, selectSelectedOptions } from '@state/configuration/selectors';
 import { Color } from '../../../../../types/types';
 
 const ExteriorColor: React.FC = () => {

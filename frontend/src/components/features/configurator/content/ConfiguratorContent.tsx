@@ -1,5 +1,5 @@
-import { useAppSelector } from '@store/hooks';
-import { selectConfiguration } from '@store/selectors';
+import { useAppSelector } from '@state/hooks';
+import { selectConfiguration } from '@state/configuration/selectors';
 import {
   EngineSelection,
   AssistanceSelection,

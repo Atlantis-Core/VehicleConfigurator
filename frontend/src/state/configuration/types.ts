@@ -6,7 +6,7 @@ import {
   Transmission,
   Feature,
   Interior,
-} from "../types/types";
+} from "../../types/types";
 
 export interface ConfigurationState {
   model: Model | undefined;
@@ -25,6 +25,7 @@ export interface ConfigurationState {
   selectedUpholstery: Interior | undefined;
   selectedAssistance: Feature[];
   selectedComfort: Feature[];
+  completedSteps: Record<string, boolean>;
 
   loading: boolean;
   error: string | null;

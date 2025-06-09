@@ -1,8 +1,8 @@
-import { Engine } from "../../../../../types/types";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
-import { setSelectedEngine } from "@store/configurationSlice";
-import { selectConfiguration, selectSelectedOptions } from "@store/selectors";
-import styles from "./Engines.module.css";
+import { Engine } from '../../../../../types/types';
+import { useAppDispatch, useAppSelector } from '@state/hooks';
+import { setSelectedEngine } from '@state/configuration/configurationSlice';
+import { selectConfiguration, selectSelectedOptions } from '@state/configuration/selectors';
+import styles from './Engines.module.css';
 
 const EngineSelection = () => {
   const dispatch = useAppDispatch();
@@ -21,7 +21,7 @@ const EngineSelection = () => {
           <li
             key={engine.id}
             className={`${styles.engineItem} ${
-              selectedEngine?.id === engine.id ? styles.selected : ""
+              selectedEngine?.id === engine.id ? styles.selected : ''
             }`}
             onClick={() => handleEngineSelect(engine)}
           >

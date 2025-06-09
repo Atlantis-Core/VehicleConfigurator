@@ -3,8 +3,8 @@ import styles from './Pricing.module.css';
 import { BsInfoCircleFill } from 'react-icons/bs';
 import { useSharedLeasing } from '@context/LeasingContext';
 import { formatEuro } from '@utils/formatEuro';
-import { useAppSelector } from '@store/hooks';
-import { selectConfiguration, selectSelectedOptions, selectTotalPrice } from '@store/selectors';
+import { useAppSelector } from '@state/hooks';
+import { selectConfiguration, selectSelectedOptions, selectTotalPrice } from '@state/configuration/selectors';
 
 const PricingPanel = () => {
   const [selectedOption, setSelectedOption] = useState<'cash' | 'leasing'>('cash');

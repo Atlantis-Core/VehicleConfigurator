@@ -1,7 +1,7 @@
-import { useAppSelector } from "@store/hooks";
-import { selectSelectedOptions, selectTotalPrice } from "@store/selectors";
-import { Model } from "../../../../types/types";
-import styles from "./SaveConfigurationPopup.module.css";
+import { useAppSelector } from '@state/hooks';
+import { selectSelectedOptions, selectTotalPrice } from '@state/configuration/selectors';
+import { Model } from '../../../../types/types';
+import styles from './SaveConfigurationPopup.module.css';
 
 interface SaveConfigurationPopupProps {
   model: Model;
@@ -9,10 +9,10 @@ interface SaveConfigurationPopupProps {
   onSaveAndContinue: () => void;
 }
 
-const SaveConfigurationPopup = ({ 
-  model, 
-  onContinue, 
-  onSaveAndContinue 
+const SaveConfigurationPopup = ({
+  model,
+  onContinue,
+  onSaveAndContinue
 }: SaveConfigurationPopupProps) => {
   const {
     selectedColor,
@@ -31,10 +31,10 @@ const SaveConfigurationPopup = ({
         Would you like to save this configuration before proceeding to checkout?
         You can load it later to continue where you left off.
       </p>
-      
+
       <div className={styles.configSummary}>
         <h4 className={styles.configModelName}>{model.name}</h4>
-        
+
         <div className={styles.configSpecs}>
           {selectedEngine && (
             <div className={styles.configSpec}>
@@ -42,14 +42,14 @@ const SaveConfigurationPopup = ({
               <span className={styles.specValue}>{selectedEngine.name}</span>
             </div>
           )}
-          
+
           {selectedTransmission && (
             <div className={styles.configSpec}>
               <span className={styles.specLabel}>Transmission:</span>
               <span className={styles.specValue}>{selectedTransmission.name}</span>
             </div>
           )}
-          
+
           {selectedColor && (
             <div className={styles.configSpec}>
               <span className={styles.specLabel}>Color:</span>
@@ -62,21 +62,21 @@ const SaveConfigurationPopup = ({
               </span>
             </div>
           )}
-          
+
           {selectedRim && (
             <div className={styles.configSpec}>
               <span className={styles.specLabel}>Rims:</span>
               <span className={styles.specValue}>{selectedRim.name}</span>
             </div>
           )}
-          
+
           {selectedUpholstery && (
             <div className={styles.configSpec}>
               <span className={styles.specLabel}>Interior:</span>
               <span className={styles.specValue}>{selectedUpholstery.name}</span>
             </div>
           )}
-          
+
           {selectedAssistance.length > 0 && (
             <div className={styles.configSpec}>
               <span className={styles.specLabel}>Assistance:</span>
@@ -85,7 +85,7 @@ const SaveConfigurationPopup = ({
               </span>
             </div>
           )}
-          
+
           {selectedComfort.length > 0 && (
             <div className={styles.configSpec}>
               <span className={styles.specLabel}>Comfort:</span>
@@ -95,13 +95,13 @@ const SaveConfigurationPopup = ({
             </div>
           )}
         </div>
-        
+
         <div className={styles.configTotalPrice}>
           <span>Total Price:</span>
           <span className={styles.priceValue}>€{totalPrice.toLocaleString()}</span>
         </div>
       </div>
-      
+
       <div className={styles.popupActions}>
         <button
           className={styles.secondaryButton}

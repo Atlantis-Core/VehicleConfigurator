@@ -12,11 +12,11 @@ import { saveConfigurationLocally } from '@hooks/useLocalConfiguration';
 import Popup from '@components/ui/popup';
 import SaveConfigurationPopup from '@components/features/configurator/saveConfigurationPopup';
 import { MobileSidebarHeader } from '@components/features/configurator/sidebar';
-import { useAppDispatch, useAppSelector } from '@store/hooks';
-import { loadModelData } from '@store/configurationSlice';
-import { selectConfiguration, selectTotalPrice, selectSelectedOptions } from '@store/selectors';
+import { useAppDispatch, useAppSelector } from '@state/hooks';
+import { loadModelData, loadSavedConfiguration, updateCompletedSteps } from '@state/configuration/configurationSlice';
+import { selectConfiguration, selectTotalPrice, selectSelectedOptions } from '@state/configuration/selectors';
 import { Provider } from 'react-redux';
-import { store } from '@store/store';
+import { store } from '@state/store';
 
 const ConfiguratorLayout = () => {
   const { modelId } = useParams();
@@ -25,12 +25,12 @@ const ConfiguratorLayout = () => {
   const dispatch = useAppDispatch();
 
   const [loadedSavedConfig, setLoadedSavedConfig] = useState<string | null>(null);
-  const configurationId = location.state?.configurationId;
+  const configurationId = location.state?.configurationId as string | undefined;
   const [isSavePopupOpen, setIsSavePopupOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [activeView, setActiveView] = useState<'viewer' | 'options'>('viewer');
 
-  const { model, loading, error } = useAppSelector(selectConfiguration);
+  const { model, loading, error, completedSteps } = useAppSelector(selectConfiguration);
   const totalPrice = useAppSelector(selectTotalPrice);
   const {
     selectedColor,
@@ -43,14 +43,36 @@ const ConfiguratorLayout = () => {
   } = useAppSelector(selectSelectedOptions);
 
   useEffect(() => {
-    if (modelId) {
-      dispatch(loadModelData(modelId));
-    }
-  }, [dispatch, modelId]);
+    const loadConfig = async () => {
+      if (configurationId) {
+        toast.info(`Loading saved configuration: ${configurationId}`, { toastId: "loading-saved-config" });
+
+        try {
+          await dispatch(loadSavedConfiguration(configurationId)).unwrap();
+          setLoadedSavedConfig(configurationId);
+          toast.dismiss("loading-saved-config");
+          toast.success("Successfully loaded saved configuration");
+        } catch (error: any) {
+          toast.dismiss("loading-saved-config");
+          toast.error(`Failed to load saved configuration: ${error}`);
+
+          // Fallback
+          if (modelId) {
+            dispatch(loadModelData(modelId));
+          }
+        }
+      } else if (modelId) {
+        dispatch(loadModelData(modelId));
+      } else {
+        toast.error("No model or configuration specified to load.");
+      }
+    };
+
+    loadConfig();
+  }, [dispatch, modelId, configurationId, navigate]);
 
   const [activeCategory, setActiveCategory] = useState<string>('motorization');
   const [activeSubcategory, setActiveSubcategory] = useState<string>('engine');
-  const [completedSteps, setCompletedSteps] = useState<Record<string, boolean>>({});
   const categories = getCategories();
 
   // Calculate overall progress
@@ -141,12 +163,17 @@ const ConfiguratorLayout = () => {
 
   // Mark selections as completed
   useEffect(() => {
-    if (selectedColor) setCompletedSteps(prev => ({ ...prev, 'exterior-color': true }));
-    if (selectedRim) setCompletedSteps(prev => ({ ...prev, 'rims': true }));
-    if (selectedEngine) setCompletedSteps(prev => ({ ...prev, 'engine': true }));
-    if (selectedTransmission) setCompletedSteps(prev => ({ ...prev, 'transmission': true }));
-    if (selectedUpholstery) setCompletedSteps(prev => ({ ...prev, 'upholstery': true }));
-  }, [selectedColor, selectedRim, selectedEngine, selectedTransmission, selectedUpholstery]);
+    const updates: Record<string, boolean> = {};
+    if (selectedColor) updates['exterior-color'] = true;
+    if (selectedRim) updates['rims'] = true;
+    if (selectedEngine) updates['engine'] = true;
+    if (selectedTransmission) updates['transmission'] = true;
+    if (selectedUpholstery) updates['upholstery'] = true;
+
+    if (Object.keys(updates).length > 0) {
+      dispatch(updateCompletedSteps(updates));
+    }
+  }, [selectedColor, selectedRim, selectedEngine, selectedTransmission, selectedUpholstery, dispatch]);
 
   const goToSection = (category: string, subcategory: string) => {
     setActiveCategory(category);
@@ -156,9 +183,9 @@ const ConfiguratorLayout = () => {
   // Mark subcategory as viewed/completed when selecting it
   useEffect(() => {
     if (['assistance', 'comfort', 'pricing', 'review'].includes(activeSubcategory)) {
-      setCompletedSteps(prev => ({ ...prev, [activeSubcategory]: true }));
+      dispatch(updateCompletedSteps({ [activeSubcategory]: true }));
     }
-  }, [activeSubcategory]);
+  }, [activeSubcategory, dispatch]);
 
   const getCurrentStepInfo = () => {
     const currentCategory = categories.find(c => c.id === activeCategory);
@@ -169,7 +196,6 @@ const ConfiguratorLayout = () => {
     };
   };
 
-  // Handle loading and error states
   if (loading) return (
     <div className={styles.loadingContainer}>
       <div className={styles.loader}></div>
@@ -186,8 +212,8 @@ const ConfiguratorLayout = () => {
 
   if (!model) return (
     <div className={styles.loadingContainer}>
-      <div className={styles.loader}></div>
-      <p>Loading your configuration...</p>
+      <p>Could not load model data. The model might not exist or there was an issue retrieving it.</p>
+      <button onClick={() => navigate('/configurator')}>Go Back to Selection</button>
     </div>
   );
 
@@ -322,7 +348,6 @@ const ConfiguratorLayout = () => {
   );
 }
 
-// No longer need the ConfiguratorProvider wrapper - Redux is provided at app level
 const Configurator = () => {
   return (
     <Provider store={store}>

@@ -6,9 +6,9 @@ import { Model } from '../../../../types/types';
 import styles from './ConfiguratorHeader.module.css';
 import { useSharedLeasing } from '@context/LeasingContext';
 import { loadConfigurationsForModel, deleteConfigurationLocally, saveConfigurationLocally } from '@hooks/useLocalConfiguration';
-import { useAppDispatch, useAppSelector } from '@store/hooks';
-import { resetConfiguration as resetReduxConfiguration } from '@store/configurationSlice';
-import { selectSelectedOptions } from '@store/selectors';
+import { useAppDispatch, useAppSelector } from '@state/hooks';
+import { resetConfiguration as resetReduxConfiguration } from '@state/configuration/configurationSlice';
+import { selectSelectedOptions } from '@state/configuration/selectors';
 import { toast } from 'react-toastify';
 import { formatEuro } from '@utils/formatEuro';
 

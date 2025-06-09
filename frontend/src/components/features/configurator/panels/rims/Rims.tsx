@@ -1,10 +1,10 @@
-import React from "react";
-import { Rim } from "../../../../../types/types";
-import styles from "./Rims.module.css"
-import { getImageUrl } from "@lib/getImageUrl";
-import { useAppDispatch, useAppSelector } from '@store/hooks';
-import { setSelectedRim } from '@store/configurationSlice';
-import { selectConfiguration, selectSelectedOptions } from '@store/selectors';
+import React from 'react';
+import { Rim } from '../../../../../types/types';
+import styles from './Rims.module.css'
+import { getImageUrl } from '@lib/getImageUrl';
+import { useAppDispatch, useAppSelector } from '@state/hooks';
+import { setSelectedRim } from '@state/configuration/configurationSlice';
+import { selectConfiguration, selectSelectedOptions } from '@state/configuration/selectors';
 
 const RimsSelection = () => {
   const dispatch = useAppDispatch();
@@ -19,19 +19,18 @@ const RimsSelection = () => {
     <div className={styles.categoryContent}>
       <h3>Wheels & Rims</h3>
       <div className={styles.rimOptions}>
-        {availableRims.map((rim, index) => (
+        {availableRims.map((rim) => (
           <div
             key={rim.id}
             className={`${styles.rimOption} ${selectedOption?.id === rim.id ? styles.selected : ''}`}
             onClick={() => onRimSelect(rim)}
-            style={{ '--animation-order': index } as React.CSSProperties}
           >
             <div className={styles.rimImage}>
               <img src={getImageUrl(rim.imagePath)} alt={rim.name} />
             </div>
             <div className={styles.rimDetails}>
               <div className={styles.rimName}>{rim.name}</div>
-              <div className={styles.rimSize}>{rim.size}"</div>
+              <div className={styles.rimSize}>{rim.size}'</div>
               {rim.additionalPrice && rim.additionalPrice > 0 ? (
                 <div className={styles.rimPrice}>
                   +€{rim.additionalPrice.toLocaleString()}

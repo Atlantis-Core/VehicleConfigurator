@@ -19,7 +19,7 @@
       "@context/*": ["context/*"],
       "@utils/*": ["utils/*"],
       "@types/*": ["types/*"],
-      "@store/*": ["store/*"]
+      "@state/*": ["state/*"]
     },
     "allowJs": true,
     "skipLibCheck": true,

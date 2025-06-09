@@ -1,7 +1,7 @@
 import styles from './Comfort.module.css';
-import { useAppDispatch, useAppSelector } from '@store/hooks';
-import { toggleComfort } from '@store/configurationSlice';
-import { selectConfiguration, selectSelectedOptions } from '@store/selectors';
+import { useAppDispatch, useAppSelector } from '@state/hooks';
+import { toggleComfort } from '@state/configuration/configurationSlice';
+import { selectConfiguration, selectSelectedOptions } from '@state/configuration/selectors';
 import { Feature } from '../../../../../types/types';
 import { getImageUrl } from '@lib/getImageUrl';
 

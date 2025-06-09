@@ -1,7 +1,7 @@
 import styles from './Upholstery.module.css';
-import { useAppDispatch, useAppSelector } from '@store/hooks';
-import { setSelectedUpholstery } from '@store/configurationSlice';
-import { selectConfiguration, selectSelectedOptions } from '@store/selectors';
+import { useAppDispatch, useAppSelector } from '@state/hooks';
+import { setSelectedUpholstery } from '@state/configuration/configurationSlice';
+import { selectConfiguration, selectSelectedOptions } from '@state/configuration/selectors';
 import { Interior } from '../../../../../types/types';
 import { getImageUrl } from '@lib/getImageUrl';
 
