@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import handlebars from 'handlebars';
 
-export function loadTemplate(templateName: string, data: Record<string, any>): string {
+export function loadTemplate(templateName: string, data: Record<string, unknown>): string {
   // Construct path to the template file
   const templatePath = path.join(__dirname, '..', 'templates', 'emails', `${templateName}.html`);
   
