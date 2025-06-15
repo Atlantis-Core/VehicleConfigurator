@@ -1,14 +1,15 @@
-import { ConfigurationSummary, FinancingObject } from "../../../../types/types";
+import { ConfigurationSummary, FinancingObject } from "../../../../../../types/types";
 import styles from "./PaymentSection.module.css";
 import PaymentTypeCard from "./PaymentTypeCard/PaymentTypeCard";
 import OrderStatus from "./OrderStatus";
+import { ORDER_STATUS_LIST } from "../../../../../../types/constants";
 
 interface PaymentSectionProps {
   configuration: ConfigurationSummary;
   paymentOption: string;
   financing?: FinancingObject;
   orderDate: string;
-  status?: string;
+  status?: (typeof ORDER_STATUS_LIST)[number];
 }
 
 const PaymentSection: React.FC<PaymentSectionProps> = ({

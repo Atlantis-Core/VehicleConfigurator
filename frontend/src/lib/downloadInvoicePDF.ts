@@ -1,7 +1,7 @@
 import { OrderWithDetails } from "../types/types";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { formatCurrency } from "./formatCurrency";
+import { formatCurrency } from "./formatters/formatCurrency";
 
 function addDemoDisclaimer(doc: jsPDF, pageWidth: number): void {
   doc.setFillColor(255, 240, 240);

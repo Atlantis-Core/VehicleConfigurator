@@ -1,5 +1,5 @@
 import { test, expect } from "vitest";
-import { formatCurrency } from "../../src/lib/formatCurrency";
+import { formatCurrency } from "../../src/lib/formatters/formatCurrency";
 
 test("formats currency for German locale", () => {
   const amount = 1234;

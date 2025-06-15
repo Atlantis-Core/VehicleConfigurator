@@ -4,8 +4,8 @@ import {
   FaCreditCard 
 } from 'react-icons/fa';
 import styles from "./FinancingDetails.module.css";
-import { formatCurrency } from "@lib/formatCurrency";
-import { FinancingObject } from '../../../../../types/types';
+import { formatCurrency } from "@lib/formatters/formatCurrency";
+import { FinancingObject } from '../../../../../../../types/types';
 
 interface FinancingDetailsObject {
   financing: FinancingObject;

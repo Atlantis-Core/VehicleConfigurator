@@ -1,7 +1,7 @@
 import { formatDistanceToNow } from "date-fns";
-import { OrderWithDetails } from "../../../../types/types";
+import { OrderWithDetails } from "../../../../../../types/types";
 import styles from "./OrderHeader.module.css";
-import { formatCurrency } from "@lib/formatCurrency";
+import { formatCurrency } from "@lib/formatters/formatCurrency";
 
 interface OrderHeaderProps {
   order: OrderWithDetails;

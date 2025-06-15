@@ -1,6 +1,4 @@
-import { BrandCompatible } from "../types/types";
-
-export function filterComponentsByBrand<T extends BrandCompatible>(
+export function filterComponentsByBrand<T extends { brand: string }>(
   items: T[],
   brand: string
 ): T[] {

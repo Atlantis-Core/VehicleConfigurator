@@ -1,12 +1,13 @@
-import styles from "./OrderCard.module.css";
-import { OrderWithDetails } from "../../../../types/types";
+import styles from './OrderCard.module.css';
+import { OrderWithDetails } from '../../../../types/types';
 import { FaExclamationCircle } from 'react-icons/fa';
 import {
   OrderHeader,
   VehicleSection,
   PaymentSection,
   OrderActions
-} from "./components";
+} from './components';
+import { ORDER_STATUS_LIST } from '../../../../types/constants';
 
 const OrderCard: React.FC<{ order: OrderWithDetails }> = ({ order }) => {
 
@@ -28,7 +29,7 @@ const OrderCard: React.FC<{ order: OrderWithDetails }> = ({ order }) => {
                 paymentOption={order.paymentOption}
                 financing={typeof order.financing === 'string' ? JSON.parse(order.financing) : order.financing}
                 orderDate={order.orderDate}
-                status="pending" />
+                status={ORDER_STATUS_LIST[0] /* processing */} />
             </div>
             <OrderActions
               order={order}

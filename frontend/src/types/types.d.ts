@@ -91,8 +91,8 @@ export interface Color {
   type: "glossy" | "matte" | "metallic";
   brand: string;
   additionalPrice: number;
-  hexCode?: string; // optional
-  materialName?: string; // optional
+  hexCode?: string;
+  materialName?: string;
 }
 
 export interface Rim {
@@ -136,8 +136,4 @@ export interface Feature {
   brand: string;
   additionalPrice: number;
   imagePath: string;
-}
-
-export interface BrandCompatible {
-  brand: string;
 }

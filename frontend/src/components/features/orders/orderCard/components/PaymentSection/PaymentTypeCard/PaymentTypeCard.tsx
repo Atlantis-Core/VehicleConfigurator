@@ -1,14 +1,14 @@
-import { 
-  FaHandHoldingUsd, 
-  FaUniversity, 
-  FaCreditCard, 
-  FaFileContract 
+import {
+  FaHandHoldingUsd,
+  FaUniversity,
+  FaCreditCard,
+  FaFileContract
 } from 'react-icons/fa';
 import styles from "./PaymentTypeCard.module.css";
-import { formatCurrency } from "@lib/formatCurrency";
+import { formatCurrency } from "@lib/formatters/formatCurrency";
 import { getPaymentBackgroundColor, getPaymentBorderColor } from "../../../helpers/getPaymentColor";
 import FinancingDetails from '../FinancingDetails';
-import { ConfigurationSummary, FinancingObject } from "../../../../../types/types";
+import { ConfigurationSummary, FinancingObject } from "../../../../../../../types/types";
 
 interface PaymentTypeCardProps {
   configuration: ConfigurationSummary;
@@ -16,10 +16,10 @@ interface PaymentTypeCardProps {
   financing?: FinancingObject;
 }
 
-const PaymentTypeCard: React.FC<PaymentTypeCardProps> = ({ 
-  configuration, 
-  paymentOption, 
-  financing 
+const PaymentTypeCard: React.FC<PaymentTypeCardProps> = ({
+  configuration,
+  paymentOption,
+  financing
 }) => {
   return (
     <div className={styles.paymentTypeCard}
