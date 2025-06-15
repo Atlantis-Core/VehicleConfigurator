@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { FaChevronDown } from 'react-icons/fa';
 import styles from './ContactForm.module.css';
-import { Customer } from '../../types/types';
+import { Customer } from '../../../../types/types';
 
 interface ContactFormProps {
   contactInfo: Customer;
@@ -15,12 +16,48 @@ const ContactForm: React.FC<ContactFormProps> = ({
   onSubmit,
   isSubmitting
 }) => {
-  const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const [addressFields, setAddressFields] = useState({
+    street: '',
+    postalCode: '',
+    city: '',
+    country: 'Deutschland'
+  });
+
+  const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    onContactInfoChange({
-      ...contactInfo,
-      [name]: value
-    });
+
+    if (['firstName', 'lastName', 'email', 'phone'].includes(name)) {
+      const updatedInfo = {
+        ...contactInfo,
+        [name]: value
+      };
+      onContactInfoChange(updatedInfo);
+    }
+
+    if (['street', 'postalCode', 'city', 'country'].includes(name)) {
+      const updatedAddressFields = {
+        ...addressFields,
+        [name]: value
+      };
+      setAddressFields(updatedAddressFields);
+
+      const { street, postalCode, city, country } = updatedAddressFields;
+      const addressParts = [];
+      if (street) addressParts.push(street);
+      if (postalCode || city) {
+        const cityLine = [postalCode, city].filter(Boolean).join(' ');
+        if (cityLine) addressParts.push(cityLine);
+      }
+      if (country) addressParts.push(country);
+
+      const fullAddress = addressParts.join(', ');
+
+      const updatedInfo = {
+        ...contactInfo,
+        address: fullAddress
+      };
+      onContactInfoChange(updatedInfo);
+    }
   };
 
   return (
@@ -81,17 +118,77 @@ const ContactForm: React.FC<ContactFormProps> = ({
         />
       </div>
 
-      <div className={styles.formGroup}>
-        <label htmlFor="address">Address *</label>
-        <textarea
-          id="address"
-          name="address"
-          required
-          value={contactInfo.address}
-          onChange={handleFieldChange}
-          rows={3}
-          placeholder="Musterstraße 123, 10115 Berlin, Deutschland"
-        />
+      <div className={styles.addressSection}>
+        <h3>Address *</h3>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="street">Straße + Hausnummer *</label>
+          <input
+            type="text"
+            id="street"
+            name="street"
+            required
+            value={addressFields.street}
+            onChange={handleFieldChange}
+            placeholder="Musterstraße 123"
+          />
+        </div>
+
+        <div className={styles.formRow}>
+          <div className={styles.formGroup}>
+            <label htmlFor="postalCode">PLZ *</label>
+            <input
+              type="text"
+              id="postalCode"
+              name="postalCode"
+              required
+              value={addressFields.postalCode}
+              onChange={handleFieldChange}
+              placeholder="10115"
+              maxLength={5}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="city">Wohnort *</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              required
+              value={addressFields.city}
+              onChange={handleFieldChange}
+              placeholder="Berlin"
+            />
+          </div>
+        </div>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="country">Land *</label>
+          <div className={styles.selectWithIcon}>
+            <select
+              id="country"
+              name="country"
+              required
+              value={addressFields.country}
+              onChange={handleFieldChange}
+            >
+              <option value="Deutschland">Deutschland</option>
+              <option value="Österreich">Österreich</option>
+              <option value="Schweiz">Schweiz</option>
+              <option value="Niederlande">Niederlande</option>
+              <option value="Belgien">Belgien</option>
+              <option value="Frankreich">Frankreich</option>
+            </select>
+            <FaChevronDown className={styles.selectIcon} />
+          </div>
+        </div>
+
+        {contactInfo.address && (
+          <div className={styles.addressPreview}>
+            <small>{contactInfo.address}</small>
+          </div>
+        )}
       </div>
 
       <button

@@ -21,7 +21,9 @@
   border-radius: 4px;
   font-size: 16px;
   box-sizing: border-box;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .formGroup input:focus {
@@ -44,7 +46,9 @@
   font-family: inherit;
   resize: vertical;
   box-sizing: border-box;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   min-height: 120px;
 }
 
@@ -88,6 +92,95 @@
 .submitButton:focus-visible {
   outline: 2px solid #0056b3;
   outline-offset: 2px;
+}
+
+.addressSection {
+  margin-top: 20px;
+  padding: 16px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.addressSection h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.formGroup select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  padding: 12px 40px 12px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.formGroup select:focus {
+  outline: none;
+  border-color: #0077cc;
+  box-shadow: 0 0 0 2px rgba(0, 119, 204, 0.1);
+}
+
+.formGroup select:hover {
+  border-color: #0077cc;
+}
+
+.selectWrapper {
+  position: relative;
+}
+
+.selectWrapper::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #666;
+  pointer-events: none;
+  transition: transform 0.2s ease;
+}
+
+.selectWrapper:hover::after {
+  border-top-color: #0077cc;
+}
+
+.selectWrapper select:focus + .selectWrapper::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.selectWithIcon {
+  position: relative;
+}
+
+.selectWithIcon select {
+  padding-right: 40px;
+}
+
+.selectIcon {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.selectWithIcon:hover .selectIcon {
+  color: #0077cc;
 }
 
 @media (max-width: 768px) {
