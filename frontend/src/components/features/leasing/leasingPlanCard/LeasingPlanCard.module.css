@@ -11,7 +11,7 @@
 }
 
 .leasingPlan::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -165,56 +165,56 @@
     margin-bottom: 12px;
     border-radius: 10px;
   }
-  
+
   .leasingPlan:hover {
     transform: none;
     box-shadow: 0 2px 12px rgba(0, 119, 204, 0.1);
   }
-  
+
   .activePlan {
     box-shadow: 0 2px 16px rgba(0, 119, 204, 0.15);
   }
-  
+
   .planHeader {
     margin-bottom: 14px;
   }
-  
+
   .planHeader h3 {
     font-size: 18px;
   }
-  
+
   .checkIcon {
     font-size: 18px;
   }
-  
+
   .planPrice {
     margin-bottom: 14px;
   }
-  
+
   .amount {
     font-size: 30px;
   }
-  
+
   .period {
     font-size: 14px;
   }
-  
+
   .planRate {
     font-size: 11px;
     padding: 5px 8px;
     margin-bottom: 16px;
   }
-  
+
   .planFeatures li {
     font-size: 14px;
     margin-bottom: 8px;
   }
-  
+
   .featureBullet {
     font-size: 13px;
     margin-right: 8px;
   }
-  
+
   .popularBadge {
     font-size: 9px;
     padding: 3px 6px;
@@ -229,62 +229,62 @@
     border-radius: 8px;
     border-width: 1.5px;
   }
-  
+
   .leasingPlan:hover {
     box-shadow: 0 2px 8px rgba(0, 119, 204, 0.08);
   }
-  
+
   .activePlan {
     box-shadow: 0 2px 12px rgba(0, 119, 204, 0.12);
   }
-  
+
   .planHeader {
     margin-bottom: 12px;
     flex-wrap: wrap;
     gap: 4px;
   }
-  
+
   .planHeader h3 {
     font-size: 16px;
     line-height: 1.3;
   }
-  
+
   .checkIcon {
     font-size: 16px;
   }
-  
+
   .planPrice {
     margin-bottom: 12px;
   }
-  
+
   .amount {
     font-size: 26px;
     line-height: 1.2;
   }
-  
+
   .period {
     font-size: 13px;
   }
-  
+
   .planRate {
     font-size: 10px;
     padding: 4px 6px;
     margin-bottom: 14px;
     border-radius: 16px;
   }
-  
+
   .planFeatures li {
     font-size: 13px;
     margin-bottom: 6px;
     line-height: 1.3;
   }
-  
+
   .featureBullet {
     font-size: 12px;
     margin-right: 6px;
     margin-top: 2px;
   }
-  
+
   .popularBadge {
     font-size: 8px;
     padding: 2px 5px;
@@ -308,27 +308,6 @@
   outline: none;
   border-color: #0077cc;
   box-shadow: 0 0 0 2px rgba(0, 119, 204, 0.1);
-}
-
-.leasingPlan.loading {
-  pointer-events: none;
-  opacity: 0.7;
-}
-
-.leasingPlan.loading::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.6),
-    transparent
-  );
-  animation: shimmer 1.5s infinite;
 }
 
 @keyframes shimmer {
@@ -373,4 +352,3 @@
   white-space: nowrap;
   min-width: 0;
 }
-

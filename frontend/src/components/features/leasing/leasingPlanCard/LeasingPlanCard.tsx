@@ -14,14 +14,14 @@ interface LeasingPlanCardProps {
   onSelect: (months: number) => void;
 }
 
-const LeasingPlanCard: React.FC<LeasingPlanCardProps> = ({ 
-  option, 
-  payment, 
-  isSelected, 
-  onSelect 
+const LeasingPlanCard: React.FC<LeasingPlanCardProps> = ({
+  option,
+  payment,
+  isSelected,
+  onSelect
 }) => {
   return (
-    <div 
+    <div
       className={`${styles.leasingPlan} ${isSelected ? styles.activePlan : ''}`}
       onClick={() => onSelect(option.months)}
     >
@@ -29,18 +29,18 @@ const LeasingPlanCard: React.FC<LeasingPlanCardProps> = ({
         <h3>{option.label}</h3>
         {isSelected && <FaCheck className={styles.checkIcon} />}
       </div>
-      
+
       <div className={styles.planPrice}>
         <span className={styles.amount}>
           {payment.toLocaleString()} €
         </span>
         <span className={styles.period}>/month</span>
       </div>
-      
+
       <div className={styles.planRate}>
         Interest rate: {option.rate}
       </div>
-      
+
       <ul className={styles.planFeatures}>
         {option.features.map((feature, index) => (
           <li key={index}>

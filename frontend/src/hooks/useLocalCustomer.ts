@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'customerSession';
+const STORAGE_KEY = "customerSession";
 
 export interface CustomerSession {
   id: number;

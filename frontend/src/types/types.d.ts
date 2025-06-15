@@ -71,7 +71,9 @@ export interface ConfigurationSummary {
   totalPrice: number;
 }
 
-type ConfigurationSummaryIncomplete = Partial<Omit<ConfigurationSummary, 'model'>> & { model: Model };
+type ConfigurationSummaryIncomplete = Partial<
+  Omit<ConfigurationSummary, "model">
+> & { model: Model };
 
 export interface Model {
   id: number;
@@ -86,11 +88,11 @@ export interface Model {
 export interface Color {
   id: number;
   name: string;
-  type: 'glossy' | 'matte' | 'metallic';
+  type: "glossy" | "matte" | "metallic";
   brand: string;
   additionalPrice: number;
-  hexCode?: string;         // optional
-  materialName?: string;    // optional
+  hexCode?: string; // optional
+  materialName?: string; // optional
 }
 
 export interface Rim {

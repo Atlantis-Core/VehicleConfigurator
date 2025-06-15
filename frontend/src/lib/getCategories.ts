@@ -12,43 +12,41 @@ export interface Category {
 export const getCategories = (): Category[] => {
   return [
     {
-      id: 'motorization',
-      label: 'Motorization',
+      id: "motorization",
+      label: "Motorization",
       subcategories: [
-        { id: 'engine', label: 'Engine' },
-        { id: 'transmission', label: 'Transmission' }
-      ]
+        { id: "engine", label: "Engine" },
+        { id: "transmission", label: "Transmission" },
+      ],
     },
     {
-      id: 'exterior',
-      label: 'Exterior',
+      id: "exterior",
+      label: "Exterior",
       subcategories: [
-        { id: 'exterior-color', label: 'Exterior Color' },
-        { id: 'rims', label: 'Wheels & Rims' }
-      ]
+        { id: "exterior-color", label: "Exterior Color" },
+        { id: "rims", label: "Wheels & Rims" },
+      ],
     },
     {
-      id: 'interior',
-      label: 'Interior',
-      subcategories: [
-        { id: 'upholstery', label: 'Upholstery' },
-      ]
+      id: "interior",
+      label: "Interior",
+      subcategories: [{ id: "upholstery", label: "Upholstery" }],
     },
     {
-      id: 'features',
-      label: 'Features',
+      id: "features",
+      label: "Features",
       subcategories: [
-        { id: 'assistance', label: 'Assistance Systems' },
-        { id: 'comfort', label: 'Comfort Features' }
-      ]
+        { id: "assistance", label: "Assistance Systems" },
+        { id: "comfort", label: "Comfort Features" },
+      ],
     },
     {
-      id: 'summary',
-      label: 'Summary',
+      id: "summary",
+      label: "Summary",
       subcategories: [
-        { id: 'pricing', label: 'Financing options' },
-        { id: 'review', label: 'Review & Complete' }
-      ]
-    }
+        { id: "pricing", label: "Financing options" },
+        { id: "review", label: "Review & Complete" },
+      ],
+    },
   ];
 };

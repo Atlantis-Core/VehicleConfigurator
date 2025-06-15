@@ -23,7 +23,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({
   return (
     <div className={styles.paymentSection}>
       <h2>Payment Method</h2>
-      
+
       <PaymentOptions
         selectedMethod={paymentMethod}
         onMethodChange={onPaymentMethodChange}

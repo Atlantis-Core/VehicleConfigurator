@@ -1,5 +1,5 @@
 import styles from "./OrderCard.module.css";
-import { OrderWithDetails } from "../../types/types";
+import { OrderWithDetails } from "../../../../types/types";
 import { FaExclamationCircle } from 'react-icons/fa';
 import {
   OrderHeader,

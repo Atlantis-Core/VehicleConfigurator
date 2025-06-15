@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getImageUrl } from "@lib/getImageUrl";
-import { Model } from "../../types/types";
+import { Model } from "../../../../types/types";
 import styles from "./ModelCard.module.css";
 
 interface ModelCardProps {
@@ -11,7 +11,7 @@ interface ModelCardProps {
 
 const ModelCard = ({ model, onSelect, isSelected = false }: ModelCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  
+
   const handleClick = () => {
     if (onSelect) {
       onSelect(model);
@@ -27,7 +27,7 @@ const ModelCard = ({ model, onSelect, isSelected = false }: ModelCardProps) => {
   };
 
   return (
-    <div 
+    <div
       className={`${styles.card} ${isSelected ? styles.selected : ''} ${isHovered ? styles.hovered : ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -40,20 +40,20 @@ const ModelCard = ({ model, onSelect, isSelected = false }: ModelCardProps) => {
 
       <div className={styles.content}>
         <h3 className={styles.modelName}>{model.name}</h3>
-        
+
         <div className={styles.imageContainer}>
-          <img 
-            src={getImageUrl(model.imagePath)} 
-            className={styles.modelImage} 
+          <img
+            src={getImageUrl(model.imagePath)}
+            className={styles.modelImage}
             alt={`${model.name} model`}
           />
         </div>
-        
+
         <div className={styles.priceSection}>
           <span className={styles.priceLabel}>Starting at</span>
           <span className={styles.basePrice}>{formatPrice(model.basePrice)}</span>
         </div>
-        
+
         <button className={styles.selectButton}>
           {isSelected ? 'Selected' : 'Configure'}
         </button>

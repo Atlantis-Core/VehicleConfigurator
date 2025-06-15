@@ -15,14 +15,13 @@ const Popup = ({ isOpen, onClose, title, children, className = '' }: PopupProps)
 
   useEffect(() => {
     setIsVisible(isOpen);
-    
+
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
-    
-    // Clean up
+
     return () => {
       document.body.style.overflow = '';
     };
@@ -54,8 +53,8 @@ const Popup = ({ isOpen, onClose, title, children, className = '' }: PopupProps)
 
   return (
     <div className={styles.overlay}>
-      <div 
-        className={`${styles.popup} ${className}`} 
+      <div
+        className={`${styles.popup} ${className}`}
         ref={popupRef}
         role="dialog"
         aria-modal="true"
@@ -63,8 +62,8 @@ const Popup = ({ isOpen, onClose, title, children, className = '' }: PopupProps)
         {title && (
           <div className={styles.header}>
             <h2>{title}</h2>
-            <button 
-              className={styles.closeButton} 
+            <button
+              className={styles.closeButton}
               onClick={onClose}
               aria-label="Close"
             >

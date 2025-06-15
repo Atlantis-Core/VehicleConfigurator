@@ -2,9 +2,8 @@ export const calculateLeasingPrice = (
   months: number,
   basePrice: number
 ): string => {
-
   if (basePrice <= 0) {
-    return "0.00"; 
+    return "0.00";
   }
 
   if (months <= 0) {

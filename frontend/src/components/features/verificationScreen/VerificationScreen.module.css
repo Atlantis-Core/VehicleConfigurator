@@ -3,7 +3,7 @@
   max-height: 95vh;
   overflow-y: scroll;
   padding: 20px;
-  font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+  font-family: "Inter", "Segoe UI", "Arial", sans-serif;
 }
 
 .verificationNotice {
@@ -141,7 +141,8 @@
 }
 
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(-50%) translateY(0);
   }
   50% {

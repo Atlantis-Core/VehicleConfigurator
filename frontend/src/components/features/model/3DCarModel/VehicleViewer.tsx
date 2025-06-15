@@ -9,7 +9,6 @@ import styles from './VehicleViewer.module.css';
 import { Color } from '../../../../types/types';
 import { generateRadialGradient } from './helpers/generateRadialGradient';
 
-// Types
 interface TurntableProps {
   autoRotate: boolean;
   autoRotateSpeed: number;

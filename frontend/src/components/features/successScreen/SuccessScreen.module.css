@@ -14,7 +14,9 @@
   animation: fadeInUp 0.8s ease-out;
   background: linear-gradient(to bottom right, #ffffff, #f8f9fa);
   border-radius: 16px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12), 0 5px 15px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.12),
+    0 5px 15px rgba(0, 0, 0, 0.06);
   border: 1px solid rgba(0, 86, 179, 0.1);
   position: relative;
   overflow: hidden;
@@ -152,7 +154,9 @@
     padding: 40px 24px;
     margin: 20px auto;
     border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1), 0 3px 10px rgba(0, 0, 0, 0.05);
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.1),
+      0 3px 10px rgba(0, 0, 0, 0.05);
   }
 
   .successContainer::before {
@@ -226,7 +230,9 @@
     padding: 32px 20px;
     margin: 16px auto;
     border-radius: 10px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+    box-shadow:
+      0 6px 20px rgba(0, 0, 0, 0.08),
+      0 2px 8px rgba(0, 0, 0, 0.04);
   }
 
   .successContainer::before {

@@ -10,7 +10,7 @@ interface LeasingProviderProps {
 
 export const LeasingProvider = ({ children, totalPrice }: LeasingProviderProps) => {
   const leasingData = useLeasing(totalPrice);
-  
+
   return (
     <LeasingContext.Provider value={leasingData}>
       {children}

@@ -1,6 +1,6 @@
 import { IoCheckmarkCircle } from "react-icons/io5";
 import styles from "./SuccessScreen.module.css";
-import { ConfigurationSummary, Customer } from "../../types/types";
+import { ConfigurationSummary, Customer } from "../../../types/types";
 
 interface SuccessScreenProps {
   contactInfo: Customer;

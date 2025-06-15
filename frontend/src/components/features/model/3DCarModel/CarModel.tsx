@@ -25,8 +25,8 @@ export const preloadCarModels = (urls: string[]) => {
   });
 };
 
-export const CarModel = forwardRef<CarModelHandle, CarModelProps>(({ 
-  url, 
+export const CarModel = forwardRef<CarModelHandle, CarModelProps>(({
+  url,
   color = '#FFFFFF',
   finish = 'glossy',
   initialRotation = -0.03,
@@ -43,7 +43,7 @@ export const CarModel = forwardRef<CarModelHandle, CarModelProps>(({
 
   const shouldColorObject = (name: string) => {
     name = name.toLowerCase();
-    
+
     // Specifically exclude the top-level "car" object
     if (name === "car" || name === "car_body") {
       return false;
@@ -58,13 +58,13 @@ export const CarModel = forwardRef<CarModelHandle, CarModelProps>(({
     scene.position.set(position[0], position[1], position[2]);
     scene.scale.set(scale, scale, scale);
     scene.rotation.y = initialRotation;
-    
+
     // Create an array to store all body parts
     const bodyParts: Mesh[] = [];
-    
+
     const processObject = (object: Object3D) => {
       let foundAny = false;
-      
+
       // Process the object if it's a mesh, OR process its children if the name matches
       if (shouldColorObject(object.name)) {
         // If it's a mesh, color it directly
@@ -73,7 +73,7 @@ export const CarModel = forwardRef<CarModelHandle, CarModelProps>(({
           applyColorToMesh(object, color, finish === 'matte');
           foundAny = true;
         }
-        
+
         // Always check its children
         object.children.forEach(child => {
           if (child instanceof Mesh) {
@@ -95,10 +95,10 @@ export const CarModel = forwardRef<CarModelHandle, CarModelProps>(({
           }
         });
       }
-      
+
       return foundAny;
     };
-    
+
     // Start processing from the scene root
     processObject(scene);
   }, [scene, initialRotation, position, scale, color, finish]);
@@ -112,7 +112,7 @@ export const CarModel = forwardRef<CarModelHandle, CarModelProps>(({
         if (object instanceof Mesh) {
           applyColorToMesh(object, color, finish === 'matte');
         }
-        
+
         // Also process its children (they might be meshes)
         object.children.forEach(child => {
           if (child instanceof Mesh) {
@@ -126,7 +126,7 @@ export const CarModel = forwardRef<CarModelHandle, CarModelProps>(({
         object.children.forEach(colorObject);
       }
     };
-    
+
     // Start coloring from scene root
     colorObject(scene);
   }, [color, finish, scene]);

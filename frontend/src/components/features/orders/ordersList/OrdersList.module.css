@@ -209,17 +209,17 @@
   .orderCard {
     padding: 1rem;
   }
-  
+
   .orderHeader {
     flex-direction: column;
     gap: 0.75rem;
     align-items: stretch;
   }
-  
+
   .orderActions {
     flex-direction: column;
   }
-  
+
   .actionButton {
     justify-content: center;
   }
