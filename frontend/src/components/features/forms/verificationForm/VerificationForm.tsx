@@ -6,9 +6,10 @@ interface VerificationFormProps {
   isLoading: boolean;
   onSubmit: (code: string) => Promise<void>;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onCancel: () => void;
 }
 
-const VerificationForm = ({ email, verificationCode, isLoading, onSubmit, onChange }: VerificationFormProps) => {
+const VerificationForm = ({ email, verificationCode, isLoading, onSubmit, onChange, onCancel }: VerificationFormProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await onSubmit(verificationCode);
@@ -43,6 +44,12 @@ const VerificationForm = ({ email, verificationCode, isLoading, onSubmit, onChan
             {isLoading ? 'Verifying...' : 'Verify'}
           </button>
         </form>
+        <button
+          className={styles.cancelButton}
+          onClick={onCancel}
+        >
+          Cancel
+        </button>
       </div>
     </div>
   );

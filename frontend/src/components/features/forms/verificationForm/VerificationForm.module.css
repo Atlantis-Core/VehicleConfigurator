@@ -93,30 +93,35 @@
   transform: none;
 }
 
-.resendSection {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #eee;
-  text-align: center;
-}
-
-.resendText {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 0.5rem;
-}
-
-.resendButton {
-  background: none;
-  border: none;
-  color: #2563eb;
+.cancelButton {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  color: #6b7280;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 0.9rem;
-  text-decoration: underline;
+  transition: all 0.2s ease;
+  margin-top: 12px;
+  width: 100%;
 }
 
-.resendButton:hover {
-  color: #1d4ed8;
+.cancelButton:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+.cancelButton:active {
+  background: #f3f4f6;
+  transform: translateY(1px);
+}
+
+.cancelButton:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 @media (max-width: 768px) {

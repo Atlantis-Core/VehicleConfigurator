@@ -66,7 +66,20 @@ const Orders = () => {
     }
   };
 
-  // Handle input changes
+  const handleCancelVerification = () => {
+    removeLocalCustomer();
+    setLoginStep('login');
+    setFormData({
+      firstName: '',
+      lastName: '',
+      email: '',
+      verificationCode: ''
+    });
+
+    toast.dismiss();
+    toast.info('Verification cancelled. Please login again.');
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -106,7 +119,6 @@ const Orders = () => {
     }
   };
 
-  // Handle verification code submission
   const handleVerifySubmit = async (verificationCode: string) => {
     setIsLoading(true);
     try {
@@ -133,7 +145,6 @@ const Orders = () => {
     }
   };
 
-  // Handle logout
   const handleLogout = () => {
     removeLocalCustomer();
     setLoginStep('login');
@@ -168,6 +179,7 @@ const Orders = () => {
             isLoading={isLoading}
             onSubmit={handleVerifySubmit}
             onChange={handleChange}
+            onCancel={handleCancelVerification}
           />
         );
       case 'verified':
