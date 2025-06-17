@@ -15,9 +15,10 @@ import { formatEuro } from '@utils/formatEuro';
 interface ConfiguratorHeaderProps {
   onBack: () => void;
   model: Model;
+  configurationId: string;
 }
 
-const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model }) => {
+const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, configurationId }) => {
   const [isLeasingModalOpen, setIsLeasingModalOpen] = useState(false);
   const dispatch = useAppDispatch();
   const { selectedOption: selectedLeasingOption, getMonthlyPaymentFor } = useSharedLeasing();
@@ -69,22 +70,16 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model }
 
   const resetConfiguration = useCallback(() => {
     // Ask for confirmation
-    if (window.confirm('Are you sure you want to reset ALL your configurations?')) {
+    if (window.confirm('Are you sure you want to reset your current configuration?')) {
       try {
-        // Clear ALL saved configurations for this model
-        const savedConfigs = loadConfigurationsForModel(model.id);
-        savedConfigs.forEach(config => {
-          deleteConfigurationLocally(config.id);
-        });
+        // Clear saved configurations for this model
+        if (configurationId !== "") {
+          deleteConfigurationLocally(configurationId);
+        }
 
-        // Reset Redux state
         dispatch(resetReduxConfiguration());
 
         const url = new URL(window.location.href);
-        url.searchParams.set('reset', 'true');
-
-        // Add a unique timestamp to ensure the browser doesn't use cached content
-        url.searchParams.set('t', Date.now().toString());
 
         // Force a full page refresh
         window.location.href = url.toString();

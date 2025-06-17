@@ -220,6 +220,7 @@ const ConfiguratorLayout = () => {
         <ConfiguratorHeader
           onBack={handleBack}
           model={model}
+          configurationId={configurationId ?? ""}
         />
 
         <ConfiguratorMobileHeader

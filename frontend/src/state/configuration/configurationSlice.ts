@@ -187,6 +187,8 @@ const configurationSlice = createSlice({
       state.selectedUpholstery = undefined;
       state.selectedAssistance = [];
       state.selectedComfort = [];
+
+      resetCompletedSteps();
     },
     updateCompletedSteps: (
       state,
