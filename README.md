@@ -2,6 +2,8 @@
 
 A full-stack vehicle configurator built with **React**, **Node.js**, and **PostgreSQL**, following **Clean Architecture** principles. This project is part of the 6th semester coursework for _Software Quality_ and _React – Web Programming_ at Furtwangen University (Allgemeine Informatik - Software Engineering).
 
+<img width="1450" alt="Screenshot 2025-06-17 at 11 06 12 AM" src="https://github.com/user-attachments/assets/426c1a7a-7ea6-4ef6-8ce9-f49d93c7b670" />
+
 ---
 
 ## 📦 Tech Stack
