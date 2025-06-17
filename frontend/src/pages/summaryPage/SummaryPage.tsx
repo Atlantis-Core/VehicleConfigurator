@@ -8,7 +8,7 @@ import { findOrCreateCustomer, saveConfiguration, submitOrder } from '@api/sette
 import { useEmailVerification } from '@hooks/useEmailVerification';
 import { useLeasing } from '@hooks/useLeasing';
 import { toast } from 'react-toastify';
-import { getLocalCustomer } from '@hooks/useLocalCustomer';
+import { getLocalCustomer } from '@state/localStorage/useLocalCustomer';
 import VerificationScreen from '@components/features/verificationScreen';
 import SuccessScreen from '@components/features/successScreen';
 import ConfigurationSummaryCard from '@components/features/configurationSummaryCard';
@@ -211,7 +211,6 @@ const SummaryPage: React.FC<SummaryPageProps> = () => {
         <ConfigurationSummaryCard
           configuration={configuration}
         />
-
 
         <PaymentSection
           paymentMethod={paymentMethod}

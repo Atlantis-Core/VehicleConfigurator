@@ -71,10 +71,6 @@ export interface ConfigurationSummary {
   totalPrice: number;
 }
 
-type ConfigurationSummaryIncomplete = Partial<
-  Omit<ConfigurationSummary, "model">
-> & { model: Model };
-
 export interface Model {
   id: number;
   name: string;

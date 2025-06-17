@@ -8,7 +8,7 @@ import ModelCard from "@components/features/model/modelCard";
 import { motion } from "framer-motion";
 import { getModelTypes } from "@lib/getModelTypes";
 import { BsBookmark } from "react-icons/bs";
-import { getAllSavedConfigurations } from "@hooks/useLocalConfiguration";
+import { getAllSavedConfigurations } from "@state/localStorage/useLocalConfiguration";
 import { HiOutlineShoppingCart } from "react-icons/hi2";
 import { preloadCarModels } from "@components/features/model/3DCarModel/CarModel";
 import { countOrdersByLocalCustomer } from "@api/helper";

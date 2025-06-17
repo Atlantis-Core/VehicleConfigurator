@@ -61,7 +61,7 @@ const ConfiguratorSidebar: React.FC<ConfiguratorSidebarProps> = ({
               </div>
               <span className={styles.categoryLabel}>{category.label}</span>
               <div className={styles.categoryStatus}>
-                {category.subcategories.some(sub => completedSteps[sub.id]) && (
+                {category.subcategories.every(sub => completedSteps[sub.id]) && (
                   <IoCheckmarkCircle className={styles.completedIcon} />
                 )}
               </div>

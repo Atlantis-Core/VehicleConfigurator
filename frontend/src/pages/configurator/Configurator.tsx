@@ -8,7 +8,7 @@ import { getNextSubcategory } from '@lib/getNextSubcategory';
 import { toast, ToastContainer } from 'react-toastify';
 import { LeasingProvider } from '@context/LeasingContext';
 import { ConfiguratorHeader, ConfiguratorContent, ConfiguratorSidebar, ConfiguratorMobileHeader } from '@components/features/configurator';
-import { saveConfigurationLocally } from '@hooks/useLocalConfiguration';
+import { saveConfigurationLocally } from '@state/localStorage/useLocalConfiguration';
 import Popup from '@components/ui/popup';
 import SaveConfigurationPopup from '@components/features/configurator/saveConfigurationPopup';
 import { MobileSidebarHeader } from '@components/features/configurator/sidebar';

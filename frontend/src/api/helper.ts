@@ -1,4 +1,4 @@
-import { getLocalCustomer } from "@hooks/useLocalCustomer";
+import { getLocalCustomer } from "@state/localStorage/useLocalCustomer";
 import { Customer } from "../types/types";
 import { getOrdersByCustomer } from "./getter";
 

@@ -5,7 +5,7 @@ import {
   deleteConfigurationLocally,
   SavedConfigurations as SavedConfigurationsType,
   SavedConfiguration,
-} from '@hooks/useLocalConfiguration';
+} from '@state/localStorage/useLocalConfiguration';
 import { useNavigate } from 'react-router-dom';
 import { IoArrowBack } from 'react-icons/io5';
 import ConfigCard from '@components/features/configCard';

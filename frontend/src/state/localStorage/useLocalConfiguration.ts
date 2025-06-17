@@ -1,6 +1,10 @@
-import { ConfigurationSummaryIncomplete } from '../types/types';
+import { ConfigurationSummary, Model } from "../../types/types";
 
 const STORAGE_KEY = "vehicleConfiguratorSaved";
+
+type ConfigurationSummaryIncomplete = Partial<
+  Omit<ConfigurationSummary, "model">
+> & { model: Model };
 
 export interface SavedConfiguration extends ConfigurationSummaryIncomplete {
   id: string;

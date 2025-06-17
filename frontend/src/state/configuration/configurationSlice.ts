@@ -19,7 +19,7 @@ import {
 import { filterComponentsByBrand } from "@utils/filterComponentsByBrand";
 import { toast } from "react-toastify";
 import { ConfigurationState } from "./types";
-import { loadConfigurationById } from "@hooks/useLocalConfiguration";
+import { loadConfigurationById } from "@state/localStorage/useLocalConfiguration";
 
 const initialState: ConfigurationState = {
   model: undefined,

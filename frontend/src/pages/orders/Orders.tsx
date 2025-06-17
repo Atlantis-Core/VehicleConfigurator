@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import styles from './Orders.module.css';
 import { findCustomerByEmail, verifyCustomer, verifyCustomerCode } from '@api/helper';
 import { Customer, OrderWithDetails } from '../../types/types';
-import { getLocalCustomer, removeLocalCustomer, saveLocalCustomer } from '@hooks/useLocalCustomer';
+import { getLocalCustomer, removeLocalCustomer, saveLocalCustomer } from '@state/localStorage/useLocalCustomer';
 import { getOrdersByCustomer } from '@api/getter';
 import OrdersHeader from '@components/features/orders/ordersHeader';
 import LoginForm from '@components/features/forms/loginForm';

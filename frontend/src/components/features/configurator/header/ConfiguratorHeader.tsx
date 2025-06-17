@@ -5,7 +5,7 @@ import LeasingModal from '@components/features/leasing/leasingModal';
 import { Model } from '../../../../types/types';
 import styles from './ConfiguratorHeader.module.css';
 import { useSharedLeasing } from '@context/LeasingContext';
-import { loadConfigurationsForModel, deleteConfigurationLocally, saveConfigurationLocally } from '@hooks/useLocalConfiguration';
+import { loadConfigurationsForModel, deleteConfigurationLocally, saveConfigurationLocally } from '@state/localStorage/useLocalConfiguration';
 import { useAppDispatch, useAppSelector } from '@state/hooks';
 import { resetConfiguration as resetReduxConfiguration } from '@state/configuration/configurationSlice';
 import { selectSelectedOptions, selectTotalPrice } from '@state/configuration/selectors';

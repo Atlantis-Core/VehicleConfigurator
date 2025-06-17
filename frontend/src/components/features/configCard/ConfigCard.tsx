@@ -1,6 +1,6 @@
 import { getImageUrl } from "@lib/getImageUrl";
 import styles from "./ConfigCard.module.css";
-import { SavedConfiguration } from "@hooks/useLocalConfiguration";
+import { SavedConfiguration } from "@state/localStorage/useLocalConfiguration";
 import { formatDistanceToNow } from "date-fns";
 
 interface ConfigCardProps {
