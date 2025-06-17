@@ -203,7 +203,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 400px));
   gap: 2rem;
-  max-width: min(90%, 1400px);
+  max-width: 90%;
   margin: 3rem auto;
   position: relative;
   padding: 2rem;

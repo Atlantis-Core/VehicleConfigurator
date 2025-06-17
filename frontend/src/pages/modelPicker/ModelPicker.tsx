@@ -63,7 +63,6 @@ const ModelPicker = () => {
 
   const handleSelectModel = (model: Model) => {
     setSelectedModel(model);
-    // Smooth scroll to the continue button
     setTimeout(() => {
       document.getElementById('selection-summary')?.scrollIntoView({
         behavior: 'smooth'

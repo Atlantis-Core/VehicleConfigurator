@@ -24,7 +24,6 @@ const ConfiguratorLayout = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
 
-  const [loadedSavedConfig, setLoadedSavedConfig] = useState<string | null>(null);
   const configurationId = location.state?.configurationId as string | undefined;
   const [isSavePopupOpen, setIsSavePopupOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
@@ -49,7 +48,6 @@ const ConfiguratorLayout = () => {
 
         try {
           await dispatch(loadSavedConfiguration(configurationId)).unwrap();
-          setLoadedSavedConfig(configurationId);
           toast.dismiss("loading-saved-config");
           toast.success("Successfully loaded saved configuration");
         } catch (error: any) {
@@ -105,7 +103,7 @@ const ConfiguratorLayout = () => {
       return;
     }
 
-    const savedId = saveConfigurationLocally({
+    saveConfigurationLocally({
       model,
       selectedColor,
       selectedRim,
@@ -117,7 +115,6 @@ const ConfiguratorLayout = () => {
       totalPrice
     });
 
-    setLoadedSavedConfig(savedId);
     toast.success('Configuration saved successfully!', { toastId: 'config-saved-success' });
     completeConfiguration();
   }
@@ -223,8 +220,6 @@ const ConfiguratorLayout = () => {
         <ConfiguratorHeader
           onBack={handleBack}
           model={model}
-          totalPrice={totalPrice}
-          loadedSavedConfig={loadedSavedConfig}
         />
 
         <ConfiguratorMobileHeader

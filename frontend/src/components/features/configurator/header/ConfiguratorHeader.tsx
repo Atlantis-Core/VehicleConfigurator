@@ -8,24 +8,24 @@ import { useSharedLeasing } from '@context/LeasingContext';
 import { loadConfigurationsForModel, deleteConfigurationLocally, saveConfigurationLocally } from '@hooks/useLocalConfiguration';
 import { useAppDispatch, useAppSelector } from '@state/hooks';
 import { resetConfiguration as resetReduxConfiguration } from '@state/configuration/configurationSlice';
-import { selectSelectedOptions } from '@state/configuration/selectors';
+import { selectSelectedOptions, selectTotalPrice } from '@state/configuration/selectors';
 import { toast } from 'react-toastify';
 import { formatEuro } from '@utils/formatEuro';
 
 interface ConfiguratorHeaderProps {
   onBack: () => void;
   model: Model;
-  totalPrice: number;
-  loadedSavedConfig: string | null;
 }
 
-const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, totalPrice, loadedSavedConfig }) => {
+const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model }) => {
   const [isLeasingModalOpen, setIsLeasingModalOpen] = useState(false);
   const dispatch = useAppDispatch();
   const { selectedOption: selectedLeasingOption, getMonthlyPaymentFor } = useSharedLeasing();
 
   const openLeasingModal = () => setIsLeasingModalOpen(true);
   const closeLeasingModal = () => setIsLeasingModalOpen(false);
+
+  const totalPrice = useAppSelector(selectTotalPrice);
 
   const {
     selectedColor,
@@ -53,7 +53,7 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
     toast.success('Configuration saved successfully!', {
       toastId: 'config-saved', // Prevent duplicate toasts
     });
-    
+
     return configId;
   }, [
     model,
@@ -79,25 +79,25 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
 
         // Reset Redux state
         dispatch(resetReduxConfiguration());
-        
+
         const url = new URL(window.location.href);
         url.searchParams.set('reset', 'true');
-        
+
         // Add a unique timestamp to ensure the browser doesn't use cached content
         url.searchParams.set('t', Date.now().toString());
-        
+
         // Force a full page refresh
         window.location.href = url.toString();
       } catch (error) {
         console.error('Error during reset:', error);
         toast.error('An error occurred while resetting the configuration');
-        
+
         // Force page reload as a fallback to reset everything
         window.location.reload();
       }
     }
   }, [model.id, dispatch]);
-  
+
   // Check for reset parameter
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -105,7 +105,7 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
       // Remove the parameter
       url.searchParams.delete('reset');
       window.history.replaceState({}, document.title, url.toString());
-      
+
       setTimeout(() => toast.info('Configuration has been reset', {
         toastId: 'config-reset'
       }), 100);
@@ -134,7 +134,7 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
         <div className={styles.priceWrapper}>
           <div className={styles.priceDetail}>
             <div className={styles.priceLabel}>Total Price</div>
-            <div className={styles.priceValue}>{ formatEuro(totalPrice) }</div>
+            <div className={styles.priceValue}>{formatEuro(totalPrice)}</div>
           </div>
 
           <div className={styles.priceDivider}></div>
@@ -153,7 +153,7 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
               </button>
             </div>
             <div className={styles.priceValue}>
-              { formatEuro(getMonthlyPaymentFor(selectedLeasingOption)) }
+              {formatEuro(getMonthlyPaymentFor(selectedLeasingOption))}
               <span className={styles.leaseTerms}>/mo.</span>
             </div>
           </div>
@@ -169,7 +169,7 @@ const ConfiguratorHeader: React.FC<ConfiguratorHeaderProps> = ({ onBack, model, 
             <BsBookmark />
             <span>Save</span>
           </button>
-          
+
           <button className={styles.resetButton} onClick={resetConfiguration}>
             <IoRefreshOutline />
             <span>Reset</span>

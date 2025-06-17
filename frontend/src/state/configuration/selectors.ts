@@ -24,20 +24,6 @@ export const selectTotalPrice = createSelector(
   }
 );
 
-export const selectModelData = createSelector(
-  selectConfiguration,
-  (config) => ({
-    model: config.model,
-    rims: config.rims,
-    colors: config.colors,
-    engines: config.engines,
-    transmissions: config.transmissions,
-    upholsteries: config.upholsteries,
-    assistances: config.assistances,
-    comforts: config.comforts,
-  })
-);
-
 export const selectSelectedOptions = createSelector(
   selectConfiguration,
   (config) => ({

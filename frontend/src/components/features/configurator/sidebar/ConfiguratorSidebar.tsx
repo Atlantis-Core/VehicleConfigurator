@@ -32,7 +32,7 @@ const ConfiguratorSidebar: React.FC<ConfiguratorSidebarProps> = ({
   onCategoryClick,
   onSubcategoryClick
 }) => {
-  // Get category icon based on id
+
   const getCategoryIcon = (categoryId: string) => {
     switch (categoryId) {
       case 'motorization': return <FaCar />;
@@ -74,7 +74,6 @@ const ConfiguratorSidebar: React.FC<ConfiguratorSidebarProps> = ({
                     key={subcategory.id}
                     className={`${styles.subcategoryItem} ${activeSubcategory === subcategory.id ? styles.active : ''}`}
                     onClick={() => onSubcategoryClick(subcategory.id)}
-                    style={{ "--animation-order": idx } as React.CSSProperties}
                   >
                     <div className={styles.subcategoryStatus}>
                       {completedSteps[subcategory.id] ? (
