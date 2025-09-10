@@ -32,8 +32,7 @@ jobs:
           context: . # Root context of monorepo
           file: ./backend/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository }}/backend:${{ github.sha }} # Unique tag for each commit
-
+          tags: ghcr.io/${{ github.repository | lower }}/backend:${{ github.sha }}
       # -----------------------------------
       # Deploy to VPS via SSH
       # -----------------------------------
