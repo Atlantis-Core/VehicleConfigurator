@@ -62,7 +62,7 @@ jobs:
 
             # Pull the new image and re-create the container
             docker-compose pull
-            docker-compose up -d
+            docker-compose up
 
             # Clean up old, unused images
             docker image prune -f
