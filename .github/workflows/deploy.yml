@@ -5,18 +5,22 @@ on:
     branches:
       - main
     paths:
-      - "backend/**" # Triggers on changes in the backend directory
+      - "backend/**"
       - "frontend/**"
       - ".github/workflows/deploy.yml"
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Use a variable to store the lowercase repository name
       - name: Set lowercase repository name
         id: repo_name
         run: echo "REPO_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
@@ -47,7 +51,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
             # Navigate to the app directory

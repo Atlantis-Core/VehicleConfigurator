@@ -2,7 +2,6 @@
 FROM node:18-alpine
 
 # Set the working directory inside the container
-# This is a key change!
 WORKDIR /app/backend
 
 # Copy package.json and package-lock.json from the backend directory
