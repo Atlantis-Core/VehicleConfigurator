@@ -16,6 +16,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Use a variable to store the lowercase repository name
+      - name: Set lowercase repository name
+        id: repo_name
+        run: echo "REPO_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
       # -----------------------------------
       # Build & Push Docker Image
       # -----------------------------------
@@ -29,10 +34,11 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v5
         with:
-          context: . # Root context of monorepo
+          context: .
           file: ./backend/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository | lower }}/backend:${{ github.sha }}
+          tags: ghcr.io/${{ env.REPO_NAME }}/backend:${{ github.sha }}
+
       # -----------------------------------
       # Deploy to VPS via SSH
       # -----------------------------------
@@ -41,14 +47,14 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
             # Navigate to the app directory
             cd /srv/apps/configurator
 
             # Create a temporary environment file with the image tag
-            echo "IMAGE=ghcr.io/${{ github.repository }}/backend:${{ github.sha }}" > .deploy.env
+            echo "IMAGE=ghcr.io/${{ env.REPO_NAME }}/backend:${{ github.sha }}" > .deploy.env
 
             # Pull the new image and re-create the container
             docker compose pull
