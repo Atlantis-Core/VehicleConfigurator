@@ -10,10 +10,13 @@ COPY backend/package*.json ./
 # Install dependencies
 RUN npm install
 
+# Copy the prisma directory before generating the client
+COPY backend/prisma/ ./prisma/
+
 # Run prisma generate
 RUN npx prisma generate
 
-# Copy the entire backend directory to the container
+# Copy the rest of the backend directory to the container
 COPY backend/ .
 
 # Build the application
