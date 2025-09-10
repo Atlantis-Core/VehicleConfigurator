@@ -8,6 +8,7 @@
     "build": "tsc && npm run copy-templates",
     "prisma:generate": "prisma generate",
     "start": "node dist/server.js",
+    "main": "dist/server.js",
     "copy-templates": "cp -r src/templates dist/templates",
     "lint": "eslint ./src --ext .ts,.tsx,.js,.jsx"
   },
