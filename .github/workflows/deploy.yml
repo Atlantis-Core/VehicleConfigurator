@@ -61,8 +61,8 @@ jobs:
             echo "IMAGE=ghcr.io/${{ env.REPO_NAME }}/backend:${{ github.sha }}" > .deploy.env
 
             # Pull the new image and re-create the container
-            docker compose pull
-            docker compose up -d
+            docker-compose pull
+            docker-compose up -d
 
             # Clean up old, unused images
             docker image prune -f
