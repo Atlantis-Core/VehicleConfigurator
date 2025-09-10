@@ -1,4 +1,3 @@
-// backend/src/utils/mailer.ts
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 

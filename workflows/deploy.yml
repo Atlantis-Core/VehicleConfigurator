@@ -1,0 +1,100 @@
+name: ci-cd
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+env:
+  REGISTRY: ghcr.io
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: Hetzner Server
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Derive lowercase repository owner & set image name
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          OWNER="${GITHUB_REPOSITORY%%/*}"          # extract owner from owner/repo
+          OWNER_LC=$(echo "$OWNER" | tr '[:upper:]' '[:lower:]')
+          IMAGE_NAME="${REGISTRY}/${OWNER_LC}/vehicleconfigurator"
+          echo "OWNER_LC=$OWNER_LC" >> "$GITHUB_ENV"
+          echo "IMAGE_NAME=$IMAGE_NAME" >> "$GITHUB_ENV"
+          echo "image_name=$IMAGE_NAME" >> "$GITHUB_OUTPUT"
+          echo "Computed IMAGE_NAME=$IMAGE_NAME"
+
+      - name: Show image name
+        run: echo "${{ steps.meta.outputs.image_name }}"
+
+      - name: Validate deploy secrets
+        shell: bash
+        run: |
+          fail=0
+          for s in SSH_HOST SSH_USER SSH_KEY SSH_PORT; do
+            v="${{ secrets.SSH_HOST }}" # dummy to satisfy syntax
+            val="${!s}"
+          done
+          [ -n "${{ secrets.SSH_HOST }}" ] || { echo "::error::SSH_HOST missing"; fail=1; }
+          [ -n "${{ secrets.SSH_USER }}" ] || { echo "::error::SSH_USER missing"; fail=1; }
+          [ -n "${{ secrets.SSH_KEY }}" ] || { echo "::error::SSH_KEY missing"; fail=1; }
+          [ -n "${{ secrets.SSH_PORT }}" ] || { echo "::error::SSH_PORT missing"; fail=1; }
+          [ $fail -eq 0 ] || exit 1
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR (push)
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build & push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.image_name }}:latest
+            ${{ steps.meta.outputs.image_name }}:${{ github.sha }}
+
+      - name: Deploy on VPS
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+          GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
+        with:
+          host: ${{ env.SSH_HOST }}
+          username: ${{ env.SSH_USER }}
+          key: ${{ env.SSH_KEY }}
+          port: ${{ env.SSH_PORT }}
+          script: |
+            set -e
+            # login if the GHCR package is private
+            if [ -n "${{ env.GHCR_TOKEN }}" ]; then
+              echo "${{ env.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ env.GHCR_USERNAME }}" --password-stdin
+            fi
+
+            export IMAGE="${{ steps.meta.outputs.image_name }}:${{ github.sha }}"
+            cd /srv/apps/portfolio
+            echo IMAGE=$IMAGE > .deploy.env
+
+            # Stop and remove old containers before starting new ones.
+            # This avoids the 'ContainerConfig' error with older docker-compose versions.
+            docker-compose down
+
+            docker-compose --env-file .deploy.env pull
+            docker-compose --env-file .deploy.env up -d
+            docker-compose exec -T portfolio npx prisma migrate deploy
+            docker image prune -f
