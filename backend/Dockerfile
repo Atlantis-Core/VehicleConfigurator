@@ -4,11 +4,14 @@ FROM node:18-alpine
 # Set the working directory inside the container
 WORKDIR /app/backend
 
-# Copy package.json and package-lock.json from the backend directory
+# Copy package.json and package-lock.json to install dependencies
 COPY backend/package*.json ./
 
 # Install dependencies
 RUN npm install
+
+# Run prisma generate
+RUN npx prisma generate
 
 # Copy the entire backend directory to the container
 COPY backend/ .
