@@ -2,16 +2,17 @@
 FROM node:18-alpine
 
 # Set the working directory inside the container
-WORKDIR /app
+# This is a key change!
+WORKDIR /app/backend
 
-# Copy package.json and package-lock.json to install dependencies
+# Copy package.json and package-lock.json from the backend directory
 COPY backend/package*.json ./
 
 # Install dependencies
 RUN npm install
 
 # Copy the rest of the application's source code
-COPY . .
+COPY backend .
 
 # Build the application
 RUN npm run build
