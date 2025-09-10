@@ -1,54 +1,23 @@
-# syntax = docker/dockerfile:1
+# Use a Node.js base image
+FROM node:18-alpine
 
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=22.11.0
-FROM node:${NODE_VERSION}-slim AS base
-
-LABEL fly_launch_runtime="Node.js/Prisma"
-
-# Node.js/Prisma app lives here
+# Set the working directory inside the container
 WORKDIR /app
 
-# Set production environment
-ENV NODE_ENV="production"
+# Copy package.json and package-lock.json to install dependencies
+COPY backend/package*.json ./
 
+# Install dependencies
+RUN npm install
 
-# Throw-away build stage to reduce size of final image
-FROM base AS build
-
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential node-gyp openssl pkg-config python-is-python3
-
-# Install node modules
-COPY package-lock.json package.json ./
-RUN npm ci --include=dev
-
-# Generate Prisma Client
-COPY prisma .
-RUN npx prisma generate
-
-# Copy application code
+# Copy the rest of the application's source code
 COPY . .
 
-# Build application
+# Build the application
 RUN npm run build
 
-# Remove development dependencies
-RUN npm prune --omit=dev
-
-
-# Final stage for app image
-FROM base
-
-# Install packages needed for deployment
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y openssl && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
-# Copy built application
-COPY --from=build /app /app
-
-# Start the server by default, this can be overwritten at runtime
+# Expose the port the app will run on
 EXPOSE 3000
-CMD [ "npm", "run", "start" ]
+
+# Start the application
+CMD ["node", "dist/index.js"]
