@@ -60,9 +60,9 @@ jobs:
             # Create a temporary environment file with the image tag
             echo "IMAGE=ghcr.io/${{ env.REPO_NAME }}/backend:${{ github.sha }}" > .deploy.env
 
-            # Pull the new image and re-create the container using the environment file
-            docker-compose --env-file .deploy.env pull
-            docker-compose --env-file .deploy.env up -d
+            # Pull the new image and re-create the container
+            sudo docker compose --env-file .deploy.env pull
+            sudo docker compose --env-file .deploy.env up -d
 
             # Clean up old, unused images
-            docker image prune -f
+            sudo docker image prune -f
