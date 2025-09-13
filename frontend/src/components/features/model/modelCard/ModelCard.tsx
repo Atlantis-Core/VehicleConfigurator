@@ -46,6 +46,9 @@ const ModelCard = ({ model, onSelect, isSelected = false }: ModelCardProps) => {
             src={getImageUrl(model.imagePath)}
             className={styles.modelImage}
             alt={`${model.name} model`}
+            draggable="false"
+            onContextMenu={(e) => e.preventDefault()}
+            style={{ pointerEvents: "none", userSelect: "none" }}
           />
         </div>
 
