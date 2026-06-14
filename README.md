@@ -36,7 +36,6 @@ A full-stack vehicle configurator built with **React**, **Node.js**, and **Postg
 - 🚀 Backend deployed on [Fly.io](https://fly.io)
 - 🌐 Frontend deployed on [Render](https://render.com)
 - 🗄️ Database hosted on [Supabase](https://supabase.com)
-- **Live Demo**: [configurator.davidpospisil.de](https://configurator.davidpospisil.de)
 - 📁 Monorepo (frontend + backend)
 
 ## 🛠️ Getting Started
@@ -98,7 +97,6 @@ A full-stack vehicle configurator built with **React**, **Node.js**, and **Postg
 5. **Access the application**
    - Frontend: `http://localhost:3001`
    - Backend API: `http://localhost:3000`
-   - **Live Demo**: [configurator.davidpospisil.de](https://configurator.davidpospisil.de)
 
 ### Testing
 
